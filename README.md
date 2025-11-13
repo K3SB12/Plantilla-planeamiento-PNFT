@@ -1,6 +1,6 @@
 # Plantilla-planeamiento-PNFT
 
-Indicaciones
+Indicaciones de uso:
 Completa los datos administrativos
 Llena los campos: Dirección Regional, centro educativo, nombre del docente, curso lectivo (2025), nivel, ciclo y áreas.
 Selecciona el número de lecciones planificadas (de 2 a 8).
