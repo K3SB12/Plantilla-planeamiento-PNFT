@@ -1164,7 +1164,7 @@
     <div class="container">
         <!-- Encabezado -->
         <div class="header">
-            <h1>Plantilla de Planeamiento Didáctico</h1>
+            <h1 id="titulo-secreto">Plantilla de Planeamiento Didáctico</h1>
             <h2>Programa Nacional de Formación Tecnológica</h2>
             <div class="year">2026</div>
         </div>
@@ -2235,185 +2235,172 @@
             }
         }
 
-// ===== MEJORA 2: SISTEMA DE IA EXTERNA MEJORADO =====
+        // ===== MEJORA 2: SISTEMA DE IA EXTERNA MEJORADO =====
+        function abrirSelectorIA(semanaIndex) {
+            const prompt = generarPromptExternoCompleto(semanaIndex);
+            
+            const modalHTML = `
+            <div id="selectorIAModal" class="modal" style="display: block;">
+                <div class="modal-content" style="text-align: center; max-width: 500px;">
+                    <h3>🪄 Enviar Prompt a IA Externa</h3>
+                    <p style="margin: 15px 0; color: #666;">El prompt se copiará automáticamente al portapapeles</p>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; margin: 20px 0;">
+                        <button class="btn btn-primary" onclick="seleccionarIA('chatgpt', ${semanaIndex})" 
+                                style="padding: 15px 25px; font-size: 16px;">
+                            🤖 ChatGPT
+                        </button>
+                        <button class="btn btn-primary" onclick="seleccionarIA('copilot', ${semanaIndex})" 
+                                style="padding: 15px 25px; font-size: 16px; background: #0078d4;">
+                            🚀 Microsoft Copilot
+                        </button>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: left;">
+                        <strong>Instrucciones:</strong>
+                        <ol style="margin: 10px 0; padding-left: 20px;">
+                            <li>Seleccione la IA de su preferencia</li>
+                            <li>El prompt se copiará automáticamente</li>
+                            <li>Se abrirá la página de la IA en nueva pestaña</li>
+                            <li>Pegue el prompt con Ctrl+V</li>
+                            <li>¡Listo para usar!</li>
+                        </ol>
+                    </div>
+                    
+                    <button onclick="cerrarModalIA()" class="btn btn-outline" style="width: 100%; margin-top: 15px;">
+                        Cancelar
+                    </button>
+                </div>
+            </div>`;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
 
-// ✅ URL de tu Agente Curricular PNFT en Copilot (SUSTITUIR AQUÍ)
-const URL_AGENTE_PNFT = "https://m365.cloud.microsoft.com/copilot/agent/TU-ID-AQUI";
-
-function abrirSelectorIA(semanaIndex) {
-    const prompt = generarPromptExternoCompleto(semanaIndex);
-    
-    const modalHTML = `
-    <div id="selectorIAModal" class="modal" style="display: block;">
-        <div class="modal-content" style="text-align: center; max-width: 500px;">
-            <h3>🪄 Enviar Prompt a IA Externa</h3>
-            <p style="margin: 15px 0; color: #666;">El prompt se copiará automáticamente al portapapeles</p>
-
-            <div style="display: flex; gap: 15px; justify-content: center; margin: 20px 0;">
-                <button class="btn btn-primary" onclick="seleccionarIA('chatgpt', ${semanaIndex})"
-                        style="padding: 15px 25px; font-size: 16px;">
-                    🤖 ChatGPT
-                </button>
-
-                <button class="btn btn-primary" onclick="seleccionarIA('agentePNFT', ${semanaIndex})"
-                        style="padding: 15px 25px; font-size: 16px; background: #0078d4;">
-                    🚀 Agente PNFT (Copilot)
-                </button>
-            </div>
-
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: left;">
-                <strong>Instrucciones:</strong>
-                <ol style="margin: 10px 0; padding-left: 20px;">
-                    <li>Seleccione la IA de su preferencia</li>
-                    <li>El prompt se copiará automáticamente</li>
-                    <li>Se abrirá la página correspondiente</li>
-                    <li>Pegue el prompt con Ctrl+V</li>
-                </ol>
-            </div>
-
-            <button onclick="cerrarModalIA()" class="btn btn-outline" style="width: 100%; margin-top: 15px;">
-                Cancelar
-            </button>
-        </div>
-    </div>`;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
-
-function seleccionarIA(tipo, semanaIndex) {
-    const prompt = generarPromptExternoCompleto(semanaIndex);
-
-    // Copiar prompt
-    navigator.clipboard.writeText(prompt).then(() => {
-        
-        const urls = {
-            'chatgpt': 'https://chat.openai.com/',
-            'agentePNFT': URL_AGENTE_PNFT  // ✅ ahora abre TU AGENTE PNFT
-        };
-
-        window.open(urls[tipo], '_blank');
-
-        const nombreIA = tipo === 'chatgpt' ? 'ChatGPT' : 'Agente Curricular PNFT';
-        
-        alert(`✅ Prompt copiado al portapapeles\n\n1. Vaya a la pestaña de ${nombreIA}\n2. Pegue con Ctrl+V\n3. ¡Listo!`);
-
-        cerrarModalIA();
-
-    }).catch(() => {
-        // Fallback para navegadores que no soportan clipboard
-        const textarea = document.createElement('textarea');
-        textarea.value = prompt;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        textarea.remove();
-
-        const urls = {
-            'chatgpt': 'https://chat.openai.com/',
-            'agentePNFT': URL_AGENTE_PNFT
-        };
-
-        window.open(urls[tipo], '_blank');
-
-        alert("✅ Prompt copiado (modo compatibilidad). Pegue con Ctrl+V.");
-        cerrarModalIA();
-    });
-}
+        function seleccionarIA(tipo, semanaIndex) {
+            const prompt = generarPromptExternoCompleto(semanaIndex);
+            
+            // Copiar al portapapeles
+            navigator.clipboard.writeText(prompt).then(() => {
+                // Abrir la IA correspondiente
+                const urls = {
+                    'chatgpt': 'https://chat.openai.com/',
+                    'copilot': 'https://copilot.microsoft.com/'
+                };
+                
+                window.open(urls[tipo], '_blank');
+                
+                // Mostrar confirmación
+                const nombreIA = tipo === 'chatgpt' ? 'ChatGPT' : 'Microsoft Copilot';
+                alert(`✅ Prompt copiado al portapapeles\n\nAhora:\n1. Vaya a la pestaña de ${nombreIA}\n2. Pegue con Ctrl+V\n3. ¡Listo para usar!`);
+                
+                cerrarModalIA();
+            }).catch(err => {
+                // Fallback para navegadores que no soportan clipboard API
+                const textarea = document.createElement('textarea');
+                textarea.value = prompt;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                const urls = {
+                    'chatgpt': 'https://chat.openai.com/',
+                    'copilot': 'https://copilot.microsoft.com/'
+                };
+                
+                window.open(urls[tipo], '_blank');
+                
+                const nombreIA = tipo === 'chatgpt' ? 'ChatGPT' : 'Microsoft Copilot';
+                alert(`✅ Prompt copiado al portapapeles\n\nAhora:\n1. Vaya a la pestaña de ${nombreIA}\n2. Pegue con Ctrl+V\n3. ¡Listo para usar!`);
+                
+                cerrarModalIA();
+            });
+        }
 
         function generarPromptExternoCompleto(semanaIndex) {
+            const nivel = document.getElementById('nivel').value;
+            const ciclo = document.getElementById('ciclo').value;
+            const areasSeleccionadas = Array.from(document.querySelectorAll('input[name="area"]:checked')).map(cb => getAreaName(cb.value));
+            const ejesTransversales = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => {
+                const labels = {
+                    'ciudadania': 'Ciudadanía y ética digital',
+                    'pensamiento': 'Pensamiento computacional para la resolución de problemas',
+                    'emprendimiento': 'Emprendimiento e Innovación'
+                };
+                return labels[cb.value] || cb.value;
+            });
+            
+            const metodologia = document.getElementById('metodologiaActiva').value;
+            const metodologiaOtra = document.getElementById('metodologiaOtra').value;
+            const metodologiaFinal = metodologia === 'otra' ? metodologiaOtra : 
+                                    document.querySelector(`#metodologiaActiva option[value="${metodologia}"]`)?.textContent || 'No especificado';
+            
+            // Obtener saberes conceptuales seleccionados para esta semana
+            const semana = document.querySelector(`.semana-item[data-semana-index="${semanaIndex}"]`);
+            const saberesConceptuales = Array.from(semana.querySelectorAll(`input[name="saberConceptualSemana${semanaIndex}"]:checked`)).map(cb => cb.value);
+            const saberesManuales = Array.from(semana.querySelectorAll(`input[name="saberManualSemana${semanaIndex}"]:checked`)).map(cb => cb.value);
+            const todosSaberes = [...saberesConceptuales, ...saberesManuales];
+            
+            // Obtener indicadores de logro REALES de la base de datos
+            const indicadoresLogro = obtenerIndicadoresLogroReales(nivel, areasSeleccionadas, saberesConceptuales);
+            
+            // Obtener saberes procedimentales y actitudinales seleccionados
+            const saberesProcedimentales = Array.from(document.querySelectorAll('input[name="procedimental"]:checked')).map(cb => {
+                const labels = {
+                    'reconoce': 'Reconoce patrones',
+                    'abstrae': 'Abstrae',
+                    'generaliza': 'Generaliza',
+                    'transfiere': 'Transfiere',
+                    'modulariza': 'Modulariza',
+                    'formula': 'Formula algoritmos',
+                    'remezcla': 'Remezcla',
+                    'depura': 'Depura',
+                    'programa': 'Programa',
+                    'comunica': 'Comunica',
+                    'colabora': 'Colabora',
+                    'piensa': 'Piensa de forma creativa',
+                    'maneja': 'Maneja las tecnologías de forma ética y segura'
+                };
+                return labels[cb.value] || cb.value;
+            });
+            
+            const saberesActitudinales = Array.from(document.querySelectorAll('input[name="actitudinal"]:checked')).map(cb => {
+                const labels = {
+                    'gusto': 'Gusto por la precisión',
+                    'aprender': 'Aprender del error',
+                    'flexibilidad': 'Flexibilidad para manejar problemas',
+                    'tolerancia': 'Tolerancia a la frustración'
+                };
+                return labels[cb.value] || cb.value;
+            });
+            
+            const indicadoresEvaluacion = "No especificado";
+            
+            return `Diseña una actividad PNFT para el ciclo ${ciclo || "No especificado"}, nivel ${nivel || "No especificado"} en las áreas de conocimiento: ${areasSeleccionadas.join(', ') || "No especificado"}, con los ejes transversales (elegidos por el docente): ${ejesTransversales.join(', ') || "No especificado"}
 
-    // === DATOS DEL DOM ===
-    const nivel = document.getElementById('nivel')?.value || '';
-    const ciclo = document.getElementById('ciclo')?.value || '';
+Saberes conceptuales: ${todosSaberes.join(', ') || "No especificado"}
 
-    const areasSeleccionadas = Array.from(document.querySelectorAll('input[name="area"]:checked'))
-        .map(cb => getAreaName(cb.value));
+Indicadores de logro (automáticos por el sistema mediante los saberes conceptuales que eligió el docente):
+${indicadoresLogro.map(ind => `• ${ind}`).join('\n')}
 
-    const ejesTransversales = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => {
-        const labels = {
-            'ciudadania': 'Ciudadanía y ética digital',
-            'pensamiento': 'Pensamiento computacional para la resolución de problemas',
-            'emprendimiento': 'Emprendimiento e Innovación'
-        };
-        return labels[cb.value] || cb.value;
-    });
+Indicadores de evaluación (personalizados): ${indicadoresEvaluacion}
 
-    const metodologia = document.getElementById('metodologiaActiva')?.value || '';
-    const metodologiaOtra = document.getElementById('metodologiaOtra')?.value || '';
-    const metodologiaFinal = metodologia === 'otra'
-        ? metodologiaOtra
-        : document.querySelector(`#metodologiaActiva option[value="${metodologia}"]`)?.textContent || 'No especificado';
+Saberes procedimentales: ${saberesProcedimentales.join(', ') || "No especificado"}
 
-    // === SABERES DE LA SEMANA ===
-    const semana = document.querySelector(`.semana-item[data-semana-index="${semanaIndex}"]`);
-    const saberesConceptuales = semana ? Array.from(semana.querySelectorAll(`input[name="saberConceptualSemana${semanaIndex}"]:checked`)).map(cb => cb.value) : [];
-    const saberesManuales = semana ? Array.from(semana.querySelectorAll(`input[name="saberManualSemana${semanaIndex}"]:checked`)).map(cb => cb.value) : [];
-    const todosSaberes = [...saberesConceptuales, ...saberesManuales];
+Saberes actitudinales: ${saberesActitudinales.join(', ') || "No especificado"}
 
-    // === INDICADORES DE LOGRO DESDE BASE INTERNA ===
-    const indicadoresLogro = obtenerIndicadoresLogroReales(nivel, areasSeleccionadas, saberesConceptuales);
+Metodología elegida: ${metodologiaFinal || "No especificado"}
 
-    // === SABERES PROCEDIMENTALES ===
-    const saberesProcedimentales = Array.from(document.querySelectorAll('input[name="procedimental"]:checked')).map(cb => {
-        const labels = {
-            'reconoce': 'Reconoce patrones',
-            'abstrae': 'Abstrae',
-            'generaliza': 'Generaliza',
-            'transfiere': 'Transfiere',
-            'modulariza': 'Modulariza',
-            'formula': 'Formula algoritmos',
-            'remezcla': 'Remezcla',
-            'depura': 'Depura',
-            'programa': 'Programa',
-            'comunica': 'Comunica',
-            'colabora': 'Colabora',
-            'piensa': 'Piensa de forma creativa',
-            'maneja': 'Maneja las tecnologías de forma ética y segura'
-        };
-        return labels[cb.value] || cb.value;
-    });
+Componente de evaluación según reglamento y lineamientos del MEP: El docente puede en algún momento solicitar que la actividad o sugerencia sea para tareas, pruebas, trabajo cotidiano o proyecto en caso de secundaria.
 
-    // === SABERES ACTITUDINALES ===
-    const saberesActitudinales = Array.from(document.querySelectorAll('input[name="actitudinal"]:checked')).map(cb => {
-        const labels = {
-            'gusto': 'Gusto por la precisión',
-            'aprender': 'Aprender del error',
-            'flexibilidad': 'Flexibilidad para manejar problemas',
-            'tolerancia': 'Tolerancia a la frustración'
-        };
-        return labels[cb.value] || cb.value;
-    });
+Tema ( En caso que el docente especifique algún tema qué desarrollará adicional con los saberes conceptuales o si es proyecto en secundaria o es para tarea, prueba o trabajo cotidiano): No especificado
 
-    // === PROMPT MAESTRO PNFT ===
-    return `
-Genera un planeamiento completo del Programa Nacional de Formación Tecnológica (PNFT) del MEP con la siguiente información:
+Duración: 40-80 min. (1 o 2 lecciones), o bien por semanas que eligió el docente.
 
-Ciclo: ${ciclo || "No especificado"}
-Nivel: ${nivel || "No especificado"}
-Áreas de conocimiento: ${areasSeleccionadas.length ? areasSeleccionadas.join(', ') : "No especificado"}
-Ejes transversales: ${ejesTransversales.length ? ejesTransversales.join(', ') : "No especificado"}
-Duración de la lección: 40–80 minutos (indicar si corresponde 40 o 80)
-Metodología seleccionada: ${metodologiaFinal || "No especificado"}
+Estructura: competencia (articulación de los saberes conceptuales), secuencia de la actividad (inicio, desarrollo, cierre), sugerencias de evaluación según instrumentos del MEP.
 
-SABERES SELECCIONADOS:
-- Saberes conceptuales: ${todosSaberes.length ? todosSaberes.join(', ') : "No especificado"}
-- Saberes procedimentales: ${saberesProcedimentales.length ? saberesProcedimentales.join(', ') : "No especificado"}
-- Saberes actitudinales: ${saberesActitudinales.length ? saberesActitudinales.join(', ') : "No especificado"}
-
-INDICADORES DEL PNFT:
-Indicadores de logro relacionados:
-${indicadoresLogro && indicadoresLogro.length ? indicadoresLogro.map(ind => `• ${ind}`).join('\n') : '• No especificado'}
-
-INSTRUCCIONES AL AGENTE:
-1) Construye un planeamiento completo que incluya: Datos curriculares, Articulación con el Resultado de Aprendizaje (RdA), Saberes (conceptuales/procedimentales/actitudinales), Actividades (Inicio — Desarrollo — Cierre), Secuencia pedagógica, Competencia desarrollada, Indicadores de evaluación redactados (acción observable + contenido + evidencia + condición), Evidencias y productos, Instrumentos de evaluación, y Tareas/Trabajo cotidiano/Prueba/Proyecto según ciclo.
-2) Verifica y corrige coherencia curricular: si detectas inconsistencias entre saberes, actividades o metodología, corrígelas y justifica los cambios.
-3) Alinea la propuesta metodológica con las fases: ABJ (7 fases), ABR (3 fases) o Design Thinking (5 fases) según la metodología seleccionada.
-4) Entrega la respuesta en un formato listo para pegar en la plantilla: encabezados I-VII (Datos curriculares; Saberes; Actividades; Indicadores de evaluación; Evidencias; Tareas; Recomendaciones).
-5) Pregunta al final si desea adaptar la lección a 40/80 minutos o convertirla en proyecto de varias semanas.
-
-PROPORCIONA la salida en texto claro y estructurado, evitando contenido irrelevante.
-`;
-}
+Proporciona una actividad completa que integre todos estos elementos de manera coherente y alineada con el currículo del PNFT.`;
+        }
 
         function obtenerIndicadoresLogroReales(nivel, areasSeleccionadas, saberesConceptuales) {
             if (!nivel || !areasSeleccionadas || areasSeleccionadas.length === 0 || !saberesConceptuales || saberesConceptuales.length === 0) {
@@ -2848,6 +2835,56 @@ PROPORCIONA la salida en texto claro y estructurado, evitando contenido irreleva
             }
         }
     </script>
+   <!-- Contenedor para el avatar secreto -->
+<div id="avatar-secreto" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; text-align: center; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    <img src="https://i.imgur.com/Pal4LtF.png" alt="Avatar de Kevin Sánchez" style="width: 150px; height: 150px; border-radius: 50%; margin-bottom: 15px;">
+    <p style="font-weight: bold; color: var(--primary-color);">MSc. Kevin Sánchez Bogarín<br>Asesor Nacional PNFT</p>
+    <button onclick="cerrarAvatar()" style="margin-top: 10px; padding: 8px 16px; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer;">Cerrar</button>
+</div>
+
+<script>
+    let clics = 0;
+    let ultimoClic = 0;
+
+    // Selecciona el título del encabezado
+    const titulo = document.getElementById('titulo-secreto');
+
+    titulo.addEventListener('click', function(e) {
+        e.stopPropagation(); // Evita que el click se propague
+        const ahora = Date.now();
+
+        // Reinicia el contador si pasaron más de 1 segundo entre clics
+        if (ahora - ultimoClic > 1000) {
+            clics = 0;
+        }
+
+        clics++;
+        ultimoClic = ahora;
+
+        // Si se hacen 3 clics rápidos (o más), activa el avatar
+        if (clics >= 3) {
+            mostrarAvatar();
+            clics = 0; // Reinicia el contador
+        }
+    });
+
+    function mostrarAvatar() {
+        const avatarDiv = document.getElementById('avatar-secreto');
+        avatarDiv.style.display = 'block';
+    }
+
+    function cerrarAvatar() {
+        const avatarDiv = document.getElementById('avatar-secreto');
+        avatarDiv.style.display = 'none';
+    }
+
+    // Opcional: Cerrar avatar si se hace clic fuera de él
+    document.addEventListener('click', function(e) {
+        const avatarDiv = document.getElementById('avatar-secreto');
+        if (avatarDiv.style.display === 'block' && !avatarDiv.contains(e.target)) {
+            cerrarAvatar();
+        }
+    });
+</script> 
 </body>
 </html>
-
