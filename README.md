@@ -25,6 +25,8 @@ Usa el botón "Imprimir" en la nueva ventana para guardarla como PDF o imprimirl
 ✅ Compatible con todos los dispositivos: Escritorio, tablet Android/iOS y TV.
 ✅ Editable y reutilizable: Guarda tantas planificaciones como necesites.
 ✅ Alineada con el PNFT 2026: Integra RdA, saberes, componentes curriculares y metodologías activas.
-✅ Diseñada por un docente para docentes: Creada por MSc. Kevin Sánchez Bogarín, Asesor Nacional del PNFT.
+
 🛠️ Recomendaciones
 Para mantener todo organizado, crea una carpeta llamada Planeaciones PNFT y guarda allí tus archivos .json.
+
+✅ Diseñada por un docente para docentes: Creada por MSc. Kevin Sánchez Bogarín, Asesor Nacional del PNFT.
