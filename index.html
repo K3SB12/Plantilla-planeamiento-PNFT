@@ -218,7 +218,7 @@
             opacity: 0.5;
         }
 
-        /* ===== SABERES CONCEPTUALES ===== */
+        /* ===== SABERES CONCEPTUALES - MEJORA IMPLEMENTADA ===== */
         .saberes-info {
             padding: 25px;
             text-align: center;
@@ -298,6 +298,74 @@
             margin-bottom: 10px;
         }
 
+        /* ===== CONTENEDOR DE SABERES SELECCIONADOS - NUEVO ===== */
+        .saberes-seleccionados-container {
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            border: 2px dashed var(--primary-color);
+            margin: 15px 0;
+        }
+
+        .saberes-seleccionados-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .saber-seleccionado-item {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(69, 37, 143, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .saber-seleccionado-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(69, 37, 143, 0.4);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+
+        .saber-seleccionado-item .eliminar {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .saber-seleccionado-item .eliminar:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .contador-saberes {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
         /* ===== SISTEMA DE SEMANAS MEJORADO ===== */
         .semanas-controls {
             display: flex;
@@ -357,10 +425,9 @@
             color: var(--primary-color);
         }
 
+        /* MEJORA 2: OCULTAR LECCIONES - ELIMINADO EL ESTILO .lecciones-info */
         .lecciones-info {
-            color: #666;
-            font-size: 14px;
-            font-weight: 500;
+            display: none; /* MEJORA 2: Se oculta completamente */
         }
 
         .semana-content {
@@ -442,8 +509,9 @@
             transform: scale(1.1);
         }
 
+        /* MEJORA 1: SABERES SEMANA ARRIBA DE TODO */
         .saberes-semana-container {
-            margin-top: 25px;
+            margin-bottom: 25px; /* MEJORA 1: Ahora va antes del contenido de la semana */
             padding: 25px;
             background: white;
             border-radius: 10px;
@@ -973,15 +1041,46 @@
                 padding: 8px !important;
             }
             
-            /* Saberes */
+            /* MEJORA 3: OCULTAR LISTA COMPLETA DE SABERES EN IMPRESIÓN */
+            .saberes-semana-opciones,
             .saberes-options,
-            .saberes-semana-opciones {
+            .saberes-semana-container .section-title:first-child {
+                display: none !important;
+            }
+
+            /* MANTENER VISIBLES los saberes procedimentales y actitudinales */
+            .saberes-options {
+                display: block !important;
                 max-height: none !important;
                 overflow: visible !important;
-                height: auto !important;
+            }
+            
+            /* MEJORA 3: Mostrar solo los saberes seleccionados en impresión */
+            .saberes-seleccionados-container {
+                display: block !important;
                 border: 1px solid #ccc !important;
                 background: white !important;
-                padding: 8px !important;
+                page-break-inside: avoid !important;
+                margin: 10px 0 !important;
+                padding: 10px !important;
+            }
+            
+            .saberes-seleccionados-lista {
+                display: block !important;
+            }
+            
+            .saber-seleccionado-item {
+                background: #f0f0f0 !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+                margin: 2px !important;
+                padding: 3px 8px !important;
+                display: inline-block !important;
+                font-size: 10px !important;
+            }
+            
+            .saber-seleccionado-item .eliminar {
+                display: none !important;
             }
             
             /* Evitar cortes de texto en todos los elementos */
@@ -1174,11 +1273,11 @@
             <tr>
                 <td width="33%">
                     <strong>Dirección Regional de Educación:</strong><br>
-                    <input type="text" id="direccionRegional" placeholder="Seleccionar" class="input-field">
+                    <input type="text" id="direccionRegional" placeholder="" class="input-field">
                 </td>
                 <td width="33%">
                     <strong>Centro educativo:</strong><br>
-                    <input type="text" id="centroEducativo" placeholder="Seleccionar" class="input-field">
+                    <input type="text" id="centroEducativo" placeholder="" class="input-field">
                 </td>
                 <td width="34%">
                     <strong>Código:</strong><br>
@@ -1293,8 +1392,8 @@
                     <div class="checkbox-group">
                         <label><input type="checkbox" name="area" value="apropiacion"> <span>Apropiación Tecnológica y Digital</span></label>
                         <label><input type="checkbox" name="area" value="programacion"> <span>Programación y Algoritmos</span></label>
-                        <label><input type="checkbox" name="area" value="robotica"> <span>Computación física y robótica</span></label>
-                        <label><input type="checkbox" name="area" value="ciencia"> <span>Ciencia de datos e Inteligencia Artificial</span></label>
+                        <label><input type="checkbox" name="area" value="robotica"> <span>Computación física y Robótica</span></label>
+                        <label><input type="checkbox" name="area" value="ciencia"> <span>Ciencia de datos e Inteligencia artificial</span></label>
                     </div>
                 </td>
                 <td>
@@ -1314,12 +1413,20 @@
             </tr>
             <tr>
                 <td>
-                    <div id="saberesConceptualesContainer">
-                        <div class="saberes-info">Seleccione nivel y al menos un área de conocimiento</div>
+                    <!-- CONTENEDOR MEJORADO: Ahora muestra los saberes seleccionados en tiempo real -->
+                    <div id="saberesConceptualesContainer" class="saberes-seleccionados-container">
+                        <div class="saberes-info">Saberes conceptuales en cada semana ve abajo en Planificación por semanas</div>
+                        <div id="saberesSeleccionadosLista" class="saberes-seleccionados-lista">
+                            <!-- Los saberes seleccionados aparecerán aquí dinámicamente -->
+                        </div>
+                        <div id="contadorSaberes" class="contador-saberes">
+                            Total de saberes seleccionados: <span id="totalSaberes">0</span>
+                        </div>
                     </div>
+                    
                     <!-- Campo para saberes manuales -->
                     <div class="saberes-manuales-container">
-                        <strong>O escriba sus saberes conceptuales manualmente:</strong><br>
+                        <strong> Escriba sus saberes conceptuales manualmente:</strong><br>
                         <textarea class="saberes-manuales-input" id="saberesManuales" placeholder="Ej: Hardware; Software; Internet; Redes... (Separe con punto y coma)"></textarea>
                         <small>Separe cada saber con punto y coma (;)</small>
                     </div>
@@ -1453,7 +1560,7 @@
                 { nombre: "Robot", indicadores: ["Reconocer qué es un robot, sus componentes y algunos de sus usos, mediante actividades lúdicas de exploración o programación guiada."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Dato", indicadores: ["Identificar el dato y su importancia en situaciones cotidianas, reconociendo diferentes tipos como texto, imagen, sonido o video."] },
                 { nombre: "Estrategias para presentar datos", indicadores: ["Reconocer gráficos pictóricos como estrategia para representar datos recolectados en actividades lúdicas."] },
@@ -1484,7 +1591,7 @@
                 { nombre: "Evento", indicadores: ["Reconocer el evento como relación de causa y efecto al participar en juegos analógicos, identificando cómo una acción provoca una respuesta o cambio observable durante la dinámica."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Fundamentos de la IA", indicadores: ["Reconocer los fundamentos de la inteligencia artificial a través de objetos o situaciones del entorno donde esta tecnología está presente, mediante actividades guiadas con apoyo visual o audiovisual."] },
                 { nombre: "Asistentes virtuales", indicadores: ["Reconocer qué es un asistente virtual y sus funciones a partir de demostraciones guiadas o videos educativos."] }
@@ -1515,7 +1622,7 @@
                 { nombre: "Evento", indicadores: ["Reconocer el evento en un entorno de programación por bloques que activa una acción o cambio visible en un objeto del programa."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Fundamentos de la IA", indicadores: ["Describir los fundamentos de la inteligencia artificial en situaciones cotidianas, utilizando ejemplos guiados y preguntas orientadoras."] },
                 { nombre: "Asistentes virtuales", indicadores: ["Reconocer el uso de asistentes virtuales en situaciones cotidianas, mediante ejemplos guiados que permitan la interacción."] }
@@ -1548,7 +1655,7 @@
                 { nombre: "Operadores relacionales", indicadores: ["Utilizar operadores aritméticos de multiplicación y división y/o operadores relacionales como \"menor que\", \"mayor que\" o \"igual que\", en la resolución de un ejercicio programado."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Desafíos de la IA", indicadores: ["Identificar los desafíos de la inteligencia artificial en la vida cotidiana y algunas recomendaciones para su uso seguro y responsable, con la ayuda de ejemplos guiados."] }
               ]
@@ -1590,7 +1697,7 @@
                 { nombre: "Eventos", indicadores: ["Utilizar eventos en pseudocódigo o programación para el control de acciones y reacciones."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Fundamentos de la IA", indicadores: ["Identificar los fundamentos de la inteligencia artificial, reconociendo cómo aprende, toma decisiones y se diferencia de otros sistemas automatizados."] },
                 { nombre: "Asistentes virtuales", indicadores: ["Explicar el aporte de los asistentes virtuales en situaciones cotidianas, mediante el análisis de ejemplos visuales, simulaciones o actividades guiadas."] }
@@ -1635,7 +1742,7 @@
                 { nombre: "Domótica", indicadores: ["Identificar usos y aplicaciones de la domótica, reconociendo cómo la automatización mejora la comodidad y eficiencia."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Dato", indicadores: ["Identificar el dato de tipo numérico y de texto en situaciones cotidianas, a partir del registro de información."] },
                 { nombre: "Recolección de datos", indicadores: ["Reconocer técnicas de recolección de datos según el tipo de información que se desea obtener."] },
@@ -1682,7 +1789,7 @@
                 { nombre: "Prototipos", indicadores: ["Diseñar prototipos de sistemas automatizados, aplicando conocimientos de computación física para resolver necesidades concretas."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Dato", indicadores: ["Aplicar registros como datos relevantes, organizando información en tablas a partir de gastos, notas, actividades deportivas o registros básicos de salud."] },
                 { nombre: "Recolección de datos", indicadores: ["Seleccionar técnicas de recolección de datos aplicándolas según el tipo de información que se desea obtener."] },
@@ -1732,7 +1839,7 @@
                 { nombre: "Procedimientos y/o funciones", indicadores: ["Aplicar procedimientos y/o funciones como estructura modular, a través de su declaración e invocación."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Dato", indicadores: ["Identificar tipos de dato (numéricos, de texto, de ubicación y de imágenes), analizando cómo influye en decisiones."] },
                 { nombre: "Fundamentos de la IA", indicadores: ["Reconocer los fundamentos de la inteligencia artificial, identificando el concepto y sus aplicaciones."] },
@@ -1779,7 +1886,7 @@
                 { nombre: "Actuador", indicadores: ["Utilizar un actuador integrado y/o externo, comprendiendo su función y cómo se conecta correctamente a VCC y GND."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Recolección de datos", indicadores: ["Aplicar técnicas de recolección de datos mediante registros escolares y personales."] },
                 { nombre: "Fundamentos de la IA", indicadores: ["Reconocer los fundamentos de la inteligencia artificial, identificando cómo funciona y se diferencia de otros sistemas digitales."] },
@@ -1790,7 +1897,7 @@
           "9°": {
             "Apropiación tecnológica y Digital": {
               saberes: [
-                { nombre: "Redes de comunicación", indicadores: ["Reconocer las redes de comunicación a partir de su arquitectura, protocolos (como HTTP, HTTPS y TCP/IP) e interfaces."] },
+                { nombre: "Redes de comunicación", indicadores: ["Reconocer las redes de comunicación a partir de su arquitectura, protocolos (como HTTP, HTTPS и TCP/IP) e interfaces."] },
                 { nombre: "Sistema Operativo", indicadores: ["Aplicar técnicas de optimización del sistema operativo, identificando cómo gestionar memoria, desfragmentar discos, limpiar caché y actualizar el sistema."] },
                 { nombre: "Herramienta de productividad (Gestor de bases de datos)", indicadores: ["Utilizar un gestor de bases de datos como herramienta de productividad para la creación de tablas, estableciendo relaciones entre ellas y realizando consultas."] },
                 { nombre: "Herramientas de creación de contenido multimedia", indicadores: ["Utilizar herramientas de creación de contenido multimedia para el modelado 3D."] },
@@ -1816,7 +1923,7 @@
                 { nombre: "Prototipos", indicadores: ["Construir prototipos que integren sensores, actuadores y un microcontrolador, a partir de una necesidad identificada."] }
               ]
             },
-            "Ciencia de datos e Inteligencia Artificial": {
+            "Ciencia de datos e Inteligencia artificial": {
               saberes: [
                 { nombre: "Dato", indicadores: ["Reconocer la importancia de la organización y conservación del dato, aplicando criterios de seguridad y responsabilidad."] },
                 { nombre: "Almacenamiento de datos", indicadores: ["Reconocer el ciclo de vida del dato en el almacenamiento de datos, identificando las etapas de creación, uso, conservación y eliminación responsable."] },
@@ -1833,25 +1940,25 @@
             "Apropiación tecnológica y Digital": "Identifica los dispositivos digitales considerando características funcionales, experimentando su utilidad y reconociendo la autoría, durante la accesibilidad, interacción y comunicación en la creación de recursos digitales.",
             "Programación y Algoritmos": "Ordena secuencias integrando conceptos de programación como dato, evento, estado, ciclos, así como nociones de lateralidad y orientación espacial, en la solución de desafíos propuestos, utilizando la programación iconográfica por bloques.",
             "Computación física y Robótica": "Reconoce el funcionamiento de los robots, así como sus componentes (cuerpo, sistema sensorial, sistemas de control), al clasificarlos por su uso y programarlos para resolver retos.",
-            "Ciencia de datos e Inteligencia Artificial": "Reconoce los conceptos básicos relacionados con la recopilación, organización e interpretación de datos, mediante gráficos pictóricos en la resolución de problemas, fomentando el pensamiento crítico y la curiosidad hacia el mundo que lo rodea."
+            "Ciencia de datos e Inteligencia artificial": "Reconoce los conceptos básicos relacionados con la recopilación, organización e interpretación de datos, mediante gráficos pictóricos en la resolución de problemas, fomentando el pensamiento crítico y la curiosidad hacia el mundo que lo rodea."
           },
           "I Ciclo": {
             "Apropiación tecnológica y Digital": "Selecciona los dispositivos digitales y herramientas de productividad, mediante el uso de software y hardware, en la creación de archivos, creación y edición de contenido multimedia, aprovechando Internet y respetando la propiedad intelectual en la realización de tareas para la accesibilidad a la información de forma segura y responsable.",
             "Programación y Algoritmos": "Selecciona conceptos de programación como dato, secuencia, evento, estado, variables, operadores aritméticos y relacionales, condicionales simples, ciclo finito e infinito, en la programación por bloques para la solución de problemas.",
             "Computación física y Robótica": "No aplica para este ciclo.",
-            "Ciencia de datos e Inteligencia Artificial": "Reconoce los fundamentos de la inteligencia artificial y su presencia en la vida cotidiana, mediante ejemplos concretos como asistentes virtuales, valorando el uso seguro y responsable de estas tecnologías."
+            "Ciencia de datos e Inteligencia artificial": "Reconoce los fundamentos de la inteligencia artificial y su presencia en la vida cotidiana, mediante ejemplos concretos como asistentes virtuales, valorando el uso seguro y responsable de estas tecnologías."
           },
           "II Ciclo": {
             "Apropiación tecnológica y Digital": "Selecciona la configuración de programas locales y en línea para su correcto uso al crear, buscar, compartir, organizar y administrar información en la realización de diferentes tareas de manera comprensiva, segura y responsable.",
             "Programación y Algoritmos": "Crea algoritmos que integran los conceptos de programación como secuencia, evento, estructuras de control (condicionales simples y ciclos), en la solución a problemas del contexto mediante la programación por bloques.",
             "Computación física y Robótica": "Crea algoritmos que permiten la simulación de comportamientos de aparatos tecnológicos, aplicando elementos de computación física, programación y electrónica para la resolución de un problema.",
-            "Ciencia de datos e Inteligencia Artificial": "Reconoce el uso de la inteligencia artificial en contextos cotidianos y aplica técnicas básicas de recolección, análisis y representación de datos mediante tablas y gráficos."
+            "Ciencia de datos e Inteligencia artificial": "Reconoce el uso de la inteligencia artificial en contextos cotidianos y aplica técnicas básicas de recolección, análisis y representación de datos mediante tablas y gráficos."
           },
           "III Ciclo": {
             "Apropiación tecnológica y Digital": "Combina herramientas digitales, tomando en cuenta fundamentos de tecnología, impacto de las TIC, seguridad y privacidad digital y su experiencia de uso, en la realización de productos digitales.",
             "Programación y Algoritmos": "Integra conceptos de programación como eventos, operadores, estructuras de datos, estructuras de control, procedimientos, funciones, colecciones de datos y algoritmos (diagrama de flujo y pseudocódigo), en la solución de problemas reales.",
             "Computación física y Robótica": "Aplica fundamentos de robótica, computación física, electrónica, mecánica y sistemas robóticos autónomos en la programación y construcción de prototipos que resuelven un problema.",
-            "Ciencia de datos e Inteligencia Artificial": "Analiza datos mediante herramientas digitales que permiten su visualización para la toma de decisiones en situaciones cotidianas y reconoce aspectos fundamentales de la inteligencia artificial, incluyendo sus aplicaciones actuales y desafíos asociados."
+            "Ciencia de datos e Inteligencia artificial": "Analiza datos mediante herramientas digitales que permiten su visualización para la toma de decisiones en situaciones cotidianas y reconoce aspectos fundamentales de la inteligencia artificial, incluyendo sus aplicaciones actuales y desafíos asociados."
           }
         };
 
@@ -1859,6 +1966,7 @@
         let semanaCounter = 0;
         let planesGuardados = JSON.parse(localStorage.getItem('planesDidacticos')) || [];
         let planSeleccionado = null;
+        let saberesSeleccionadosGlobal = new Set(); // MEJORA: Conjunto global de saberes seleccionados
 
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', function() {
@@ -1969,6 +2077,10 @@
             document.getElementById('totalLecciones').textContent = '8';
             document.getElementById('totalSemanas').textContent = '0';
             
+            // Limpiar saberes seleccionados
+            saberesSeleccionadosGlobal.clear();
+            actualizarSaberesSeleccionadosDisplay();
+            
             // Limpiar localStorage
             localStorage.removeItem('planActual');
         }
@@ -2016,9 +2128,23 @@
         function crearHTMLSemana(index, leccionInicio, leccionFin, leccionesEnSemana) {
             return `
             <div class="semana-item" data-semana-index="${index}">
+                <!-- MEJORA 1: SABERES SEMANA ARRIBA DE TODO -->
+                <div class="saberes-semana-container">
+                    <div class="section-title">Saberes Conceptuales para esta semana</div>
+                    <div class="saberes-semana-opciones" id="saberesSemana${index}">
+                        <div class="saberes-info">Seleccione nivel y áreas de conocimiento</div>
+                    </div>
+                    <div class="saberes-manuales-container">
+                        <strong>Saberes manuales para esta semana:</strong>
+                        <div id="saberesManualesSemana${index}" class="saberes-manuales-lista">
+                            <em>No hay saberes manuales definidos</em>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="semana-header">
                     <strong>Semana: <input type="text" class="semana-nombre" value="Semana ${leccionInicio}-${leccionFin}"></strong>
-                    <span class="lecciones-info">Lecciones: <span class="lecciones-contador">${leccionesEnSemana}</span></span>
+                    <!-- MEJORA 2: ELIMINADO LECCIONES INFO -->
                     ${index > 0 ? '<button type="button" class="btn-eliminar-semana" onclick="eliminarSemana(this)">✕</button>' : ''}
                 </div>
                 
@@ -2046,19 +2172,6 @@
                             <button class="expand-btn" onclick="toggleExpansion(this)" title="Expandir">+</button>
                         </div>
                         <div class="contenedor-editable" contenteditable="true" data-placeholder="Indicador de evaluación..."></div>
-                    </div>
-                </div>
-                
-                <div class="saberes-semana-container">
-                    <div class="section-title">Saberes Conceptuales para esta semana</div>
-                    <div class="saberes-semana-opciones" id="saberesSemana${index}">
-                        <div class="saberes-info">Seleccione nivel y áreas de conocimiento</div>
-                    </div>
-                    <div class="saberes-manuales-container">
-                        <strong>Saberes manuales para esta semana:</strong>
-                        <div id="saberesManualesSemana${index}" class="saberes-manuales-lista">
-                            <em>No hay saberes manuales definidos</em>
-                        </div>
                     </div>
                 </div>
             </div>`;
@@ -2161,12 +2274,14 @@
                 if (areaData && areaData.saberes.length > 0) {
                     html += `<div class="area-saberes"><strong>${areaNombre}:</strong><br>`;
                     areaData.saberes.forEach(saber => {
+                        const estaSeleccionado = saberesSeleccionadosGlobal.has(saber.nombre);
                         html += `<label class="saber-item">
                                     <input type="checkbox" name="saberConceptualSemana${semanaIndex}" 
                                            value="${saber.nombre}" 
                                            data-indicadores='${JSON.stringify(saber.indicadores)}'
                                            data-semana-index="${semanaIndex}"
-                                           onchange="actualizarIndicadoresLogroSemana(this); guardarDatosAutomaticamente()">
+                                           ${estaSeleccionado ? 'checked' : ''}
+                                           onchange="manejarSeleccionSaber(this); guardarDatosAutomaticamente()">
                                     <span>${saber.nombre}</span>
                                 </label><br>`;
                     });
@@ -2175,6 +2290,65 @@
             });
 
             container.innerHTML = html || '<div class="saberes-info">No hay saberes para esta combinación</div>';
+        }
+
+        // ===== MEJORA PRINCIPAL: SISTEMA DE SABERES SELECCIONADOS GLOBAL =====
+        function manejarSeleccionSaber(checkbox) {
+            const saberNombre = checkbox.value;
+            const semanaIndex = checkbox.getAttribute('data-semana-index');
+            
+            if (checkbox.checked) {
+                saberesSeleccionadosGlobal.add(saberNombre);
+            } else {
+                saberesSeleccionadosGlobal.delete(saberNombre);
+            }
+            
+            // Actualizar el display de saberes seleccionados
+            actualizarSaberesSeleccionadosDisplay();
+            
+            // Actualizar indicadores de logro para esta semana
+            actualizarIndicadoresLogroSemana(checkbox);
+        }
+
+        function actualizarSaberesSeleccionadosDisplay() {
+            const container = document.getElementById('saberesSeleccionadosLista');
+            const contador = document.getElementById('totalSaberes');
+            
+            if (saberesSeleccionadosGlobal.size === 0) {
+                container.innerHTML = '<div class="saberes-info">Seleccione saberes conceptuales en las semanas para verlos aquí</div>';
+                contador.textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            saberesSeleccionadosGlobal.forEach(saber => {
+                html += `
+                <div class="saber-seleccionado-item">
+                    ${saber}
+                    <button class="eliminar" onclick="eliminarSaberGlobal('${saber}')" title="Eliminar saber">✕</button>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            contador.textContent = saberesSeleccionadosGlobal.size;
+        }
+
+        function eliminarSaberGlobal(saberNombre) {
+            // Eliminar del conjunto global
+            saberesSeleccionadosGlobal.delete(saberNombre);
+            
+            // Desmarcar todos los checkboxes correspondientes en todas las semanas
+            document.querySelectorAll(`input[type="checkbox"][value="${saberNombre}"]`).forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Actualizar el display
+            actualizarSaberesSeleccionadosDisplay();
+            
+            // Actualizar indicadores de logro en todas las semanas afectadas
+            actualizarIndicadoresLogroEnTodasLasSemanas();
+            
+            guardarDatosAutomaticamente();
         }
 
         function actualizarSaberesManualesEnTodasLasSemanas() {
@@ -2187,12 +2361,15 @@
                 if (saberesArray.length > 0) {
                     let html = '<div style="margin-top: 10px;">';
                     saberesArray.forEach((saber, i) => {
+                        const saberTrim = saber.trim();
+                        const estaSeleccionado = saberesSeleccionadosGlobal.has(saberTrim);
                         html += `<label class="saber-item">
                                     <input type="checkbox" name="saberManualSemana${index}" 
-                                           value="${saber.trim()}" 
+                                           value="${saberTrim}" 
                                            data-semana-index="${index}"
-                                           onchange="actualizarIndicadoresLogroSemana(this); guardarDatosAutomaticamente()">
-                                    <span>${saber.trim()}</span>
+                                           ${estaSeleccionado ? 'checked' : ''}
+                                           onchange="manejarSeleccionSaberManual(this); guardarDatosAutomaticamente()">
+                                    <span>${saberTrim}</span>
                                 </label>${i < saberesArray.length - 1 ? '<br>' : ''}`;
                     });
                     html += '</div>';
@@ -2201,6 +2378,23 @@
                     container.innerHTML = '<em>No hay saberes manuales definidos</em>';
                 }
             });
+        }
+
+        function manejarSeleccionSaberManual(checkbox) {
+            const saberNombre = checkbox.value;
+            const semanaIndex = checkbox.getAttribute('data-semana-index');
+            
+            if (checkbox.checked) {
+                saberesSeleccionadosGlobal.add(saberNombre);
+            } else {
+                saberesSeleccionadosGlobal.delete(saberNombre);
+            }
+            
+            // Actualizar el display de saberes seleccionados
+            actualizarSaberesSeleccionadosDisplay();
+            
+            // Actualizar indicadores de logro para esta semana
+            actualizarIndicadoresLogroSemana(checkbox);
         }
 
         // ===== MEJORA 1: INDICADORES DE LOGRO CON FORMATO DE LISTA MEJORADO =====
@@ -2233,6 +2427,36 @@
             } else {
                 contenedor.innerHTML = "Seleccione al menos dos saberes conceptuales para esta semana.";
             }
+        }
+
+        function actualizarIndicadoresLogroEnTodasLasSemanas() {
+            const semanas = document.querySelectorAll('.semana-item');
+            semanas.forEach((semana, index) => {
+                const contenedor = semana.querySelector('.contenedor-editable[contenteditable="false"]');
+                const saberesSeleccionados = Array.from(semana.querySelectorAll(`input[name="saberConceptualSemana${index}"]:checked`));
+                const saberesManualesSeleccionados = Array.from(semana.querySelectorAll(`input[name="saberManualSemana${index}"]:checked`));
+                
+                let indicadores = [];
+                
+                saberesSeleccionados.forEach(cb => {
+                    try {
+                        const indicadoresSaber = JSON.parse(cb.getAttribute('data-indicadores') || '[]');
+                        indicadores = indicadores.concat(indicadoresSaber);
+                    } catch (error) {
+                        console.error("Error parseando indicadores:", error);
+                    }
+                });
+                
+                saberesManualesSeleccionados.forEach(cb => {
+                    indicadores.push(`Aplica el concepto de "${cb.value}" en situaciones prácticas del contexto educativo.`);
+                });
+                
+                if (indicadores.length > 0) {
+                    contenedor.innerHTML = `<ul class="indicadores-lista">${indicadores.map(ind => `<li>${ind}</li>`).join('')}</ul>`;
+                } else {
+                    contenedor.innerHTML = "Seleccione al menos dos saberes conceptuales para esta semana.";
+                }
+            });
         }
 
         // ===== MEJORA 2: SISTEMA DE IA EXTERNA MEJORADO =====
@@ -2470,7 +2694,7 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                 'apropiacion': 'Apropiación tecnológica y Digital',
                 'programacion': 'Programación y Algoritmos', 
                 'robotica': 'Computación física y Robótica',
-                'ciencia': 'Ciencia de datos e Inteligencia Artificial'
+                'ciencia': 'Ciencia de datos e Inteligencia artificial'
             };
             return areas[areaKey] || areaKey;
         }
@@ -2498,6 +2722,7 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                 queNoFunciono: document.getElementById('queNoFunciono').value,
                 queMejorar: document.getElementById('queMejorar').value,
                 observaciones: document.getElementById('observaciones').value,
+                saberesSeleccionadosGlobal: Array.from(saberesSeleccionadosGlobal), // MEJORA: Guardar saberes globales
                 semanas: []
             };
             
@@ -2505,10 +2730,10 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                 const contenedores = semana.querySelectorAll('.contenedor-editable');
                 const datosSemana = {
                     nombre: semana.querySelector('.semana-nombre').value,
-                    lecciones: semana.querySelector('.lecciones-contador').textContent,
+                    lecciones: semana.querySelector('.lecciones-contador')?.textContent || '4', // MEJORA 2: Valor por defecto
                     indicadoresLogro: contenedores[0]?.innerHTML || '',
-                    estrategiasMediacion: contenedores[1]?.textContent || '',
-                    indicadorEvaluacion: contenedores[2]?.textContent || '',
+                    estrategiasMediacion: contenedores[1]?.innerHTML || '',
+                    indicadorEvaluacion: contenedores[2]?.innerHTML || '',
                     saberesConceptuales: Array.from(semana.querySelectorAll(`input[name="saberConceptualSemana${index}"]:checked`)).map(cb => cb.value),
                     saberesManuales: Array.from(semana.querySelectorAll(`input[name="saberManualSemana${index}"]:checked`)).map(cb => cb.value)
                 };
@@ -2528,6 +2753,12 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                 }
             }
             
+            // MEJORA: Cargar saberes seleccionados globales
+            if (plan.saberesSeleccionadosGlobal) {
+                saberesSeleccionadosGlobal = new Set(plan.saberesSeleccionadosGlobal);
+                actualizarSaberesSeleccionadosDisplay();
+            }
+            
             if (plan.semanas) {
                 plan.semanas.forEach((semanaData, index) => {
                     const semanaElement = document.querySelector(`.semana-item[data-semana-index="${index}"]`);
@@ -2536,26 +2767,35 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                         
                         const contenedores = semanaElement.querySelectorAll('.contenedor-editable');
                         if (semanaData.indicadoresLogro && contenedores[0]) contenedores[0].innerHTML = semanaData.indicadoresLogro;
-                        if (semanaData.estrategiasMediacion && contenedores[1]) contenedores[1].textContent = semanaData.estrategiasMediacion;
-                        if (semanaData.indicadorEvaluacion && contenedores[2]) contenedores[2].textContent = semanaData.indicadorEvaluacion;
+                        if (semanaData.estrategiasMediacion && contenedores[1]) contenedores[1].innerHTML = semanaData.estrategiasMediacion;
+                        if (semanaData.indicadorEvaluacion && contenedores[2]) contenedores[2].innerHTML = semanaData.indicadorEvaluacion;
                         
                         if (semanaData.saberesConceptuales) {
                             semanaData.saberesConceptuales.forEach(saber => {
                                 const checkbox = semanaElement.querySelector(`input[name="saberConceptualSemana${index}"][value="${saber}"]`);
-                                if (checkbox) checkbox.checked = true;
+                                if (checkbox) {
+                                    checkbox.checked = true;
+                                    saberesSeleccionadosGlobal.add(saber);
+                                }
                             });
                         }
                         
                         if (semanaData.saberesManuales) {
                             semanaData.saberesManuales.forEach(saber => {
                                 const checkbox = semanaElement.querySelector(`input[name="saberManualSemana${index}"][value="${saber}"]`);
-                                if (checkbox) checkbox.checked = true;
+                                if (checkbox) {
+                                    checkbox.checked = true;
+                                    saberesSeleccionadosGlobal.add(saber);
+                                }
                             });
                         }
                         
                         actualizarIndicadoresLogroDesdeDatos(semanaElement, index);
                     }
                 });
+                
+                // Actualizar display después de cargar todos los datos
+                actualizarSaberesSeleccionadosDisplay();
             }
         }
 
