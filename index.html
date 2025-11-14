@@ -1398,7 +1398,7 @@
                 </td>
                 <td>
                     <div id="rdaContainer" class="rda-container">
-                        <div class="saberes-info">Seleccione un nivel y al menos un área de conocimiento</div>
+                        <div class="saberes-info">Seleccione al menos un área de conocimiento</div>
                     </div>
                 </td>
             </tr>
@@ -1415,7 +1415,7 @@
                 <td>
                     <!-- CONTENEDOR MEJORADO: Ahora muestra los saberes seleccionados en tiempo real -->
                     <div id="saberesConceptualesContainer" class="saberes-seleccionados-container">
-                        <div class="saberes-info">Saberes conceptuales en cada semana ve abajo en Planificación por semanas</div>
+                        <div class="saberes-info">Encuentralos en Planificación por Semanas</div>
                         <div id="saberesSeleccionadosLista" class="saberes-seleccionados-lista">
                             <!-- Los saberes seleccionados aparecerán aquí dinámicamente -->
                         </div>
@@ -1774,7 +1774,7 @@
                 { nombre: "Contraseñas seguras", indicadores: ["Reconocer la importancia de las contraseñas seguras, aplicando estrategias básicas como el uso de doble factor."] },
                 { nombre: "Software malicioso", indicadores: ["Identificar las formas comunes de propagación de software malicioso y estrategias básicas de prevención."] },
                 { nombre: "Riesgos en línea", indicadores: ["Identificar riesgos en línea como ciberacoso, contenido inapropiado y suplantación de identidad."] },
-                { nombre: "Medidas de seguridad en la web", indicadores: ["Identificar medidas de seguridad en la web, reconociendo la diferencia entre HTTPS y HTTP."] }
+                { nombre: "Medidas de seguridad en la web", indicadores: ["Identificar medidas de seguridad en la web, reconociendo la diferencia entre HTTPS и HTTP."] }
               ]
             },
             "Programación y Algoritmos": {
@@ -1956,7 +1956,7 @@
           },
           "III Ciclo": {
             "Apropiación tecnológica y Digital": "Combina herramientas digitales, tomando en cuenta fundamentos de tecnología, impacto de las TIC, seguridad y privacidad digital y su experiencia de uso, en la realización de productos digitales.",
-            "Programación y Algoritmos": "Integra conceptos de programación como eventos, operadores, estructuras de datos, estructuras de control, procedimientos, funciones, colecciones de datos y algoritmos (diagrama de flujo y pseudocódigo), en la solución de problemas reales.",
+            "Programación y Algoritmos": "Integra conceptos de programación como eventos, operadores, estructuras de datos, estructuras de control, procedimientos, funciones, colecciones de datos y algoritmos (diagrama de flujo y pseudocódigo), en la solution de problemas reales.",
             "Computación física y Robótica": "Aplica fundamentos de robótica, computación física, electrónica, mecánica y sistemas robóticos autónomos en la programación y construcción de prototipos que resuelven un problema.",
             "Ciencia de datos e Inteligencia artificial": "Analiza datos mediante herramientas digitales que permiten su visualización para la toma de decisiones en situaciones cotidianas y reconoce aspectos fundamentales de la inteligencia artificial, incluyendo sus aplicaciones actuales y desafíos asociados."
           }
@@ -1966,7 +1966,9 @@
         let semanaCounter = 0;
         let planesGuardados = JSON.parse(localStorage.getItem('planesDidacticos')) || [];
         let planSeleccionado = null;
-        let saberesSeleccionadosGlobal = new Set(); // MEJORA: Conjunto global de saberes seleccionados
+        
+        // MEJORA CRÍTICA: Sistema de saberes por semana separado
+        let saberesPorSemana = {}; // {semanaIndex: Set(saberes)}
 
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', function() {
@@ -2070,7 +2072,7 @@
             document.getElementById('observaciones').value = '';
             
             // Limpiar contenedores
-            document.getElementById('rdaContainer').innerHTML = '<div class="saberes-info">Seleccione un nivel y al menos un área de conocimiento</div>';
+            document.getElementById('rdaContainer').innerHTML = '<div class="saberes-info">Seleccione  al menos un área de conocimiento</div>';
             document.getElementById('semanasContainer').innerHTML = '<div class="saberes-info">Ingrese la cantidad de lecciones planificadas para generar las semanas</div>';
             
             // Limpiar contadores
@@ -2078,7 +2080,7 @@
             document.getElementById('totalSemanas').textContent = '0';
             
             // Limpiar saberes seleccionados
-            saberesSeleccionadosGlobal.clear();
+            saberesPorSemana = {};
             actualizarSaberesSeleccionadosDisplay();
             
             // Limpiar localStorage
@@ -2102,15 +2104,17 @@
                 return;
             }
 
-            const cantidadSemanas = Math.ceil(lecciones / 4);
+            // MEJORA 1: Cambiar de 4 a 2 lecciones por semana
+            const cantidadSemanas = Math.ceil(lecciones / 2);
             document.getElementById('totalSemanas').textContent = cantidadSemanas;
             
             let html = '';
             semanaCounter = 0;
             
             for (let i = 0; i < cantidadSemanas; i++) {
-                const leccionInicio = (i * 4) + 1;
-                const leccionFin = Math.min((i + 1) * 4, lecciones);
+                // MEJORA 1: Cambiar de 4 a 2 lecciones por semana
+                const leccionInicio = (i * 2) + 1;
+                const leccionFin = Math.min((i + 1) * 2, lecciones);
                 const leccionesEnSemana = leccionFin - leccionInicio + 1;
                 
                 html += crearHTMLSemana(i, leccionInicio, leccionFin, leccionesEnSemana);
@@ -2180,19 +2184,32 @@
         function agregarSemanaManual() {
             const semanasContainer = document.getElementById('semanasContainer');
             const leccionesActuales = parseInt(document.getElementById('leccionesPlanificadas').value) || 0;
+            
+            // MEJORA 1: Cambiar de 4 a 2 lecciones por semana
             const nuevaLeccionInicio = leccionesActuales + 1;
-            const nuevaLeccionFin = leccionesActuales + 4;
+            const nuevaLeccionFin = leccionesActuales + 2;
             
-            document.getElementById('leccionesPlanificadas').value = leccionesActuales + 4;
-            document.getElementById('totalLecciones').textContent = leccionesActuales + 4;
+            // MEJORA 1: Cambiar de 4 a 2 lecciones por semana
+            document.getElementById('leccionesPlanificadas').value = leccionesActuales + 2;
+            document.getElementById('totalLecciones').textContent = leccionesActuales + 2;
             
-            const nuevaSemanaHTML = crearHTMLSemana(semanaCounter, nuevaLeccionInicio, nuevaLeccionFin, 4);
+            const nuevaSemanaHTML = crearHTMLSemana(semanaCounter, nuevaLeccionInicio, nuevaLeccionFin, 2);
             semanasContainer.insertAdjacentHTML('beforeend', nuevaSemanaHTML);
+            
+            // Inicializar conjunto de saberes para la nueva semana
+            saberesPorSemana[semanaCounter] = new Set();
             
             semanaCounter++;
             document.getElementById('totalSemanas').textContent = document.querySelectorAll('.semana-item').length;
             
-            actualizarSaberesEnTodasLasSemanas();
+            // MEJORA 2: No copiar saberes de semanas anteriores
+            // En lugar de actualizar todos los saberes, solo cargamos los disponibles
+            const nivel = document.getElementById('nivel').value;
+            const areasSeleccionadas = Array.from(document.querySelectorAll('input[name="area"]:checked')).map(cb => cb.value);
+            const nuevaSemana = document.querySelector(`.semana-item[data-semana-index="${semanaCounter-1}"]`);
+            const container = nuevaSemana.querySelector('.saberes-semana-opciones');
+            cargarSaberesEnContenedor(container, nivel, areasSeleccionadas, semanaCounter-1);
+            
             actualizarSaberesManualesEnTodasLasSemanas();
             guardarDatosAutomaticamente();
             
@@ -2208,16 +2225,28 @@
                 return;
             }
             
-            if (confirm("¿Está seguro de que desea eliminar esta semana? Los datos de las otras semanas se conservarán.")) {
-                const leccionesEnSemana = parseInt(semana.querySelector('.lecciones-contador').textContent);
+            if (confirm("¿Está seguro de que desea eliminar esta semana? Solo se eliminarán los saberes de esta semana específica.")) {
+                // MEJORA 3: Corregir eliminación de semanas - SOLO eliminar saberes de esta semana
+                const leccionesEnSemana = 2; // MEJORA 1: Ahora son 2 lecciones por semana
                 const leccionesActuales = parseInt(document.getElementById('leccionesPlanificadas').value);
                 document.getElementById('leccionesPlanificadas').value = leccionesActuales - leccionesEnSemana;
                 document.getElementById('totalLecciones').textContent = leccionesActuales - leccionesEnSemana;
                 
+                // MEJORA CRÍTICA: Eliminar solo los saberes de esta semana específica
+                if (saberesPorSemana[index]) {
+                    delete saberesPorSemana[index];
+                }
+                
+                // MEJORA 3: Eliminar completamente la semana
                 semana.remove();
                 reindexarSemanas();
                 document.getElementById('totalSemanas').textContent = document.querySelectorAll('.semana-item').length;
+                
+                // Actualizar el display global después de eliminar
+                actualizarSaberesSeleccionadosDisplay();
                 guardarDatosAutomaticamente();
+                
+                alert('✅ Semana eliminada correctamente. Los saberes de otras semanas se conservaron.');
             }
         }
 
@@ -2229,7 +2258,7 @@
             const container = document.getElementById('rdaContainer');
 
             if (!nivel || areasSeleccionadas.length === 0) {
-                container.innerHTML = '<div class="saberes-info">Seleccione un nivel y al menos un área de conocimiento</div>';
+                container.innerHTML = '<div class="saberes-info">Seleccione al menos un área de conocimiento</div>';
                 return;
             }
 
@@ -2256,7 +2285,7 @@
 
         function cargarSaberesEnContenedor(container, nivel, areasSeleccionadas, semanaIndex) {
             if (!nivel || areasSeleccionadas.length === 0) {
-                container.innerHTML = '<div class="saberes-info">Seleccione nivel y áreas de conocimiento</div>';
+                container.innerHTML = '<div class="saberes-info">Seleccione mínimo un área de conocimiento</div>';
                 return;
             }
 
@@ -2264,6 +2293,11 @@
             if (!nivelData) {
                 container.innerHTML = '<div class="saberes-info">No hay datos para este nivel</div>';
                 return;
+            }
+
+            // Inicializar conjunto de saberes para esta semana si no existe
+            if (!saberesPorSemana[semanaIndex]) {
+                saberesPorSemana[semanaIndex] = new Set();
             }
 
             let html = '';
@@ -2274,7 +2308,7 @@
                 if (areaData && areaData.saberes.length > 0) {
                     html += `<div class="area-saberes"><strong>${areaNombre}:</strong><br>`;
                     areaData.saberes.forEach(saber => {
-                        const estaSeleccionado = saberesSeleccionadosGlobal.has(saber.nombre);
+                        const estaSeleccionado = saberesPorSemana[semanaIndex].has(saber.nombre);
                         html += `<label class="saber-item">
                                     <input type="checkbox" name="saberConceptualSemana${semanaIndex}" 
                                            value="${saber.nombre}" 
@@ -2292,18 +2326,23 @@
             container.innerHTML = html || '<div class="saberes-info">No hay saberes para esta combinación</div>';
         }
 
-        // ===== MEJORA PRINCIPAL: SISTEMA DE SABERES SELECCIONADOS GLOBAL =====
+        // ===== MEJORA PRINCIPAL: SISTEMA DE SABERES POR SEMANA SEPARADO =====
         function manejarSeleccionSaber(checkbox) {
             const saberNombre = checkbox.value;
-            const semanaIndex = checkbox.getAttribute('data-semana-index');
+            const semanaIndex = parseInt(checkbox.getAttribute('data-semana-index'));
             
-            if (checkbox.checked) {
-                saberesSeleccionadosGlobal.add(saberNombre);
-            } else {
-                saberesSeleccionadosGlobal.delete(saberNombre);
+            // Asegurar que existe el conjunto para esta semana
+            if (!saberesPorSemana[semanaIndex]) {
+                saberesPorSemana[semanaIndex] = new Set();
             }
             
-            // Actualizar el display de saberes seleccionados
+            if (checkbox.checked) {
+                saberesPorSemana[semanaIndex].add(saberNombre);
+            } else {
+                saberesPorSemana[semanaIndex].delete(saberNombre);
+            }
+            
+            // Actualizar el display de saberes seleccionados (global)
             actualizarSaberesSeleccionadosDisplay();
             
             // Actualizar indicadores de logro para esta semana
@@ -2314,32 +2353,43 @@
             const container = document.getElementById('saberesSeleccionadosLista');
             const contador = document.getElementById('totalSaberes');
             
-            if (saberesSeleccionadosGlobal.size === 0) {
-                container.innerHTML = '<div class="saberes-info">Seleccione saberes conceptuales en las semanas para verlos aquí</div>';
+            // Obtener todos los saberes únicos de todas las semanas
+            const todosLosSaberes = new Set();
+            Object.values(saberesPorSemana).forEach(saberesSemana => {
+                saberesSemana.forEach(saber => todosLosSaberes.add(saber));
+            });
+            
+            if (todosLosSaberes.size === 0) {
+                container.innerHTML = '<div class="saberes-info">Saberes conceptuales </div>';
                 contador.textContent = '0';
                 return;
             }
             
             let html = '';
-            saberesSeleccionadosGlobal.forEach(saber => {
+            todosLosSaberes.forEach(saber => {
                 html += `
                 <div class="saber-seleccionado-item">
                     ${saber}
-                    <button class="eliminar" onclick="eliminarSaberGlobal('${saber}')" title="Eliminar saber">✕</button>
+                    <button class="eliminar" onclick="eliminarSaberGlobal('${saber}')" title="Eliminar saber de todas las semanas">✕</button>
                 </div>`;
             });
             
             container.innerHTML = html;
-            contador.textContent = saberesSeleccionadosGlobal.size;
+            contador.textContent = todosLosSaberes.size;
         }
 
         function eliminarSaberGlobal(saberNombre) {
-            // Eliminar del conjunto global
-            saberesSeleccionadosGlobal.delete(saberNombre);
-            
-            // Desmarcar todos los checkboxes correspondientes en todas las semanas
-            document.querySelectorAll(`input[type="checkbox"][value="${saberNombre}"]`).forEach(checkbox => {
-                checkbox.checked = false;
+            // Eliminar el saber de TODAS las semanas
+            Object.keys(saberesPorSemana).forEach(semanaIndex => {
+                if (saberesPorSemana[semanaIndex]) {
+                    saberesPorSemana[semanaIndex].delete(saberNombre);
+                    
+                    // Desmarcar checkbox correspondiente en esta semana
+                    const checkbox = document.querySelector(`input[name="saberConceptualSemana${semanaIndex}"][value="${saberNombre}"]`);
+                    if (checkbox) {
+                        checkbox.checked = false;
+                    }
+                }
             });
             
             // Actualizar el display
@@ -2362,7 +2412,7 @@
                     let html = '<div style="margin-top: 10px;">';
                     saberesArray.forEach((saber, i) => {
                         const saberTrim = saber.trim();
-                        const estaSeleccionado = saberesSeleccionadosGlobal.has(saberTrim);
+                        const estaSeleccionado = saberesPorSemana[index]?.has(saberTrim) || false;
                         html += `<label class="saber-item">
                                     <input type="checkbox" name="saberManualSemana${index}" 
                                            value="${saberTrim}" 
@@ -2382,12 +2432,17 @@
 
         function manejarSeleccionSaberManual(checkbox) {
             const saberNombre = checkbox.value;
-            const semanaIndex = checkbox.getAttribute('data-semana-index');
+            const semanaIndex = parseInt(checkbox.getAttribute('data-semana-index'));
+            
+            // Asegurar que existe el conjunto para esta semana
+            if (!saberesPorSemana[semanaIndex]) {
+                saberesPorSemana[semanaIndex] = new Set();
+            }
             
             if (checkbox.checked) {
-                saberesSeleccionadosGlobal.add(saberNombre);
+                saberesPorSemana[semanaIndex].add(saberNombre);
             } else {
-                saberesSeleccionadosGlobal.delete(saberNombre);
+                saberesPorSemana[semanaIndex].delete(saberNombre);
             }
             
             // Actualizar el display de saberes seleccionados
@@ -2399,7 +2454,7 @@
 
         // ===== MEJORA 1: INDICADORES DE LOGRO CON FORMATO DE LISTA MEJORADO =====
         function actualizarIndicadoresLogroSemana(checkbox) {
-            const semanaIndex = checkbox.getAttribute('data-semana-index');
+            const semanaIndex = parseInt(checkbox.getAttribute('data-semana-index'));
             const semana = document.querySelector(`.semana-item[data-semana-index="${semanaIndex}"]`);
             const contenedor = semana.querySelector('.contenedor-editable[contenteditable="false"]');
             
@@ -2454,7 +2509,7 @@
                 if (indicadores.length > 0) {
                     contenedor.innerHTML = `<ul class="indicadores-lista">${indicadores.map(ind => `<li>${ind}</li>`).join('')}</ul>`;
                 } else {
-                    contenedor.innerHTML = "Seleccione al menos dos saberes conceptuales para esta semana.";
+                    contenedor.innerHTML = "Sugerencia: Seleccione al menos dos saberes conceptuales para esta semana.";
                 }
             });
         }
@@ -2722,15 +2777,20 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                 queNoFunciono: document.getElementById('queNoFunciono').value,
                 queMejorar: document.getElementById('queMejorar').value,
                 observaciones: document.getElementById('observaciones').value,
-                saberesSeleccionadosGlobal: Array.from(saberesSeleccionadosGlobal), // MEJORA: Guardar saberes globales
+                saberesPorSemana: {}, // MEJORA CRÍTICA: Guardar saberes por semana
                 semanas: []
             };
+            
+            // MEJORA CRÍTICA: Guardar saberes por semana como arrays
+            Object.keys(saberesPorSemana).forEach(semanaIndex => {
+                datos.saberesPorSemana[semanaIndex] = Array.from(saberesPorSemana[semanaIndex]);
+            });
             
             document.querySelectorAll('.semana-item').forEach((semana, index) => {
                 const contenedores = semana.querySelectorAll('.contenedor-editable');
                 const datosSemana = {
                     nombre: semana.querySelector('.semana-nombre').value,
-                    lecciones: semana.querySelector('.lecciones-contador')?.textContent || '4', // MEJORA 2: Valor por defecto
+                    lecciones: 2, // MEJORA 1: Siempre 2 lecciones por semana
                     indicadoresLogro: contenedores[0]?.innerHTML || '',
                     estrategiasMediacion: contenedores[1]?.innerHTML || '',
                     indicadorEvaluacion: contenedores[2]?.innerHTML || '',
@@ -2753,9 +2813,12 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                 }
             }
             
-            // MEJORA: Cargar saberes seleccionados globales
-            if (plan.saberesSeleccionadosGlobal) {
-                saberesSeleccionadosGlobal = new Set(plan.saberesSeleccionadosGlobal);
+            // MEJORA CRÍTICA: Cargar saberes por semana
+            if (plan.saberesPorSemana) {
+                saberesPorSemana = {};
+                Object.keys(plan.saberesPorSemana).forEach(semanaIndex => {
+                    saberesPorSemana[semanaIndex] = new Set(plan.saberesPorSemana[semanaIndex]);
+                });
                 actualizarSaberesSeleccionadosDisplay();
             }
             
@@ -2775,7 +2838,11 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                                 const checkbox = semanaElement.querySelector(`input[name="saberConceptualSemana${index}"][value="${saber}"]`);
                                 if (checkbox) {
                                     checkbox.checked = true;
-                                    saberesSeleccionadosGlobal.add(saber);
+                                    // Asegurar que existe el conjunto para esta semana
+                                    if (!saberesPorSemana[index]) {
+                                        saberesPorSemana[index] = new Set();
+                                    }
+                                    saberesPorSemana[index].add(saber);
                                 }
                             });
                         }
@@ -2785,7 +2852,11 @@ Proporciona una actividad completa que integre todos estos elementos de manera c
                                 const checkbox = semanaElement.querySelector(`input[name="saberManualSemana${index}"][value="${saber}"]`);
                                 if (checkbox) {
                                     checkbox.checked = true;
-                                    saberesSeleccionadosGlobal.add(saber);
+                                    // Asegurar que existe el conjunto para esta semana
+                                    if (!saberesPorSemana[index]) {
+                                        saberesPorSemana[index] = new Set();
+                                    }
+                                    saberesPorSemana[index].add(saber);
                                 }
                             });
                         }
