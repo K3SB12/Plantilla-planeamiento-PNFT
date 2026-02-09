@@ -4830,3 +4830,1049 @@
             contenido = contenido.replace(/&#39;/g, "'");
             
             // 
+                        // 3. Limpiar espacios múltiples y saltos de línea
+            contenido = contenido.replace(/\s+/g, ' ');
+            contenido = contenido.replace(/\n\s*\n/g, '\n');
+            
+            // 4. Preservar algunos formatos básicos
+            contenido = contenido.replace(/•/g, '• ');
+            contenido = contenido.replace(/<br>/gi, '\n');
+            contenido = contenido.replace(/<\/p>/gi, '\n');
+            
+            // 5. Truncar si es muy largo (para evitar problemas en PDF)
+            if (contenido.length > 2000) {
+                contenido = contenido.substring(0, 2000) + '... [texto truncado]';
+            }
+            
+            return contenido.trim();
+        }
+        
+        function obtenerMetodologiaActiva() {
+            let metodologia = document.getElementById('metodologiaActiva').value;
+            if (metodologia === 'otra') {
+                metodologia = document.getElementById('metodologiaPersonalizada').value || 'Metodología personalizada';
+            }
+            
+            if (metodologia === 'ABJ') return 'Aprendizaje basado en juegos (ABJ)';
+            if (metodologia === 'ABR') return 'Aprendizaje basado en retos (ABR)';
+            if (metodologia === 'APD') return 'Aprendizaje Pensamiento por Diseño (APD)';
+            return metodologia;
+        }
+        
+        function obtenerEjesTransversales() {
+            const ejesSeleccionados = [];
+            document.querySelectorAll('input[name="eje"]:checked').forEach(cb => {
+                if (cb.value === 'ciudadania') ejesSeleccionados.push('Ciudadanía y ética digital');
+                if (cb.value === 'pensamiento') ejesSeleccionados.push('Pensamiento computacional');
+                if (cb.value === 'emprendimiento') ejesSeleccionados.push('Emprendimiento e Innovación');
+            });
+            return ejesSeleccionados.join(', ') || 'No seleccionado';
+        }
+        
+        // ===== EXPORTACIÓN A PDF - VERSIÓN COMPLETA =====
+        function exportarAPDF() {
+            try {
+                console.log("Iniciando exportación a PDF...");
+                
+                // OBTENER VALORES DE CHECKBOXES
+                const nombreArchivo = document.getElementById('nombreArchivo').value || 'Planeamiento-Didáctico';
+                const exportarInformacionGeneral = document.getElementById('exportarInformacionGeneral')?.checked ?? true;
+                const exportarSaberes = document.getElementById('exportarSaberes')?.checked ?? true;
+                const exportarSemanas = document.getElementById('exportarSemanas')?.checked ?? true;
+                const exportarReflexiones = document.getElementById('exportarReflexiones')?.checked ?? true;
+                const exportarSaberesGlobales = document.getElementById('exportarSaberesGlobales')?.checked ?? true;
+                const incluirEncabezado = document.getElementById('incluirEncabezado')?.checked ?? true;
+                const incluirPiePagina = document.getElementById('incluirPiePagina')?.checked ?? true;
+                
+                // Crear ventana para vista previa
+                const ventanaPDF = window.open('', '_blank');
+                ventanaPDF.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>${nombreArchivo} - Vista Previa</title>
+                        <style>
+                            @media print {
+                                @page {
+                                    size: A4 landscape;
+                                    margin: 0.5in;
+                                }
+                                body {
+                                    font-family: 'Poppins', sans-serif;
+                                    margin: 0;
+                                    padding: 0;
+                                    line-height: 1.4;
+                                    color: #000;
+                                    font-size: 11px;
+                                    -webkit-print-color-adjust: exact;
+                                    print-color-adjust: exact;
+                                }
+                            }
+                            body {
+                                font-family: 'Poppins', sans-serif;
+                                margin: 20px;
+                                padding: 0;
+                                line-height: 1.4;
+                                color: #000;
+                                font-size: 11px;
+                                background: #fff;
+                            }
+                            .container {
+                                width: 100%;
+                                max-width: 10in;
+                                margin: 0 auto;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-bottom: 10px;
+                                border: 1px solid #000;
+                                page-break-inside: avoid;
+                            }
+                            td, th {
+                                border: 1px solid #000;
+                                padding: 6px;
+                                vertical-align: top;
+                                font-size: 10px;
+                            }
+                            th {
+                                background: #45258F !important;
+                                color: white !important;
+                                font-weight: bold;
+                                text-align: center;
+                                -webkit-print-color-adjust: exact;
+                                print-color-adjust: exact;
+                            }
+                            .section-title {
+                                background: #45258F !important;
+                                color: white !important;
+                                font-weight: bold;
+                                text-align: center;
+                                padding: 8px;
+                                margin: 10px 0 5px 0;
+                                border: 1px solid #000;
+                                font-size: 11px;
+                                width: 100%;
+                                box-sizing: border-box;
+                                -webkit-print-color-adjust: exact;
+                                print-color-adjust: exact;
+                            }
+                            .header {
+                                text-align: center;
+                                font-weight: bold;
+                                font-size: 14px;
+                                margin-bottom: 15px;
+                                padding: 10px;
+                                background: #f0f0f0;
+                                border: 1px solid #000;
+                            }
+                            .semana-container {
+                                margin-bottom: 15px;
+                                page-break-inside: avoid;
+                            }
+                            .footer {
+                                text-align: center;
+                                margin-top: 20px;
+                                font-weight: bold;
+                                color: #45258F;
+                                padding: 15px;
+                                border-top: 2px solid #45258F;
+                                page-break-inside: avoid;
+                            }
+                            .note {
+                                margin: 15px 0;
+                                padding: 10px;
+                                background: #e7f3ff;
+                                border-left: 3px solid #007bff;
+                                border-radius: 4px;
+                                font-size: 10px;
+                                page-break-inside: avoid;
+                            }
+                            .checkbox-table {
+                                width: 100%;
+                                border: none;
+                            }
+                            .checkbox-table td {
+                                border: none;
+                                text-align: center;
+                                vertical-align: middle;
+                                padding: 8px;
+                            }
+                            .page-break {
+                                page-break-before: always;
+                            }
+                            .no-print {
+                                display: none;
+                            }
+                            .print-instructions {
+                                background: #fff3cd;
+                                border: 1px solid #ffc107;
+                                padding: 15px;
+                                margin-bottom: 20px;
+                                border-radius: 5px;
+                                font-size: 12px;
+                            }
+                            .print-instructions h3 {
+                                margin-top: 0;
+                                color: #856404;
+                            }
+                            .print-button {
+                                background: #28a745;
+                                color: white;
+                                border: none;
+                                padding: 10px 20px;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-size: 14px;
+                                margin: 10px 5px;
+                            }
+                            .print-button:hover {
+                                background: #218838;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                `);
+                
+                // INSTRUCCIONES DE IMPRESIÓN (solo en vista previa)
+                ventanaPDF.document.write(`
+                    <div class="print-instructions no-print">
+                        <h3>📄 Instrucciones para exportar a PDF:</h3>
+                        <p><strong>1.</strong> Revise el documento completo en esta vista previa.</p>
+                        <p><strong>2.</strong> Haga clic en el botón "🖨️ Imprimir como PDF" para abrir el diálogo de impresión.</p>
+                        <p><strong>3.</strong> En el diálogo de impresión, seleccione:</p>
+                        <ul>
+                            <li><strong>Destino:</strong> Guardar como PDF</li>
+                            <li><strong>Orientación:</strong> Horizontal (Apaisada)</li>
+                            <li><strong>Márgenes:</strong> Personalizados (0.5in)</li>
+                            <li><strong>Escala:</strong> 100%</li>
+                        </ul>
+                        <p><strong>4.</strong> Haga clic en "Guardar" para exportar el archivo PDF.</p>
+                        <button onclick="window.print()" class="print-button">🖨️ Imprimir como PDF</button>
+                        <button onclick="window.close()" class="print-button" style="background: #dc3545;">❌ Cerrar</button>
+                        <hr>
+                    </div>
+                `);
+                
+                // ENCABEZADO INSTITUCIONAL
+                if (incluirEncabezado) {
+                    ventanaPDF.document.write(`
+                        <div class="header">
+                            <strong>PLANEAMIENTO DIDÁCTICO - PROGRAMA NACIONAL DE FORMACIÓN TECNOLÓGICA (PNFT)</strong><br>
+                            <span style="font-size: 12px;">Ministerio de Educación Pública - Costa Rica</span><br>
+                            <span style="font-size: 11px;">Dirección de Recursos Tecnológicos en Educación - DIDI</span>
+                        </div>
+                    `);
+                }
+                
+                // INFORMACIÓN GENERAL
+                if (exportarInformacionGeneral) {
+                    ventanaPDF.document.write(`
+                        <div class="section-title">INFORMACIÓN GENERAL</div>
+                        <table>
+                            <tr>
+                                <td width="25%"><strong>Dirección Regional de Educación:</strong><br>${document.getElementById('direccionRegional').value || 'No especificado'}</td>
+                                <td width="25%"><strong>Centro educativo:</strong><br>${document.getElementById('centroEducativo').value || 'No especificado'}</td>
+                                <td width="25%"><strong>Código presupuestario:</strong><br>${document.getElementById('codigoCentro').value || 'No especificado'}</td>
+                                <td width="25%"><strong>Circuito:</strong><br>${document.getElementById('circuito').value || 'No especificado'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nombre de la persona docente:</strong><br>${document.getElementById('nombreDocente').value || 'No especificado'}</td>
+                                <td><strong>Asignatura:</strong><br>${document.getElementById('asignatura').value || 'Formación tecnológica/Informática Educativa'}</td>
+                                <td><strong>Curso lectivo:</strong><br>${document.getElementById('cursoLectivo').value || 'No especificado'}</td>
+                                <td><strong>Semestre:</strong><br>${document.getElementById('semestre').value || 'No especificado'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ciclo:</strong><br>${document.getElementById('ciclo').value || 'No especificado'}</td>
+                                <td><strong>Nivel:</strong><br>${document.getElementById('nivel').value || 'No especificado'}</td>
+                                <td><strong>Lecciones planificadas:</strong><br>${document.getElementById('leccionesPlanificadas').value || 'No especificado'}</td>
+                                <td><strong>Mes inicio - Mes final:</strong><br>${document.getElementById('mesInicio').value || 'No'} - ${document.getElementById('mesFinal').value || 'No'}</td>
+                            </tr>
+                        </table>
+                    `);
+                }
+                
+                // EJES TRANSVERSALES
+                if (exportarInformacionGeneral) {
+                    const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
+                    
+                    ventanaPDF.document.write(`
+                        <div class="section-title">EJE TRANSVERSAL DEL PNFT SEGÚN COMPETENCIA MEP</div>
+                        <table class="checkbox-table">
+                            <tr>
+                                <td width="33%" style="text-align: center; padding: 10px; border: 1px solid #000;">
+                                    <strong>Ciudadanía y ética digital</strong><br>
+                                    Competencias para la ciudadanía responsable y solidaria<br><br>
+                                    <strong style="font-size: 16px;">${ejesSeleccionados.includes('ciudadania') ? '[X]' : '[ ]'}</strong>
+                                </td>
+                                <td width="34%" style="text-align: center; padding: 10px; border: 1px solid #000;">
+                                    <strong>Pensamiento computacional</strong><br>
+                                    Competencias para la vida<br><br>
+                                    <strong style="font-size: 16px;">${ejesSeleccionados.includes('pensamiento') ? '[X]' : '[ ]'}</strong>
+                                </td>
+                                <td width="33%" style="text-align: center; padding: 10px; border: 1px solid #000;">
+                                    <strong>Emprendimiento e Innovación</strong><br>
+                                    Competencias para el empleo digno<br><br>
+                                    <strong style="font-size: 16px;">${ejesSeleccionados.includes('emprendimiento') ? '[X]' : '[ ]'}</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    `);
+                }
+                
+                // METODOLOGÍA ACTIVA
+                if (exportarInformacionGeneral) {
+                    const metodologia = obtenerMetodologiaActiva();
+                    
+                    ventanaPDF.document.write(`
+                        <div class="section-title">METODOLOGÍA ACTIVA</div>
+                        <table>
+                            <tr>
+                                <td style="font-weight: bold; padding: 8px;">${metodologia || 'No especificada'}</td>
+                            </tr>
+                        </table>
+                    `);
+                }
+                
+                // MÓDULO DE PROYECCIÓN GENERAL
+                if (areasProyeccion.length > 0) {
+                    ventanaPDF.document.write(`
+                        <div class="section-title">PROYECCIÓN GENERAL DEL MÓDULO</div>
+                        <table>
+                            <tr>
+                                <th width="50%">Áreas de conocimiento seleccionadas</th>
+                                <th width="50%">Lecciones totales</th>
+                            </tr>
+                            <tr>
+                                <td>${areasProyeccion.join('<br>• ') || 'No seleccionadas'}</td>
+                                <td>${document.getElementById('proyeccion-lecciones-totales').value || document.getElementById('leccionesPlanificadas').value || 'No especificado'} lecciones</td>
+                            </tr>
+                        </table>
+                    `);
+                    
+                    // Saberes conceptuales de proyección
+                    if (saberesProyeccionSeleccionados.size > 0) {
+                        ventanaPDF.document.write(`
+                            <table>
+                                <tr>
+                                    <th>SABERES CONCEPTUALES SELECCIONADOS (PROYECCIÓN)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        ${Array.from(saberesProyeccionSeleccionados).map((saber, idx) => 
+                                            `${idx + 1}. ${saber}`).join('<br>')}
+                                    </td>
+                                </tr>
+                            </table>
+                        `);
+                    }
+                }
+                
+                // ÁREAS Y RDA GLOBALES
+                if (exportarSaberes) {
+                    const ciclo = document.getElementById('ciclo').value;
+                    const areasUnicas = new Set();
+                    semanas.forEach(semana => {
+                        semana.areas.forEach(area => areasUnicas.add(area));
+                    });
+                    
+                    if (areasUnicas.size > 0) {
+                        ventanaPDF.document.write(`
+                            <div class="section-title">ÁREAS DE CONOCIMIENTO Y RESULTADOS DE APRENDIZAJE (RdA)</div>
+                            <table>
+                                <tr>
+                                    <th width="40%">Área de conocimiento</th>
+                                    <th width="60%">RdA</th>
+                                </tr>
+                        `);
+                        
+                        areasUnicas.forEach(area => {
+                            const rda = RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][area] 
+                                ? RDA_POR_CICLO[ciclo][area] 
+                                : 'No definido para este ciclo';
+                            ventanaPDF.document.write(`
+                                <tr>
+                                    <td><strong>${area}</strong></td>
+                                    <td>${rda}</td>
+                                </tr>
+                            `);
+                        });
+                        
+                        ventanaPDF.document.write(`</table>`);
+                    }
+                }
+                
+                // SABERES GLOBALES
+                if (exportarSaberesGlobales) {
+                    ventanaPDF.document.write(`
+                        <div class="section-title">SABERES GLOBALES SELECCIONADOS</div>
+                        <table>
+                            <tr>
+                                <th width="33%">Saberes conceptuales (Saber)</th>
+                                <th width="33%">Saberes procedimentales (Saber Hacer)</th>
+                                <th width="34%">Saberes actitudinales (Saber Ser)</th>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                    `);
+                    
+                    // Saberes conceptuales
+                    if (saberesSeleccionados.size > 0) {
+                        ventanaPDF.document.write(Array.from(saberesSeleccionados).map(saber => 
+                            `• ${saber}`).join('<br>'));
+                    } else {
+                        ventanaPDF.document.write('No seleccionados');
+                    }
+                    
+                    ventanaPDF.document.write(`</td><td style="vertical-align: top;">`);
+                    
+                    // Saberes procedimentales
+                    if (saberesProcedimentalesGlobales.size > 0) {
+                        const procedimentalesMap = {
+                            'reconoce': 'Reconoce patrones',
+                            'abstrae': 'Abstrae',
+                            'generaliza': 'Generaliza',
+                            'transfiere': 'Transfiere',
+                            'modulariza': 'Modulariza',
+                            'formula': 'Formula algoritmos',
+                            'remezcla': 'Remezcla',
+                            'depura': 'Depura',
+                            'programa': 'Programa',
+                            'comunica': 'Comunica',
+                            'colabora': 'Colabora',
+                            'piensa': 'Piensa de forma creativa',
+                            'maneja': 'Maneja las tecnologías de forma ética y segura'
+                        };
+                        
+                        ventanaPDF.document.write(Array.from(saberesProcedimentalesGlobales).map(proc => 
+                            `• ${procedimentalesMap[proc] || proc}`).join('<br>'));
+                    } else {
+                        ventanaPDF.document.write('No seleccionados');
+                    }
+                    
+                    ventanaPDF.document.write(`</td><td style="vertical-align: top;">`);
+                    
+                    // Saberes actitudinales
+                    if (saberesActitudinalesGlobales.size > 0) {
+                        const actitudinalesMap = {
+                            'gusto': 'Gusto por la precisión',
+                            'aprender': 'Aprender del error',
+                            'flexibilidad': 'Flexibilidad para manejar problemas',
+                            'tolerancia': 'Tolerancia a la frustración'
+                        };
+                        
+                        ventanaPDF.document.write(Array.from(saberesActitudinalesGlobales).map(act => 
+                            `• ${actitudinalesMap[act] || act}`).join('<br>'));
+                    } else {
+                        ventanaPDF.document.write('No seleccionados');
+                    }
+                    
+                    ventanaPDF.document.write(`</td></tr></table>`);
+                }
+                
+                // PLANIFICACIÓN POR SEMANAS
+                if (exportarSemanas && semanas.length > 0) {
+                    ventanaPDF.document.write(`<div class="section-title">PLANIFICACIÓN POR SEMANAS</div>`);
+                    
+                    semanas.forEach((semana, index) => {
+                        // Agregar salto de página cada 2 semanas (excepto la primera)
+                        if (index > 0 && index % 2 === 0) {
+                            ventanaPDF.document.write(`<div class="page-break"></div>`);
+                        }
+                        
+                        ventanaPDF.document.write(`
+                            <div class="semana-container">
+                                <table>
+                                    <tr>
+                                        <td colspan="3" style="background: #45258F !important; color: white !important; font-weight: bold; text-align: center; font-size: 11px;">
+                                            <strong>SEMANA ${index + 1}: ${semana.lecciones || 'Sin nombre'}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th width="33%">Indicadores de logro</th>
+                                        <th width="34%">Estrategias de Mediación</th>
+                                        <th width="33%">Indicadores de evaluación</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align: top; font-size: 9px;">
+                                            ${limpiarContenidoParaPDF(semana.indicadores || 'No especificado')}
+                                        </td>
+                                        <td style="vertical-align: top; font-size: 9px;">
+                                            ${limpiarContenidoParaPDF(semana.actividades || 'No especificado')}
+                                        </td>
+                                        <td style="vertical-align: top; font-size: 9px;">
+                                            ${limpiarContenidoParaPDF(semana.evaluacion || 'No especificado')}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        `);
+                    });
+                }
+                
+                // REFLEXIONES DOCENTES
+                if (exportarReflexiones) {
+                    ventanaPDF.document.write(`
+                        <div class="section-title">REFLEXIONES DOCENTES</div>
+                        <table>
+                            <tr>
+                                <th width="33%">¿Qué funcionó?</th>
+                                <th width="34%">¿Qué no funcionó?</th>
+                                <th width="33%">¿Qué puedo mejorar?</th>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top; font-size: 9px;">
+                                    ${limpiarContenidoParaPDF(document.getElementById('queFunciono').value || '')}
+                                </td>
+                                <td style="vertical-align: top; font-size: 9px;">
+                                    ${limpiarContenidoParaPDF(document.getElementById('queNoFunciono').value || '')}
+                                </td>
+                                <td style="vertical-align: top; font-size: 9px;">
+                                    ${limpiarContenidoParaPDF(document.getElementById('queMejorar').value || '')}
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <div class="section-title">OBSERVACIONES Y/O RECOMENDACIONES DIDÁCTICAS</div>
+                        <table>
+                            <tr>
+                                <td style="font-size: 9px;">
+                                    ${limpiarContenidoParaPDF(document.getElementById('observaciones').value || '')}
+                                </td>
+                            </tr>
+                        </table>
+                    `);
+                }
+                
+                // NOTA SOBRE IA
+                ventanaPDF.document.write(`
+                    <div class="note">
+                        <strong>Nota importante sobre el uso de IA:</strong> Lo que brinda la IA debe ser contextualizado por el educador, 
+                        quien decide, observa y ejecuta según su criterio y conocimiento del grupo. La IA proporciona estrategias de mediación 
+                        que deben ser definidas, reagrupadas y reestructuradas por el educador considerando el orden, estructura y forma de 
+                        implementación más adecuada.
+                    </div>
+                `);
+                
+                // NOTA DE LICENCIA
+                ventanaPDF.document.write(`
+                    <div class="note">
+                        <strong>📄 Nota de Licencia:</strong> Este documento fue elaborado utilizando la <strong>Plantilla de Planeamiento Didáctico del PNFT</strong>.<br>
+                        <strong>📄 Licencia de Uso:</strong> Este recurso y sus derivados se ofrecen bajo una <strong>Licencia de Uso Educativo</strong> que permite 
+                        su uso, adaptación y distribución no comercial dentro del sistema educativo nacional, con atribución al autor original. 
+                        Queda <strong>prohibida su venta</strong> o inclusión en materiales comerciales.
+                    </div>
+                `);
+                
+                // PIE DE PÁGINA INSTITUCIONAL
+                if (incluirPiePagina) {
+                    ventanaPDF.document.write(`
+                        <div class="footer">
+                            DIDI - Departamento de Investigación, Desarrollo e Implementación<br>
+                            Dirección de Recursos Tecnológicos en Educación - Ministerio de Educación Pública
+                        </div>
+                    `);
+                }
+                
+                // CERRAR HTML
+                ventanaPDF.document.write(`
+                        </div>
+                        <script>
+                            // Agregar marca de agua de generación
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const fecha = new Date().toLocaleDateString('es-CR');
+                                const marcaAgua = document.createElement('div');
+                                marcaAgua.style.cssText = 'position: fixed; bottom: 5px; right: 5px; font-size: 8px; color: #ccc; z-index: 9999;';
+                                marcaAgua.textContent = 'Generado el ' + fecha + ' | Plantilla PNFT';
+                                document.body.appendChild(marcaAgua);
+                            });
+                            
+                            // Configurar evento de impresión
+                            window.addEventListener('beforeprint', function() {
+                                document.querySelectorAll('.no-print').forEach(el => {
+                                    el.style.display = 'none';
+                                });
+                            });
+                            
+                            window.addEventListener('afterprint', function() {
+                                document.querySelectorAll('.no-print').forEach(el => {
+                                    el.style.display = 'block';
+                                });
+                            });
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                
+                ventanaPDF.document.close();
+                console.log("✅ Vista previa de PDF generada correctamente");
+                
+            } catch (error) {
+                console.error('❌ Error al exportar a PDF:', error);
+                alert('Error al generar el PDF. Por favor, intente nuevamente.');
+            }
+        }
+        
+        // ===== FUNCIONES PARA MENÚ DE GUARDADO =====
+        function toggleMenuGuardar(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('menuGuardar');
+            menu.classList.toggle('abierto');
+            
+            // Cerrar al hacer clic fuera
+            if (menu.classList.contains('abierto')) {
+                setTimeout(() => {
+                    document.addEventListener('click', cerrarMenuFuera);
+                }, 10);
+            } else {
+                document.removeEventListener('click', cerrarMenuFuera);
+            }
+        }
+        
+        function cerrarMenuFuera(event) {
+            const menu = document.getElementById('menuGuardar');
+            const contenedor = document.querySelector('.guardar-container');
+            
+            if (!contenedor.contains(event.target)) {
+                menu.classList.remove('abierto');
+                document.removeEventListener('click', cerrarMenuFuera);
+            }
+        }
+        
+        function ejecutarGuardarOffline() {
+            const menu = document.getElementById('menuGuardar');
+            if (menu) {
+                menu.classList.remove('abierto');
+            }
+            
+            // Crear una copia offline de la plantilla
+            const plantillaHTML = document.documentElement.outerHTML;
+            const dataBlob = new Blob([plantillaHTML], {type: 'text/html'});
+            
+            const enlace = document.createElement('a');
+            enlace.download = 'Plantilla-PNFT-Offline.html';
+            enlace.href = URL.createObjectURL(dataBlob);
+            enlace.click();
+            
+            setTimeout(() => URL.revokeObjectURL(enlace.href), 100);
+            
+            mostrarMensaje('📁 Plantilla offline descargada');
+        }
+        
+        // ===== FUNCIONES PARA PROMPTS IA =====
+        function generarPromptCompleto() {
+            const ciclo = document.getElementById('ciclo').value || 'No seleccionado';
+            const nivel = document.getElementById('nivel').value || 'No seleccionado';
+            const lecciones = document.getElementById('leccionesPlanificadas').value || 'No especificado';
+            const metodologia = obtenerMetodologiaActiva();
+            const ejes = obtenerEjesTransversales();
+            
+            // Obtener áreas únicas de todas las semanas
+            const areasUnicas = new Set();
+            semanas.forEach(semana => {
+                semana.areas.forEach(area => areasUnicas.add(area));
+            });
+            
+            // Obtener RdA para las áreas seleccionadas
+            const rdaTextos = [];
+            areasUnicas.forEach(area => {
+                if (RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][area]) {
+                    rdaTextos.push(`${area}: ${RDA_POR_CICLO[ciclo][area]}`);
+                }
+            });
+            
+            let prompt = `🔹 PROMPT PARA PLANEAMIENTO DIDÁCTICO - PNFT 🔹\n\n`;
+            
+            prompt += `🎯 CONTEXTO EDUCATIVO:\n`;
+            prompt += `• Nivel: ${nivel} - Ciclo: ${ciclo}\n`;
+            prompt += `• Lecciones totales: ${lecciones} lecciones\n`;
+            prompt += `• Meses: ${document.getElementById('mesInicio').value || 'No'} a ${document.getElementById('mesFinal').value || 'No'}\n`;
+            prompt += `• Metodología activa: ${metodologia}\n`;
+            prompt += `• Eje(s) transversal(es): ${ejes}\n\n`;
+            
+            prompt += `📚 ÁREAS DE CONOCIMIENTO SELECCIONADAS:\n`;
+            if (areasUnicas.size > 0) {
+                Array.from(areasUnicas).forEach((area, index) => {
+                    prompt += `${index + 1}. ${area}\n`;
+                });
+            } else {
+                prompt += `(No se han seleccionado áreas)\n`;
+            }
+            prompt += `\n`;
+            
+            prompt += `🎯 RESULTADOS DE APRENDIZAJE (RdA):\n`;
+            if (rdaTextos.length > 0) {
+                rdaTextos.forEach((rda, index) => {
+                    prompt += `${index + 1}. ${rda}\n`;
+                });
+            } else {
+                prompt += `(No se han definido RdA)\n`;
+            }
+            prompt += `\n`;
+            
+            prompt += `📖 SABERES CONCEPTUALES GLOBALES:\n`;
+            if (saberesSeleccionados.size > 0) {
+                Array.from(saberesSeleccionados).forEach((saber, index) => {
+                    prompt += `${index + 1}. ${saber}\n`;
+                });
+            } else {
+                prompt += `(No se han seleccionado saberes conceptuales)\n`;
+            }
+            prompt += `\n`;
+            
+            prompt += `🛠️ SABERES PROCEDIMENTALES GLOBALES:\n`;
+            if (saberesProcedimentalesGlobales.size > 0) {
+                const procedimentalesMap = {
+                    'reconoce': 'Reconoce patrones',
+                    'abstrae': 'Abstrae',
+                    'generaliza': 'Generaliza',
+                    'transfiere': 'Transfiere',
+                    'modulariza': 'Modulariza',
+                    'formula': 'Formula algoritmos',
+                    'remezcla': 'Remezcla',
+                    'depura': 'Depura',
+                    'programa': 'Programa',
+                    'comunica': 'Comunica',
+                    'colabora': 'Colabora',
+                    'piensa': 'Piensa de forma creativa',
+                    'maneja': 'Maneja las tecnologías de forma ética y segura'
+                };
+                
+                Array.from(saberesProcedimentalesGlobales).forEach((proc, index) => {
+                    prompt += `${index + 1}. ${procedimentalesMap[proc] || proc}\n`;
+                });
+            } else {
+                prompt += `(No se han seleccionado saberes procedimentales)\n`;
+            }
+            prompt += `\n`;
+            
+            prompt += `💖 SABERES ACTITUDINALES GLOBALES:\n`;
+            if (saberesActitudinalesGlobales.size > 0) {
+                const actitudinalesMap = {
+                    'gusto': 'Gusto por la precisión',
+                    'aprender': 'Aprender del error',
+                    'flexibilidad': 'Flexibilidad para manejar problemas',
+                    'tolerancia': 'Tolerancia a la frustración'
+                };
+                
+                Array.from(saberesActitudinalesGlobales).forEach((act, index) => {
+                    prompt += `${index + 1}. ${actitudinalesMap[act] || act}\n`;
+                });
+            } else {
+                prompt += `(No se han seleccionado saberes actitudinales)\n`;
+            }
+            prompt += `\n`;
+            
+            prompt += `🤖 SOLICITO QUE:\n\n`;
+            prompt += `1. Proporciones una secuencia didáctica para ${lecciones} lecciones distribuidas en ${semanas.length} semanas\n`;
+            prompt += `2. Incluyas actividades específicas usando la metodología ${metodologia}\n`;
+            prompt += `3. Integres el eje transversal "${ejes}" en las actividades\n`;
+            prompt += `4. Propongas estrategias de evaluación formativa y sumativa\n`;
+            prompt += `5. Sugieras recursos tecnológicos apropiados para ${nivel}\n`;
+            prompt += `6. Consideres principios del Diseño Universal para el Aprendizaje (DUA)\n\n`;
+            
+            prompt += `⚠️ IMPORTANTE: Todas las sugerencias deben basarse en documentos oficiales del PNFT y del MEP.\n`;
+            
+            document.getElementById('promptText').value = prompt;
+            document.getElementById('promptModal').style.display = 'block';
+        }
+        
+        function generarPromptSemana(numeroSemana) {
+            try {
+                const semana = semanas[numeroSemana-1];
+                if (!semana) {
+                    alert('Semana no encontrada');
+                    return;
+                }
+                
+                const ciclo = document.getElementById('ciclo').value || 'No seleccionado';
+                const nivel = document.getElementById('nivel').value || 'No seleccionado';
+                const metodologia = obtenerMetodologiaActiva();
+                const ejes = obtenerEjesTransversales();
+                
+                // Obtener indicadores de logro para los saberes de esta semana
+                const indicadores = obtenerIndicadoresLogroSemana(numeroSemana);
+                
+                let prompt = `🔹 PROMPT PARA SEMANA ${numeroSemana} - ${semana.lecciones} 🔹\n\n`;
+                
+                prompt += `📅 CONTEXTO DE LA SEMANA:\n`;
+                prompt += `• Semana: ${numeroSemana} de ${semanas.length}\n`;
+                prompt += `• Lecciones: ${semana.lecciones}\n`;
+                prompt += `• Nivel: ${nivel} - Ciclo: ${ciclo}\n`;
+                prompt += `• Metodología activa: ${metodologia}\n`;
+                prompt += `• Eje(s) transversal(es): ${ejes}\n\n`;
+                
+                prompt += `🎯 ÁREAS PARA ESTA SEMANA:\n`;
+                if (semana.areas.length > 0) {
+                    semana.areas.forEach((area, index) => {
+                        prompt += `${index + 1}. ${area}\n`;
+                    });
+                } else {
+                    prompt += `(No se han seleccionado áreas para esta semana)\n`;
+                }
+                prompt += `\n`;
+                
+                prompt += `📚 SABERES CONCEPTUALES ESPECÍFICOS:\n`;
+                if (semana.saberes.length > 0) {
+                    semana.saberes.forEach((saber, index) => {
+                        prompt += `${index + 1}. ${saber}\n`;
+                    });
+                } else {
+                    prompt += `(No se han seleccionado saberes para esta semana)\n`;
+                }
+                prompt += `\n`;
+                
+                prompt += `🎯 INDICADORES DE LOGRO:\n`;
+                if (indicadores.length > 0) {
+                    indicadores.forEach((indicador, index) => {
+                        prompt += `${index + 1}. ${indicador}\n`;
+                    });
+                } else {
+                    prompt += `(No se han definido indicadores)\n`;
+                }
+                prompt += `\n`;
+                
+                prompt += `🛠️ SABERES PROCEDIMENTALES (SABER HACER):\n`;
+                if (semana.procedimentales.length > 0) {
+                    const procedimentalesMap = {
+                        'reconoce': 'Reconoce patrones',
+                        'abstrae': 'Abstrae',
+                        'generaliza': 'Generaliza',
+                        'transfiere': 'Transfiere',
+                        'modulariza': 'Modulariza',
+                        'formula': 'Formula algoritmos',
+                        'remezcla': 'Remezcla',
+                        'depura': 'Depura',
+                        'programa': 'Programa',
+                        'comunica': 'Comunica',
+                        'colabora': 'Colabora',
+                        'piensa': 'Piensa de forma creativa',
+                        'maneja': 'Maneja las tecnologías de forma ética y segura'
+                    };
+                    
+                    semana.procedimentales.forEach((proc, index) => {
+                        prompt += `${index + 1}. ${procedimentalesMap[proc] || proc}\n`;
+                    });
+                } else {
+                    prompt += `(No se han seleccionado saberes procedimentales)\n`;
+                }
+                prompt += `\n`;
+                
+                prompt += `💖 SABERES ACTITUDINALES (SABER SER):\n`;
+                if (semana.actitudinales.length > 0) {
+                    const actitudinalesMap = {
+                        'gusto': 'Gusto por la precisión',
+                        'aprender': 'Aprender del error',
+                        'flexibilidad': 'Flexibilidad para manejar problemas',
+                        'tolerancia': 'Tolerancia a la frustración'
+                    };
+                    
+                    semana.actitudinales.forEach((act, index) => {
+                        prompt += `${index + 1}. ${actitudinalesMap[act] || act}\n`;
+                    });
+                } else {
+                    prompt += `(No se han seleccionado saberes actitudinales)\n`;
+                }
+                prompt += `\n`;
+                
+                prompt += `🤖 SOLICITO PARA ESTA SEMANA:\n\n`;
+                prompt += `1. Dos actividades específicas (una por lección) usando ${metodologia}\n`;
+                prompt += `2. Estrategias de mediación que integren los saberes procedimentales y actitudinales\n`;
+                prompt += `3. Recursos tecnológicos específicos para ${nivel}\n`;
+                prompt += `4. Criterios de evaluación para esta semana\n`;
+                prompt += `5. Posibles adaptaciones para estudiantes con necesidades educativas\n\n`;
+                
+                prompt += `⚠️ RECUERDA: Basar las sugerencias en el currículo oficial del PNFT.\n`;
+                
+                document.getElementById('promptSemanaText').value = prompt;
+                document.getElementById('promptSemanaModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error generando prompt de semana:', error);
+                alert('Error al generar el prompt para la semana');
+            }
+        }
+        
+        function copiarPrompt() {
+            const promptText = document.getElementById('promptText');
+            promptText.select();
+            promptText.setSelectionRange(0, 99999);
+            
+            try {
+                navigator.clipboard.writeText(promptText.value).then(() => {
+                    mostrarMensaje('📋 Prompt copiado al portapapeles');
+                });
+            } catch (err) {
+                // Fallback para navegadores antiguos
+                document.execCommand('copy');
+                mostrarMensaje('📋 Prompt copiado al portapapeles');
+            }
+        }
+        
+        function copiarPromptSemana() {
+            const promptText = document.getElementById('promptSemanaText');
+            promptText.select();
+            promptText.setSelectionRange(0, 99999);
+            
+            try {
+                navigator.clipboard.writeText(promptText.value).then(() => {
+                    mostrarMensaje('📋 Prompt de semana copiado');
+                });
+            } catch (err) {
+                document.execCommand('copy');
+                mostrarMensaje('📋 Prompt de semana copiado');
+            }
+        }
+        
+        function copiarPromptProyeccion() {
+            const promptText = document.getElementById('promptProyeccionText');
+            promptText.select();
+            promptText.setSelectionRange(0, 99999);
+            
+            try {
+                navigator.clipboard.writeText(promptText.value).then(() => {
+                    mostrarMensaje('📋 Prompt de proyección copiado');
+                });
+            } catch (err) {
+                document.execCommand('copy');
+                mostrarMensaje('📋 Prompt de proyección copiado');
+            }
+        }
+        
+        function abrirEnCopilot() {
+            const promptText = document.getElementById('promptText').value;
+            const encodedPrompt = encodeURIComponent(promptText);
+            window.open(`https://copilot.microsoft.com/?text=${encodedPrompt}`, '_blank');
+        }
+        
+        function abrirEnChatGPT() {
+            const promptText = document.getElementById('promptText').value;
+            // Nota: ChatGPT no tiene una URL directa para prompts
+            // Esta función solo copia y muestra un mensaje
+            copiarPrompt();
+            alert('El prompt ha sido copiado. Ahora puedes pegarlo en ChatGPT manualmente.');
+        }
+        
+        function abrirEnCopilotProyeccion() {
+            const promptText = document.getElementById('promptProyeccionText').value;
+            const encodedPrompt = encodeURIComponent(promptText);
+            window.open(`https://copilot.microsoft.com/?text=${encodedPrompt}`, '_blank');
+        }
+        
+        function abrirEnChatGPTProyeccion() {
+            copiarPromptProyeccion();
+            alert('El prompt de proyección ha sido copiado. Ahora puedes pegarlo en ChatGPT manualmente.');
+        }
+        
+        function cerrarPromptModal() {
+            document.getElementById('promptModal').style.display = 'none';
+        }
+        
+        function cerrarPromptSemanaModal() {
+            document.getElementById('promptSemanaModal').style.display = 'none';
+        }
+        
+        function cerrarPromptProyeccionModal() {
+            document.getElementById('promptProyeccionModal').style.display = 'none';
+        }
+        
+        function mostrarMensaje(texto) {
+            // Eliminar mensaje existente si hay
+            const mensajeExistente = document.querySelector('.mensaje-temporal');
+            if (mensajeExistente) {
+                mensajeExistente.remove();
+            }
+            
+            const mensaje = document.createElement('div');
+            mensaje.className = 'mensaje-temporal';
+            mensaje.innerHTML = `✅ ${texto}`;
+            document.body.appendChild(mensaje);
+            
+            setTimeout(() => {
+                if (mensaje.parentNode) {
+                    mensaje.remove();
+                }
+            }, 3000);
+        }
+        
+        // ===== INICIALIZACIÓN FINAL =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Plantilla PNFT cargada correctamente');
+            
+            // Inicializar semanas
+            inicializarSemanas();
+            
+            // Configurar eventos
+            configurarEventListeners();
+            
+            // Inicializar proyección
+            inicializarProyeccion();
+            
+            // Sincronizar lecciones de proyección
+            sincronizarLeccionesProyeccion();
+            
+            // Configurar eventos para ejes transversales
+            document.querySelectorAll('.eje-option').forEach(option => {
+                option.addEventListener('click', function(e) {
+                    // Si el clic fue directamente en el checkbox, no hacer nada extra
+                    if (e.target.type === 'checkbox') return;
+                    
+                    // Buscar el checkbox dentro de esta opción
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    if (checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                        
+                        // Actualizar clase visual
+                        if (checkbox.checked) {
+                            this.classList.add('selected');
+                        } else {
+                            this.classList.remove('selected');
+                        }
+                    }
+                });
+            });
+            
+            // Configurar tooltips mejorados
+            document.querySelectorAll('.tooltip-improved').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    const tooltip = this.querySelector('.tooltiptext-improved');
+                    if (tooltip) {
+                        // Ajustar posición si se sale de la pantalla
+                        const rect = tooltip.getBoundingClientRect();
+                        if (rect.right > window.innerWidth) {
+                            tooltip.style.left = 'auto';
+                            tooltip.style.right = '0';
+                            tooltip.style.transform = 'translateX(0)';
+                        }
+                    }
+                });
+            });
+            
+            console.log('✅ Sistema inicializado completamente');
+        });
+        
+        // ===== POLYFILLS Y COMPATIBILIDAD =====
+        if (!String.prototype.replaceAll) {
+            String.prototype.replaceAll = function(search, replacement) {
+                return this.split(search).join(replacement);
+            };
+        }
+        
+        // Prevenir cierre accidental con datos no guardados
+        window.addEventListener('beforeunload', function(e) {
+            // Solo preguntar si hay datos ingresados
+            const tieneDatos = 
+                document.getElementById('nombreDocente').value ||
+                document.getElementById('centroEducativo').value ||
+                semanas.some(semana => semana.saberes.length > 0);
+                
+            if (tieneDatos) {
+                e.preventDefault();
+                e.returnValue = '¿Está seguro de que desea salir? Los cambios no guardados se perderán.';
+            }
+        });
+    </script>
+</body>
+</html>
+
