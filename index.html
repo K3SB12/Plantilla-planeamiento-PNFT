@@ -804,7 +804,7 @@
                     <strong>Ciclos:</strong><br>
                     <select id="ciclo" class="select-field" onchange="actualizarNiveles()">
                         <option value="">Seleccionar</option>
-                        <option value="Materno Infantil/Transición">Materno Infantil/Transición</option>
+                        <option value="Materno Infantil (Grupo Interactivo II) y Transición">Materno Infantil/Transición</option>
                         <option value="I Ciclo">I Ciclo</option>
                         <option value="II Ciclo">II Ciclo</option>
                         <option value="III Ciclo">III Ciclo</option>
@@ -2591,7 +2591,7 @@
     
             // ===== RESULTADOS DE APRENDIZAJE (RdA) POR CICLO Y ÁREA =====
             const RDA_POR_CICLO = {
-            "Materno Infantil/Transición": {
+            "Materno Infantil (Grupo Interactivo II) y Transición": {
                 "Apropiación tecnológica y Digital": "Identifica los dispositivos digitales considerando características funcionales, experimentando su utilidad y reconociendo la autoría, durante la accesibilidad, interacción y comunicación en la creación de recursos digitales.",
                 "Programación y Algoritmos": "Ordena secuencias integrando conceptos de programación como dato, evento, estado, ciclos, así como nociones de lateralidad y orientación espacial, en la solución de desafíos propuestos, utilizando la programación iconográfica por bloques.",
                 "Computación física y Robótica": "Reconoce el funcionamiento de los robots, así como sus componentes (cuerpo, sistema sensorial, sistemas de control), al clasificarlos por su uso y programarlos para resolver retos.",
@@ -2668,8 +2668,8 @@
             
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
             
-            if (ciclo === 'Materno Infantil/Transición') {
-                nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
+            if (ciclo === 'Materno Infantil (Grupo Interactivo II) y Transición') {
+                    nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
             } else if (ciclo === 'I Ciclo') {
                 nivelSelect.innerHTML += '<option value="1°">1°</option>';
                 nivelSelect.innerHTML += '<option value="2°">2°</option>';
@@ -2684,6 +2684,12 @@
                 nivelSelect.innerHTML += '<option value="9°">9°</option>';
             }
         }
+
+            // ACTUALIZAR PROYECCIÓN AUTOMÁTICAMENTE
+                setTimeout(() => {
+                    actualizarAreasProyeccion();
+                }, 100);
+            }
 
         function inicializarSemanas() {
             const lecciones = parseInt(document.getElementById('leccionesPlanificadas').value) || 8;
@@ -3314,26 +3320,26 @@
         }
 
         function actualizarRdASemana(numeroSemana) {
-            const semana = semanas[numeroSemana-1];
-            const ciclo = document.getElementById('ciclo').value;
-            const rdaContainer = document.getElementById(`rda-semana-${numeroSemana}`);
-            
-            rdaContainer.innerHTML = '';
-            
-            if (!ciclo || semana.areas.length === 0) {
-                rdaContainer.innerHTML = '<div style="color: #666; font-style: italic; padding: 8px; font-size: 11px;">Seleccione al menos un área de conocimiento</div>';
-                return;
-            }
-            
-            semana.areas.forEach(areaNombre => {
-                if (RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][areaNombre]) {
-                    const rdaItem = document.createElement('div');
-                    rdaItem.className = 'rda-item';
-                    rdaItem.innerHTML = `<strong>${areaNombre}:</strong><br>${RDA_POR_CICLO[ciclo][areaNombre]}`;
-                    rdaContainer.appendChild(rdaItem);
+                const semana = semanas[numeroSemana-1];
+                const ciclo = document.getElementById('ciclo').value;
+                const rdaContainer = document.getElementById(`rda-semana-${numeroSemana}`);
+                
+                rdaContainer.innerHTML = '';
+                
+                if (!ciclo || semana.areas.length === 0) {
+                    rdaContainer.innerHTML = '<div style="color: #666; font-style: italic; padding: 8px; font-size: 11px;">Seleccione al menos un área de conocimiento</div>';
+                    return;
                 }
-            });
-        }
+                
+                semana.areas.forEach(areaNombre => {
+                    if (RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][areaNombre]) {
+                        const rdaItem = document.createElement('div');
+                        rdaItem.className = 'rda-item';
+                        rdaItem.innerHTML = `<strong>${areaNombre}:</strong><br>${RDA_POR_CICLO[ciclo][areaNombre]}`;
+                        rdaContainer.appendChild(rdaItem);
+                    }
+                });
+            }
 
         function actualizarOpcionesSaberesSemana(numeroSemana) {
             const container = document.getElementById(`saberes-conceptuales-${numeroSemana}`);
@@ -5875,4 +5881,5 @@
     </script>
 </body>
 </html>
+
 
