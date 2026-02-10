@@ -2750,26 +2750,26 @@
         }
         
         // 2. ACTUALIZAR RDA DE PROYECCIÓN
-        function actualizarRdAProyeccion() {
-            const ciclo = document.getElementById('ciclo').value;
-            const rdaContainer = document.getElementById('rda-proyeccion-container');
-            
-            rdaContainer.innerHTML = '';
-            
-            if (!ciclo || areasProyeccion.length === 0) {
-                rdaContainer.innerHTML = '<div style="color: #666; font-style: italic; padding: 8px; font-size: 11px;">Seleccione al menos un área de conocimiento</div>';
-                return;
-            }
-            
-            areasProyeccion.forEach(areaNombre => {
-                if (RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][areaNombre]) {
-                    const rdaItem = document.createElement('div');
-                    rdaItem.className = 'rda-item';
-                    rdaItem.innerHTML = `<strong>${areaNombre}:</strong><br>${RDA_POR_CICLO[ciclo][areaNombre]}`;
-                    rdaContainer.appendChild(rdaItem);
+         function actualizarRdAProyeccion() {
+                const ciclo = document.getElementById('ciclo').value;
+                const rdaContainer = document.getElementById('rda-proyeccion-container');
+                
+                rdaContainer.innerHTML = '';
+                
+                if (!ciclo || areasProyeccion.length === 0) {
+                    rdaContainer.innerHTML = '<div style="color: #666; font-style: italic; padding: 8px; font-size: 11px;">Seleccione al menos un área de conocimiento</div>';
+                    return;
                 }
-            });
-        }
+                
+                areasProyeccion.forEach(areaNombre => {
+                    if (RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][areaNombre]) {
+                        const rdaItem = document.createElement('div');
+                        rdaItem.className = 'rda-item';
+                        rdaItem.innerHTML = `<strong>${areaNombre}:</strong><br>${RDA_POR_CICLO[ciclo][areaNombre]}`;
+                        rdaContainer.appendChild(rdaItem);
+                    }
+                });
+            }
         
         // 3. ACTUALIZAR SABERES CONCEPTUALES DE PROYECCIÓN
         function actualizarSaberesConceptualesProyeccion() {
@@ -2847,26 +2847,29 @@
         
         // 4. MANEJAR SELECCIÓN DE SABERES EN PROYECCIÓN
         function manejarSeleccionSaberProyeccion(nombreSaber, seleccionado, area, indicadoresStr) {
-            if (seleccionado) {
-                saberesProyeccionSeleccionados.add(nombreSaber);
-            } else {
-                saberesProyeccionSeleccionados.delete(nombreSaber);
-            }
-            
-            // Actualizar la clase de selección visual
-            const checkboxes = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                if (checkbox.nextElementSibling?.querySelector('div')?.textContent.includes(nombreSaber)) {
-                    checkbox.parentElement.classList.toggle('seleccionado', seleccionado);
+                if (seleccionado) {
+                    saberesProyeccionSeleccionados.add(nombreSaber);
+                } else {
+                    saberesProyeccionSeleccionados.delete(nombreSaber);
                 }
-            });
-            
-            // Actualizar contenedor de saberes conceptuales
-            actualizarContenedorSaberesConceptualesProyeccion();
-            
-            // Actualizar indicadores automáticos
-            actualizarIndicadoresProyeccion();
-        }
+                
+                // Actualizar la clase de selección visual
+                setTimeout(() => {
+                    const checkboxes = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        const saberDiv = checkbox.closest('.saber-conceptual-item');
+                        if (saberDiv && saberDiv.textContent.includes(nombreSaber)) {
+                            saberDiv.classList.toggle('seleccionado', seleccionado);
+                        }
+                    });
+                    
+                    // Actualizar contenedor de saberes conceptuales
+                    actualizarContenedorSaberesConceptualesProyeccion();
+                    
+                    // Actualizar indicadores automáticos
+                    actualizarIndicadoresProyeccion();
+                }, 50);
+            }
         
         // 5. ACTUALIZAR CONTENEDOR DE SABERES CONCEPTUALES (COLUMNA 1)
         function actualizarContenedorSaberesConceptualesProyeccion() {
@@ -4099,247 +4102,270 @@
             mostrarMensaje('✅ Archivo .json guardado exitosamente');
         }
 
-        function obtenerDatosPlan() {
-            // Obtener metodología activa
-            let metodologia = document.getElementById('metodologiaActiva').value;
-            if (metodologia === 'otra') {
-                metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
-            }
-        
-            // ========== DATOS DE PROYECCIÓN GENERAL ==========
-            console.log('💾 Guardando datos de proyección...');
-            
-            // 1. Metodología de proyección
-            const metodologiaProyeccion = document.getElementById('metodologia-proyeccion').value;
-            
-            // 2. Áreas seleccionadas en proyección
-            const areasProyeccionGuardar = [];
-            document.querySelectorAll('input[name="area-proyeccion"]:checked').forEach(checkbox => {
-                const areaMapping = {
-                    'apropiacion': 'Apropiación tecnológica y Digital',
-                    'programacion': 'Programación y Algoritmos',
-                    'robotica': 'Computación física y Robótica',
-                    'ciencia': 'Ciencia de datos e Inteligencia artificial'
-                };
-                if (areaMapping[checkbox.value]) {
-                    areasProyeccionGuardar.push(areaMapping[checkbox.value]);
+                    function obtenerDatosPlan() {
+                // Obtener metodología activa
+                let metodologia = document.getElementById('metodologiaActiva').value;
+                if (metodologia === 'otra') {
+                    metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
                 }
-            });
             
-            // 3. Saberes conceptuales seleccionados
-            const saberesProyeccionArray = Array.from(saberesProyeccionSeleccionados);
-            
-            // 4. Texto de evaluación (solo texto plano)
-            let textoEvaluacionProyeccion = '';
-            const elementoEvaluacion = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-            if (elementoEvaluacion) {
-                textoEvaluacionProyeccion = elementoEvaluacion.textContent || '';
-            }
-            
-            // 5. Lecciones totales de proyección
-            const leccionesProyeccion = document.getElementById('proyeccion-lecciones-totales').value || '';
-            
-            console.log('📊 Datos de proyección capturados:');
-            console.log('- Metodología:', metodologiaProyeccion);
-            console.log('- Áreas:', areasProyeccionGuardar);
-            console.log('- Saberes:', saberesProyeccionArray.length);
-            console.log('- Evaluación:', textoEvaluacionProyeccion.substring(0, 50) + '...');
-            
-            return {
-                informacionGeneral: {
-                    cursoLectivo: document.getElementById('cursoLectivo').value,
-                    semestre: document.getElementById('semestre').value,
-                    direccionRegional: document.getElementById('direccionRegional').value,
-                    centroEducativo: document.getElementById('centroEducativo').value,
-                    codigoCentro: document.getElementById('codigoCentro').value,
-                    nombreDocente: document.getElementById('nombreDocente').value,
-                    circuito: document.getElementById('circuito').value,
-                    ciclo: document.getElementById('ciclo').value,
-                    nivel: document.getElementById('nivel').value,
-                    leccionesPlanificadas: document.getElementById('leccionesPlanificadas').value,
-                    mesInicio: document.getElementById('mesInicio').value,
-                    mesFinal: document.getElementById('mesFinal').value,
-                    asignatura: document.getElementById('asignatura').value
-                },
-                ejesTransversales: Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value),
-                metodologiaActiva: metodologia,
+                // ========== DATOS DE PROYECCIÓN GENERAL ==========
+                console.log('💾 Guardando datos de proyección...');
                 
-                // ========== MÓDULO DE PROYECCIÓN - AHORA SÍ SE GUARDA ==========
-                proyeccionGeneral: {
-                    metodologiaProyeccion: metodologiaProyeccion,
-                    areasProyeccion: areasProyeccionGuardar,
-                    saberesProyeccionSeleccionados: saberesProyeccionArray,
-                    textoEvaluacionProyeccion: textoEvaluacionProyeccion,
-                    leccionesTotalesProyeccion: leccionesProyeccion,
-                    fechaProyeccion: new Date().toISOString()
-                },
+                // 1. Metodología de proyección
+                const metodologiaProyeccion = document.getElementById('metodologia-proyeccion').value;
                 
-                semanas: semanas,
-                reflexiones: {
-                    queFunciono: document.getElementById('queFunciono').value,
-                    queNoFunciono: document.getElementById('queNoFunciono').value,
-                    queMejorar: document.getElementById('queMejorar').value
-                },
-                observaciones: document.getElementById('observaciones').value,
-                saberesGlobales: Array.from(saberesSeleccionados),
-                saberesProcedimentalesGlobales: Array.from(saberesProcedimentalesGlobales),
-                saberesActitudinalesGlobales: Array.from(saberesActitudinalesGlobales),
-                fechaGuardado: new Date().toISOString()
-            };
-        }
-
-        function cargarPlan(plan) {
-            if (plan.informacionGeneral) {
-                document.getElementById('cursoLectivo').value = plan.informacionGeneral.cursoLectivo || '2026';
-                document.getElementById('semestre').value = plan.informacionGeneral.semestre || 'I';
-                document.getElementById('direccionRegional').value = plan.informacionGeneral.direccionRegional || '';
-                document.getElementById('centroEducativo').value = plan.informacionGeneral.centroEducativo || '';
-                document.getElementById('codigoCentro').value = plan.informacionGeneral.codigoCentro || '';
-                document.getElementById('nombreDocente').value = plan.informacionGeneral.nombreDocente || '';
-                document.getElementById('circuito').value = plan.informacionGeneral.circuito || '';
-                document.getElementById('ciclo').value = plan.informacionGeneral.ciclo || '';
-                
-                actualizarNiveles();
-                
-                document.getElementById('nivel').value = plan.informacionGeneral.nivel || '';
-                document.getElementById('leccionesPlanificadas').value = plan.informacionGeneral.leccionesPlanificadas || '8';
-                document.getElementById('mesInicio').value = plan.informacionGeneral.mesInicio || '';
-                document.getElementById('mesFinal').value = plan.informacionGeneral.mesFinal || '';
-                document.getElementById('asignatura').value = plan.informacionGeneral.asignatura || 'Formación tecnológica/Informática Educativa';
-            }
-            
-            if (plan.ejesTransversales) {
-                document.querySelectorAll('input[name="eje"]').forEach(checkbox => {
-                    checkbox.checked = plan.ejesTransversales.includes(checkbox.value);
-                });
-            }
-            
-            if (plan.metodologiaActiva) {
-                // Manejar metodología personalizada
-                const metodologia = plan.metodologiaActiva;
-                if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
-                    document.getElementById('metodologiaActiva').value = 'ABJ';
-                } else if (metodologia.includes('ABR') || metodologia.includes('Aprendizaje basado en retos')) {
-                    document.getElementById('metodologiaActiva').value = 'ABR';
-                } else if (metodologia.includes('APD') || metodologia.includes('Pensamiento por Diseño')) {
-                    document.getElementById('metodologiaActiva').value = 'APD';
-                } else if (metodologia) {
-                    document.getElementById('metodologiaActiva').value = 'otra';
-                    document.getElementById('metodologiaPersonalizada').value = metodologia;
-                    document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
-                }
-            }
-
-            // ========== CARGAR DATOS DE PROYECCIÓN GENERAL ==========
-            if (plan.proyeccionGeneral) {
-                console.log('📥 Cargando módulo de proyección...');
-                
-                // 1. Metodología de proyección (inmediato)
-                if (plan.proyeccionGeneral.metodologiaProyeccion) {
-                    document.getElementById('metodologia-proyeccion').value = plan.proyeccionGeneral.metodologiaProyeccion;
-                }
-                
-                // 2. Texto de evaluación (inmediato)
-                if (plan.proyeccionGeneral.textoEvaluacionProyeccion) {
-                    const evalBox = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-                    if (evalBox) {
-                        evalBox.textContent = plan.proyeccionGeneral.textoEvaluacionProyeccion;
-                    }
-                }
-                
-                // 3. Guardar saberes para restaurar después
-                if (plan.proyeccionGeneral.saberesProyeccionSeleccionados) {
-                    saberesProyeccionSeleccionados = new Set(plan.proyeccionGeneral.saberesProyeccionSeleccionados);
-                    console.log('💾 Saberes guardados para restaurar:', saberesProyeccionSeleccionados.size);
-                }
-                
-                // 4. Cargar áreas INMEDIATAMENTE, no con setTimeout
-                if (plan.proyeccionGeneral.areasProyeccion) {
-                    console.log('📍 Cargando áreas:', plan.proyeccionGeneral.areasProyeccion);
-                    
-                    // Mapeo de áreas a IDs de checkboxes
+                // 2. Áreas seleccionadas en proyección
+                const areasProyeccionGuardar = [];
+                document.querySelectorAll('input[name="area-proyeccion"]:checked').forEach(checkbox => {
                     const areaMapping = {
-                        'Apropiación tecnológica y Digital': 'area-proyeccion-apropiacion',
-                        'Programación y Algoritmos': 'area-proyeccion-programacion',
-                        'Computación física y Robótica': 'area-proyeccion-robotica',
-                        'Ciencia de datos e Inteligencia artificial': 'area-proyeccion-ciencia'
+                        'apropiacion': 'Apropiación tecnológica y Digital',
+                        'programacion': 'Programación y Algoritmos',
+                        'robotica': 'Computación física y Robótica',
+                        'ciencia': 'Ciencia de datos e Inteligencia artificial'
                     };
+                    if (areaMapping[checkbox.value]) {
+                        areasProyeccionGuardar.push(areaMapping[checkbox.value]);
+                    }
+                });
+                
+                // 3. Saberes conceptuales seleccionados (CONVERTIR A ARRAY)
+                const saberesProyeccionArray = Array.from(saberesProyeccionSeleccionados);
+                
+                // 4. Texto de evaluación
+                let textoEvaluacionProyeccion = '';
+                const elementoEvaluacion = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
+                if (elementoEvaluacion) {
+                    textoEvaluacionProyeccion = elementoEvaluacion.textContent || '';
+                }
+                
+                // 5. Lecciones totales de proyección
+                const leccionesProyeccion = document.getElementById('proyeccion-lecciones-totales').value || '';
+                
+                console.log('📊 Datos de proyección capturados:');
+                console.log('- Metodología:', metodologiaProyeccion);
+                console.log('- Áreas:', areasProyeccionGuardar);
+                console.log('- Saberes:', saberesProyeccionArray.length);
+                console.log('- Evaluación:', textoEvaluacionProyeccion.substring(0, 50) + '...');
+                
+                return {
+                    informacionGeneral: {
+                        cursoLectivo: document.getElementById('cursoLectivo').value,
+                        semestre: document.getElementById('semestre').value,
+                        direccionRegional: document.getElementById('direccionRegional').value,
+                        centroEducativo: document.getElementById('centroEducativo').value,
+                        codigoCentro: document.getElementById('codigoCentro').value,
+                        nombreDocente: document.getElementById('nombreDocente').value,
+                        circuito: document.getElementById('circuito').value,
+                        ciclo: document.getElementById('ciclo').value,
+                        nivel: document.getElementById('nivel').value,
+                        leccionesPlanificadas: document.getElementById('leccionesPlanificadas').value,
+                        mesInicio: document.getElementById('mesInicio').value,
+                        mesFinal: document.getElementById('mesFinal').value,
+                        asignatura: document.getElementById('asignatura').value
+                    },
+                    ejesTransversales: Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value),
+                    metodologiaActiva: metodologia,
                     
-                    // Desmarcar todos primero
-                    document.querySelectorAll('input[name="area-proyeccion"]').forEach(cb => {
-                        cb.checked = false;
+                    // ========== MÓDULO DE PROYECCIÓN - AHORA SÍ SE GUARDA ==========
+                    proyeccionGeneral: {
+                        metodologiaProyeccion: metodologiaProyeccion,
+                        areasProyeccion: areasProyeccionGuardar,
+                        saberesProyeccionSeleccionados: saberesProyeccionArray, // ARRAY, no Set
+                        textoEvaluacionProyeccion: textoEvaluacionProyeccion,
+                        leccionesTotalesProyeccion: leccionesProyeccion,
+                        fechaProyeccion: new Date().toISOString()
+                    },
+                    
+                    semanas: semanas,
+                    reflexiones: {
+                        queFunciono: document.getElementById('queFunciono').value,
+                        queNoFunciono: document.getElementById('queNoFunciono').value,
+                        queMejorar: document.getElementById('queMejorar').value
+                    },
+                    observaciones: document.getElementById('observaciones').value,
+                    saberesGlobales: Array.from(saberesSeleccionados), // CONVERTIR A ARRAY
+                    saberesProcedimentalesGlobales: Array.from(saberesProcedimentalesGlobales), // CONVERTIR A ARRAY
+                    saberesActitudinalesGlobales: Array.from(saberesActitudinalesGlobales), // CONVERTIR A ARRAY
+                    fechaGuardado: new Date().toISOString(),
+                    version: '1.0-corregido'
+                };
+            }
+
+
+                    function cargarPlan(plan) {
+                console.log('📥 Iniciando carga del plan...', plan);
+                
+                if (plan.informacionGeneral) {
+                    document.getElementById('cursoLectivo').value = plan.informacionGeneral.cursoLectivo || '2026';
+                    document.getElementById('semestre').value = plan.informacionGeneral.semestre || 'I';
+                    document.getElementById('direccionRegional').value = plan.informacionGeneral.direccionRegional || '';
+                    document.getElementById('centroEducativo').value = plan.informacionGeneral.centroEducativo || '';
+                    document.getElementById('codigoCentro').value = plan.informacionGeneral.codigoCentro || '';
+                    document.getElementById('nombreDocente').value = plan.informacionGeneral.nombreDocente || '';
+                    document.getElementById('circuito').value = plan.informacionGeneral.circuito || '';
+                    document.getElementById('ciclo').value = plan.informacionGeneral.ciclo || '';
+                    
+                    actualizarNiveles();
+                    
+                    // ESPERAR a que se actualicen los niveles antes de asignar el nivel
+                    setTimeout(() => {
+                        document.getElementById('nivel').value = plan.informacionGeneral.nivel || '';
+                        document.getElementById('leccionesPlanificadas').value = plan.informacionGeneral.leccionesPlanificadas || '8';
+                        document.getElementById('mesInicio').value = plan.informacionGeneral.mesInicio || '';
+                        document.getElementById('mesFinal').value = plan.informacionGeneral.mesFinal || '';
+                        document.getElementById('asignatura').value = plan.informacionGeneral.asignatura || 'Formación tecnológica/Informática Educativa';
+                        
+                        // INICIALIZAR SEMANAS DESPUÉS de tener las lecciones
+                        inicializarSemanasDesdeCarga(plan);
+                    }, 100);
+                }
+                
+                if (plan.ejesTransversales) {
+                    document.querySelectorAll('input[name="eje"]').forEach(checkbox => {
+                        checkbox.checked = plan.ejesTransversales.includes(checkbox.value);
                     });
-                    
-                    // Marcar las áreas guardadas
-                    plan.proyeccionGeneral.areasProyeccion.forEach(areaNombre => {
-                        const checkboxId = areaMapping[areaNombre];
-                        if (checkboxId) {
-                            const checkbox = document.getElementById(checkboxId);
-                            if (checkbox) {
-                                checkbox.checked = true;
-                                console.log('✅ Área marcada:', areaNombre);
-                            }
-                        }
-                    });
-                    
-                    // Actualizar la proyección inmediatamente
-                    if (typeof actualizarAreasProyeccion === 'function') {
-                        setTimeout(() => {
-                            actualizarAreasProyeccion();
-                            
-                            // Restaurar saberes después de actualizar áreas
-                            if (saberesProyeccionSeleccionados.size > 0) {
-                                setTimeout(() => {
-                                    restaurarSaberesProyeccion();
-                                }, 300);
-                            }
-                        }, 100);
+                }
+                
+                if (plan.metodologiaActiva) {
+                    const metodologia = plan.metodologiaActiva;
+                    if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
+                        document.getElementById('metodologiaActiva').value = 'ABJ';
+                    } else if (metodologia.includes('ABR') || metodologia.includes('Aprendizaje basado en retos')) {
+                        document.getElementById('metodologiaActiva').value = 'ABR';
+                    } else if (metodologia.includes('APD') || metodologia.includes('Pensamiento por Diseño')) {
+                        document.getElementById('metodologiaActiva').value = 'APD';
+                    } else if (metodologia) {
+                        document.getElementById('metodologiaActiva').value = 'otra';
+                        document.getElementById('metodologiaPersonalizada').value = metodologia;
+                        document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
                     }
                 }
+
+                // ========== CARGAR DATOS DE PROYECCIÓN GENERAL ==========
+                if (plan.proyeccionGeneral) {
+                    console.log('📥 Cargando módulo de proyección...', plan.proyeccionGeneral);
+                    
+                    // 1. Metodología de proyección
+                    if (plan.proyeccionGeneral.metodologiaProyeccion) {
+                        document.getElementById('metodologia-proyeccion').value = plan.proyeccionGeneral.metodologiaProyeccion;
+                    }
+                    
+                    // 2. Texto de evaluación
+                    if (plan.proyeccionGeneral.textoEvaluacionProyeccion) {
+                        const evalBox = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
+                        if (evalBox) {
+                            evalBox.textContent = plan.proyeccionGeneral.textoEvaluacionProyeccion;
+                        }
+                    }
+                    
+                    // 3. Guardar saberes para restaurar después
+                    if (plan.proyeccionGeneral.saberesProyeccionSeleccionados) {
+                        saberesProyeccionSeleccionados = new Set(plan.proyeccionGeneral.saberesProyeccionSeleccionados);
+                        console.log('💾 Saberes de proyección cargados:', saberesProyeccionSeleccionados.size);
+                    }
+                    
+                    // 4. Cargar áreas - ESPERAR a que el DOM esté listo
+                    if (plan.proyeccionGeneral.areasProyeccion) {
+                        console.log('📍 Cargando áreas de proyección:', plan.proyeccionGeneral.areasProyeccion);
+                        
+                        // Mapeo de áreas a IDs de checkboxes
+                        const areaMapping = {
+                            'Apropiación tecnológica y Digital': 'area-proyeccion-apropiacion',
+                            'Programación y Algoritmos': 'area-proyeccion-programacion',
+                            'Computación física y Robótica': 'area-proyeccion-robotica',
+                            'Ciencia de datos e Inteligencia artificial': 'area-proyeccion-ciencia'
+                        };
+                        
+                        // ESPERAR a que el DOM esté listo
+                        setTimeout(() => {
+                            // Desmarcar todos primero
+                            document.querySelectorAll('input[name="area-proyeccion"]').forEach(cb => {
+                                cb.checked = false;
+                            });
+                            
+                            // Marcar las áreas guardadas
+                            plan.proyeccionGeneral.areasProyeccion.forEach(areaNombre => {
+                                const checkboxId = areaMapping[areaNombre];
+                                if (checkboxId) {
+                                    const checkbox = document.getElementById(checkboxId);
+                                    if (checkbox) {
+                                        checkbox.checked = true;
+                                        console.log('✅ Área de proyección marcada:', areaNombre);
+                                    }
+                                }
+                            });
+                            
+                            // Actualizar la proyección
+                            if (typeof actualizarAreasProyeccion === 'function') {
+                                actualizarAreasProyeccion();
+                            }
+                        }, 500); // Más tiempo para asegurar
+                    }
+                }
+                
+                if (plan.saberesGlobales) {
+                    saberesSeleccionados = new Set(plan.saberesGlobales);
+                }
+                
+                if (plan.saberesProcedimentalesGlobales) {
+                    saberesProcedimentalesGlobales = new Set(plan.saberesProcedimentalesGlobales);
+                }
+                
+                if (plan.saberesActitudinalesGlobales) {
+                    saberesActitudinalesGlobales = new Set(plan.saberesActitudinalesGlobales);
+                }
+                
+                if (plan.reflexiones) {
+                    document.getElementById('queFunciono').value = plan.reflexiones.queFunciono || '';
+                    document.getElementById('queNoFunciono').value = plan.reflexiones.queNoFunciono || '';
+                    document.getElementById('queMejorar').value = plan.reflexiones.queMejorar || '';
+                }
+                
+                if (plan.observaciones) {
+                    document.getElementById('observaciones').value = plan.observaciones || '';
+                }
+                
+                console.log('✅ Plan cargado correctamente');
             }
-            // ========== FIN CARGAR PROYECCIÓN ==========
-            
-            if (plan.semanas && plan.semanas.length > 0) {
-                semanas = plan.semanas;
-                reconstruirVistaSemanasPreservandoContenido();
+
+            // ======================= CORRECCIÓN 8: NUEVA FUNCIÓN PARA INICIALIZAR SEMANAS DESDE CARGA =======================
+            function inicializarSemanasDesdeCarga(plan) {
+                if (plan.semanas && plan.semanas.length > 0) {
+                    console.log('📅 Cargando semanas desde archivo:', plan.semanas.length);
+                    
+                    // 1. Actualizar lecciones planificadas si es necesario
+                    const leccionesGuardadas = plan.semanas.length * 2;
+                    const leccionesActuales = parseInt(document.getElementById('leccionesPlanificadas').value);
+                    
+                    if (leccionesGuardadas > leccionesActuales) {
+                        document.getElementById('leccionesPlanificadas').value = leccionesGuardadas;
+                    }
+                    
+                    // 2. Actualizar semanas
+                    semanas = plan.semanas;
+                    
+                    // 3. Reconstruir vista
+                    setTimeout(() => {
+                        reconstruirVistaSemanasPreservandoContenido();
+                        actualizarContadoresSemanas();
+                        
+                        // 4. Forzar actualización de saberes conceptuales
+                        semanas.forEach((semana, index) => {
+                            setTimeout(() => {
+                                actualizarRdASemana(index + 1);
+                                actualizarOpcionesSaberesSemana(index + 1);
+                                actualizarIndicadoresSemana(index + 1);
+                                actualizarSaberesConceptualesContenedor(index + 1);
+                            }, 100 * index);
+                        });
+                    }, 300);
+                } else {
+                    // Si no hay semanas guardadas, inicializar normalmente
+                    inicializarSemanas();
+                }
             }
-            
-            if (plan.saberesGlobales) {
-                saberesSeleccionados = new Set(plan.saberesGlobales);
-            }
-            
-            if (plan.saberesProcedimentalesGlobales) {
-                saberesProcedimentalesGlobales = new Set(plan.saberesProcedimentalesGlobales);
-            }
-            
-            if (plan.saberesActitudinalesGlobales) {
-                saberesActitudinalesGlobales = new Set(plan.saberesActitudinalesGlobales);
-            }
-            
-            if (plan.reflexiones) {
-                document.getElementById('queFunciono').value = plan.reflexiones.queFunciono || '';
-                document.getElementById('queNoFunciono').value = plan.reflexiones.queNoFunciono || '';
-                document.getElementById('queMejorar').value = plan.reflexiones.queMejorar || '';
-            }
-            
-            if (plan.observaciones) {
-                document.getElementById('observaciones').value = plan.observaciones || '';
-            }
-            
-            actualizarContadoresSemanas();
-            
-            // FORZAR ACTUALIZACIÓN DE SABERES CONCEPTUALES
-            setTimeout(() => {
-                semanas.forEach((semana, index) => {
-                    actualizarRdASemana(index + 1);
-                    actualizarOpcionesSaberesSemana(index + 1);
-                    actualizarIndicadoresSemana(index + 1);
-                    actualizarSaberesConceptualesContenedor(index + 1);
-                });
-            }, 500);
-            
-            alert('Plan cargado exitosamente');
-        }
+
 
         // ===== FUNCIONES DE EXPORTACIÓN CORREGIDAS =====
 
@@ -5803,60 +5829,56 @@
         }
         
         // ===== INICIALIZACIÓN FINAL =====
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Plantilla PNFT cargada correctamente');
-            
-            // Inicializar semanas
-            inicializarSemanas();
-            
-            // Configurar eventos
-            configurarEventListeners();
-            
-            // Inicializar proyección
-            inicializarProyeccion();
-            
-            // Sincronizar lecciones de proyección
-            sincronizarLeccionesProyeccion();
-            
-            // Configurar eventos para ejes transversales
-            document.querySelectorAll('.eje-option').forEach(option => {
-                option.addEventListener('click', function(e) {
-                    // Si el clic fue directamente en el checkbox, no hacer nada extra
-                    if (e.target.type === 'checkbox') return;
-                    
-                    // Buscar el checkbox dentro de esta opción
-                    const checkbox = this.querySelector('input[type="checkbox"]');
-                    if (checkbox) {
-                        checkbox.checked = !checkbox.checked;
+                   document.addEventListener('DOMContentLoaded', function() {
+                console.log('🚀 Plantilla PNFT cargada correctamente');
+                
+                // Inicializar semanas básicas
+                inicializarSemanas();
+                
+                // Configurar eventos
+                configurarEventListeners();
+                
+                // Inicializar proyección
+                inicializarProyeccion();
+                
+                // Sincronizar lecciones de proyección
+                sincronizarLeccionesProyeccion();
+                
+                // Configurar eventos para ejes transversales
+                document.querySelectorAll('.eje-option').forEach(option => {
+                    option.addEventListener('click', function(e) {
+                        if (e.target.type === 'checkbox') return;
                         
-                        // Actualizar clase visual
-                        if (checkbox.checked) {
-                            this.classList.add('selected');
-                        } else {
-                            this.classList.remove('selected');
+                        const checkbox = this.querySelector('input[type="checkbox"]');
+                        if (checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                            
+                            if (checkbox.checked) {
+                                this.classList.add('selected');
+                            } else {
+                                this.classList.remove('selected');
+                            }
                         }
-                    }
+                    });
                 });
-            });
-            
-            // Configurar tooltips mejorados
-            document.querySelectorAll('.tooltip-improved').forEach(element => {
-                element.addEventListener('mouseenter', function() {
-                    const tooltip = this.querySelector('.tooltiptext-improved');
-                    if (tooltip) {
-                        // Ajustar posición si se sale de la pantalla
-                        const rect = tooltip.getBoundingClientRect();
-                        if (rect.right > window.innerWidth) {
-                            tooltip.style.left = 'auto';
-                            tooltip.style.right = '0';
-                            tooltip.style.transform = 'translateX(0)';
+                
+                // Configurar tooltips mejorados
+                document.querySelectorAll('.tooltip-improved').forEach(element => {
+                    element.addEventListener('mouseenter', function() {
+                        const tooltip = this.querySelector('.tooltiptext-improved');
+                        if (tooltip) {
+                            const rect = tooltip.getBoundingClientRect();
+                            if (rect.right > window.innerWidth) {
+                                tooltip.style.left = 'auto';
+                                tooltip.style.right = '0';
+                                tooltip.style.transform = 'translateX(0)';
+                            }
                         }
-                    }
+                    });
                 });
+                
+                console.log('✅ Sistema inicializado completamente');
             });
-            
-            console.log('✅ Sistema inicializado completamente');
-        });
         
         // ===== POLYFILLS Y COMPATIBILIDAD =====
         if (!String.prototype.replaceAll) {
@@ -5881,5 +5903,6 @@
     </script>
 </body>
 </html>
+
 
 
