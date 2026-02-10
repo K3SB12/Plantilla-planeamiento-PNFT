@@ -2663,33 +2663,58 @@
         }
 
         function actualizarNiveles() {
+            console.log('🔄 Ejecutando actualizarNiveles()...');
+            
             const ciclo = document.getElementById('ciclo').value;
             const nivelSelect = document.getElementById('nivel');
             
+            console.log('Ciclo seleccionado:', ciclo);
+            
+            // Guardar selección actual si existe
+            const nivelActual = nivelSelect.value;
+            
+            // Limpiar opciones
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
             
+            if (!ciclo) {
+                console.log('No hay ciclo seleccionado');
+                return;
+            }
+            
             if (ciclo === 'Materno Infantil (Grupo Interactivo II) y Transición') {
-                    nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
+                nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
+                console.log('Opciones para Materno Infantil cargadas');
             } else if (ciclo === 'I Ciclo') {
                 nivelSelect.innerHTML += '<option value="1°">1°</option>';
                 nivelSelect.innerHTML += '<option value="2°">2°</option>';
                 nivelSelect.innerHTML += '<option value="3°">3°</option>';
+                console.log('Opciones para I Ciclo cargadas');
             } else if (ciclo === 'II Ciclo') {
                 nivelSelect.innerHTML += '<option value="4°">4°</option>';
                 nivelSelect.innerHTML += '<option value="5°">5°</option>';
                 nivelSelect.innerHTML += '<option value="6°">6°</option>';
+                console.log('Opciones para II Ciclo cargadas');
             } else if (ciclo === 'III Ciclo') {
                 nivelSelect.innerHTML += '<option value="7°">7°</option>';
                 nivelSelect.innerHTML += '<option value="8°">8°</option>';
                 nivelSelect.innerHTML += '<option value="9°">9°</option>';
+                console.log('Opciones para III Ciclo cargadas');
             }
+            
+            // Restaurar selección anterior si existe en las nuevas opciones
+            if (nivelActual) {
+                const opcionExistente = Array.from(nivelSelect.options).find(opt => opt.value === nivelActual);
+                if (opcionExistente) {
+                    nivelSelect.value = nivelActual;
+                    console.log('Selección restaurada:', nivelActual);
+                }
+            }
+            
+            // Disparar eventos de cambio para actualizar otras partes
+            nivelSelect.dispatchEvent(new Event('change'));
+            
+            console.log('✅ actualizarNiveles() completado');
         }
-
-            // ACTUALIZAR PROYECCIÓN AUTOMÁTICAMENTE
-                setTimeout(() => {
-                    actualizarAreasProyeccion();
-                }, 100);
-            }
 
         function inicializarSemanas() {
             const lecciones = parseInt(document.getElementById('leccionesPlanificadas').value) || 8;
@@ -5829,56 +5854,78 @@
         }
         
         // ===== INICIALIZACIÓN FINAL =====
-                   document.addEventListener('DOMContentLoaded', function() {
-                console.log('🚀 Plantilla PNFT cargada correctamente');
-                
-                // Inicializar semanas básicas
-                inicializarSemanas();
-                
-                // Configurar eventos
-                configurarEventListeners();
-                
-                // Inicializar proyección
-                inicializarProyeccion();
-                
-                // Sincronizar lecciones de proyección
-                sincronizarLeccionesProyeccion();
-                
-                // Configurar eventos para ejes transversales
-                document.querySelectorAll('.eje-option').forEach(option => {
-                    option.addEventListener('click', function(e) {
-                        if (e.target.type === 'checkbox') return;
-                        
-                        const checkbox = this.querySelector('input[type="checkbox"]');
-                        if (checkbox) {
-                            checkbox.checked = !checkbox.checked;
-                            
-                            if (checkbox.checked) {
-                                this.classList.add('selected');
-                            } else {
-                                this.classList.remove('selected');
-                            }
-                        }
-                    });
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando sistema PNFT...');
+            
+            // Configurar event listener CORREGIDO para el ciclo
+            const cicloSelect = document.getElementById('ciclo');
+            if (cicloSelect) {
+                // Remover listener anterior si existe
+                cicloSelect.removeEventListener('change', actualizarNiveles);
+                // Agregar nuevo listener
+                cicloSelect.addEventListener('change', function() {
+                    console.log('Ciclo cambiado a:', this.value);
+                    actualizarNiveles();
                 });
                 
-                // Configurar tooltips mejorados
-                document.querySelectorAll('.tooltip-improved').forEach(element => {
-                    element.addEventListener('mouseenter', function() {
-                        const tooltip = this.querySelector('.tooltiptext-improved');
-                        if (tooltip) {
-                            const rect = tooltip.getBoundingClientRect();
-                            if (rect.right > window.innerWidth) {
-                                tooltip.style.left = 'auto';
-                                tooltip.style.right = '0';
-                                tooltip.style.transform = 'translateX(0)';
-                            }
-                        }
-                    });
+                console.log('✅ Event listener para ciclo configurado');
+            }
+            
+            // Si ya hay un ciclo seleccionado (en caso de recarga), actualizar niveles
+            if (cicloSelect && cicloSelect.value) {
+                console.log('Ciclo preseleccionado encontrado:', cicloSelect.value);
+                setTimeout(() => {
+                    actualizarNiveles();
+                }, 100);
+            }
+            
+            // Inicializar semanas
+            inicializarSemanas();
+            
+            // Configurar otros event listeners
+            configurarEventListeners();
+            
+            // Inicializar proyección
+            inicializarProyeccion();
+            
+            console.log('✅ Sistema completamente inicializado');
+        });
+
+        // ===== CORRECCIÓN 3: FUNCIÓN configurarEventListeners() ACTUALIZADA =====
+        function configurarEventListeners() {
+            console.log('⚙️ Configurando event listeners...');
+            
+            // Lecciones planificadas
+            const leccionesInput = document.getElementById('leccionesPlanificadas');
+            if (leccionesInput) {
+                leccionesInput.addEventListener('change', actualizarSemanasPreservandoContenido);
+            }
+            
+            // Metodología activa
+            const metodologiaSelect = document.getElementById('metodologiaActiva');
+            if (metodologiaSelect) {
+                metodologiaSelect.addEventListener('change', manejarCambioMetodologia);
+            }
+            
+            // Nivel (actualizar proyección cuando cambie)
+            const nivelSelect = document.getElementById('nivel');
+            if (nivelSelect) {
+                nivelSelect.addEventListener('change', function() {
+                    console.log('Nivel cambiado a:', this.value);
+                    setTimeout(() => {
+                        actualizarAreasProyeccion();
+                    }, 100);
                 });
-                
-                console.log('✅ Sistema inicializado completamente');
+            }
+            
+            // Checkboxes de áreas de proyección
+            document.querySelectorAll('input[name="area-proyeccion"]').forEach(checkbox => {
+                checkbox.addEventListener('change', actualizarAreasProyeccion);
             });
+            
+            console.log('✅ Event listeners configurados');
+        }
+
         
         // ===== POLYFILLS Y COMPATIBILIDAD =====
         if (!String.prototype.replaceAll) {
@@ -5903,6 +5950,7 @@
     </script>
 </body>
 </html>
+
 
 
 
