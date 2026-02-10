@@ -5274,7 +5274,7 @@
 
             // SOLICITUD
             prompt += `SOLICITO UN RESUMEN GENERAL QUE:\n`;
-            prompt += `1. Identifique patrones comunes en todas las semanas mostrando claridad y organización.\n`;
+            prompt += `1. Distribuye los indicadores de logro por la cantidad de semanas y lecciones del ciclo, nivel y Módulo seleccionado, en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, Metodología y el indicador de evaluación sugerido. Mostrando claridad y organización.\n`;
             prompt += `2. Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
             prompt += `3. Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
             prompt += `4. Estrategias de mediación que integren, den secuencialidad coherente y articulación de los saberes conceptuales.\n`;
@@ -5568,12 +5568,13 @@
             
             // SOLICITUD
             prompt += `🤖 SOLICITO:\n`;
-            prompt += `• Genera una actividad secuenciada para la ${semana.lecciones} que considere:\n`;
+            prompt += `• Genera una actividad que tenga inicio, desarrollo y cierre para la ${semana.lecciones} que considere:\n`;
+            prompt += `• Articula los saberes conceptuales e indicadores de logro del módulo seleccionado.\n`;
+            prompt += `• Que las actividades sean prácticas y contextualizadas para el nivel seleccionado.\n`;
             prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
             prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
             prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
             prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
-            prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n`;
             prompt += `• Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
@@ -5582,6 +5583,7 @@
     </script>
 </body>
 </html>
+
 
 
 
