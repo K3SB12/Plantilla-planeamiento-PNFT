@@ -1099,7 +1099,7 @@
         <script>
             const PNFT_DATA = {
             // ========== MATERNO INFANTIL / TRANSICIÓN ==========
-            "Grupo Interactivo II y Transición": {
+            "0°": {
                 "Módulo 1": {
                 "Apropiación tecnológica y Digital": {
                     saberes: [
@@ -2395,7 +2395,7 @@
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
             
             if (ciclo === 'Materno Infantil/Transición') {
-                nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
+                nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">"0°"</option>';
             } else if (ciclo === 'I Ciclo') {
                 nivelSelect.innerHTML += '<option value="1°">1°</option>';
                 nivelSelect.innerHTML += '<option value="2°">2°</option>';
@@ -2850,11 +2850,11 @@
                 }
                 
                 // Buscar en Módulo 2
-                if (!encontrado && PNFT_DATA[nivel]["Módulo 2"]) {
+                if (!encontroSaberes && PNFT_DATA[nivel]["Módulo 2"]) {
                     for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
                         const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea].saberes.find(s => s.nombre === saber);
                         if (saberData) {
-                            encontrado = true;
+                            encontroSaberes = true;
                             saberData.indicadores.forEach(indicador => {
                                 html += `
                                     <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
@@ -5582,6 +5582,7 @@
     </script>
 </body>
 </html>
+
 
 
 
