@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Plantilla de Planeamiento Didáctico - PNFT (Versión Definitiva)</title>
+    <title>Plantilla de Planeamiento Didáctico - PNFT (Versión Final)</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Quill se carga SOLO cuando el usuario activa el modo avanzado -->
     
     <style>
         :root {
@@ -740,7 +738,6 @@
             display: block;
         }
 
-        /* ===== NUEVOS ESTILOS ===== */
         .panel-institucional {
             display: flex;
             align-items: center;
@@ -812,11 +809,11 @@
             margin-right: 5px;
         }
 
-        /* Estilos para impresión */
         @media print {
             .action-buttons, .btn-agregar-semana, .btn-eliminar-semana,
             .modal, .semanas-controls, .btn, .panel-institucional,
-            .guardar-container, .menu-desplegable {
+            .guardar-container, .menu-desplegable, .mensaje-flotante,
+            [style*="position: fixed"] {
                 display: none !important;
             }
             
@@ -916,7 +913,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- PANEL INSTITUCIONAL PERSONALIZABLE -->
         <div class="panel-institucional">
             <div class="escudo-container" onclick="document.getElementById('uploadEscudo').click()">
                 <img id="escudoInstitucional" src="" alt="Escudo" style="display: none; width: 100%; height: 100%; object-fit: contain;">
@@ -933,13 +929,11 @@
             </div>
         </div>
 
-        <!-- ENCABEZADO -->
         <div class="header">
             <h1>Plantilla de Planeamiento Didáctico</h1>
             <h2>Programa Nacional de Formación Tecnológica - Informática educativa</h2>
         </div>
 
-        <!-- INFORMACIÓN GENERAL -->
         <table>
             <tr>
                 <td width="33%">
@@ -1017,7 +1011,6 @@
             </tr>
         </table>
 
-        <!-- EJES TRANSVERSALES -->
         <div class="section-title">Eje transversal del PNFT según competencia MEP, marque con equis (x) el eje a desarrollar.</div>
         <div class="ejes-transversales">
             <div class="eje-option">
@@ -1043,7 +1036,6 @@
             </div>
         </div>
 
-        <!-- METODOLOGÍA ACTIVA -->
         <div class="section-title">Metodología activa:</div>
         <select id="metodologiaActiva" class="select-field" onchange="mostrarDetalleMetodologia(this.value)">
             <option value="">Seleccionar metodología</option>
@@ -1053,13 +1045,11 @@
             <option value="otra">Otra metodología</option>
         </select>
 
-        <!-- CAMPO PARA METODOLOGÍA PERSONALIZADA -->
         <div id="metodologiaPersonalizadaContainer" class="metodologia-personalizada-container">
             <label for="metodologiaPersonalizada"><strong>Especifique la metodología:</strong></label>
             <input type="text" id="metodologiaPersonalizada" class="input-field" placeholder="Escriba la metodología que desea utilizar...">
         </div>
 
-        <!-- PLANIFICACIÓN POR SEMANAS -->
         <div class="section-title espacio-optimizado">Planificación por Semanas</div>
         <div class="semanas-controls">
             <div>
@@ -1069,11 +1059,8 @@
             <button type="button" class="btn-agregar-semana" onclick="agregarSemanaManual()">+ Agregar Semana</button>
         </div>
         
-        <div id="semanasContainer">
-            <!-- Las semanas se generarán aquí dinámicamente -->
-        </div>
+        <div id="semanasContainer"></div>
 
-        <!-- REFLEXIONES DOCENTES -->
         <table>
             <tr>
                 <td width="33%" class="section-title">¿Qué funcionó?</td>
@@ -1093,7 +1080,6 @@
             </tr>
         </table>
 
-        <!-- OBSERVACIONES -->
         <div class="section-title">Observaciones y/o recomendaciones didácticas por nivel:</div>
         <div style="font-size: 11px; color: #666; margin-bottom: 8px; font-style: italic;">
             En este apartado la persona docente podrá realizar los apuntes que considere necesarios: antes, durante y después de la aplicación del planeamiento didáctico.
@@ -1102,7 +1088,6 @@
 
         <hr style="margin: 15px 0; border: 1px solid #45258F;">
         
-        <!-- NOTA SOBRE IA -->
         <div class="info-note">
             <strong>Nota importante sobre el uso de IA:</strong> Lo que brinda la IA debe ser contextualizado por el educador, 
             quien decide, observa y ejecuta según su criterio y conocimiento del grupo. La IA proporciona estrategias de mediación 
@@ -1110,13 +1095,11 @@
             implementación más adecuada.
         </div>
 
-        <!-- FOOTER -->
         <div class="footer">
             DIDI - Departamento de Investigación, Desarrollo e Implementación<br>
             Dirección de Recursos Tecnológicos en Educación
         </div>
 
-        <!-- BOTONES DE ACCIÓN -->
         <div class="action-buttons">
             <button onclick="nuevoPlan()" class="btn btn-outline">🆕 Nuevo</button>
             <button onclick="abrirPlan()" class="btn btn-outline">📂 Abrir</button>
@@ -1139,7 +1122,6 @@
             <button onclick="desactivarEditorAvanzado()" class="btn btn-secondary" style="background: #6c757d; color: white; display: none;" id="btnDesactivarAvanzado">🔙 Modo simple</button>
         </div>
 
-        <!-- MODAL PARA EXPORTAR -->
         <div id="exportarModal" class="modal">
             <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
                 <button class="modal-close" onclick="cerrarExportModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer; z-index: 10;">&times;</button>
@@ -1207,7 +1189,6 @@
             </div>
         </div>
 
-        <!-- MODAL PARA PROMPT IA GENERAL -->
         <div id="promptModal" class="modal">
             <div class="modal-content">
                 <button class="modal-close" onclick="cerrarPromptModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
@@ -1235,7 +1216,6 @@
             </div>
         </div>
 
-        <!-- MODAL PARA PROMPT POR SEMANA -->
         <div id="promptSemanaModal" class="modal">
             <div class="modal-content">
                 <button class="modal-close" onclick="cerrarPromptSemanaModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
@@ -1261,15 +1241,12 @@
                 <button onclick="cerrarPromptSemanaModal()" class="btn btn-outline" style="width: 50%; margin-top: 8px; padding: 8px;">❌ Cerrar</button>
             </div>
         </div>
-
-    </div> <!-- Cierre del container principal -->
+    </div>
 
     <script>
         // ====================================================
-        // ===== ESPACIO PARA INSERTAR TU PNFT_DATA =========
+        // ===== PEGA AQUÍ TU CONST PNFT_DATA =================
         // ====================================================
-        // PEGA AQUÍ TU CONST PNFT_DATA
-        // Ejemplo:
         // const PNFT_DATA = { ... };
         // ====================================================
         const PNFT_DATA = {
@@ -2506,7 +2483,6 @@
 }  // ← CIERRA "9°"
 };  // ← CIERRA todo PNFT_DATA (solo UNA vez al final)
     
-        // ===== RESULTADOS DE APRENDIZAJE (RdA) POR CICLO Y ÁREA =====
         const RDA_POR_CICLO = {
             "Materno Infantil/Transición": {
                 "Apropiación tecnológica y Digital": "Identifica los dispositivos digitales considerando características funcionales, experimentando su utilidad y reconociendo la autoría, durante la accesibilidad, interacción y comunicación en la creación de recursos digitales.",
@@ -2534,7 +2510,6 @@
             }
         };
 
-        // Variables globales
         let semanas = [];
         let saberesSeleccionados = new Set();
         let saberesProcedimentalesGlobales = new Set();
@@ -2547,10 +2522,8 @@
             lema: ''
         };
 
-        // Variable para saber si estamos en modo avanzado
         let modoAvanzadoActivo = false;
 
-        // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof PNFT_DATA === 'undefined') {
                 console.warn('⚠️ PNFT_DATA no está definido. Algunas funciones podrían no trabajar correctamente.');
@@ -2642,7 +2615,6 @@
                             ${semanas.length <= 1 ? 'disabled' : ''}>✕</button>
                 </div>
                 
-                <!-- EJE TRANSVERSAL POR SEMANA -->
                 <div class="section-title" style="font-size: 13px; margin: 5px 0;">Eje transversal del PNFT (Semana ${numero})</div>
                 <div class="ejes-transversales-semana">
                     <label class="eje-semana-option">
@@ -2659,7 +2631,6 @@
                     </label>
                 </div>
                 
-                <!-- ÁREAS DE CONOCIMIENTO Y RDA -->
                 <div class="areas-rda-container">
                     <div class="areas-container">
                         <div class="section-title">Áreas de conocimiento para esta semana</div>
@@ -2690,7 +2661,6 @@
                     </div>
                 </div>
                 
-                <!-- SABERES POR DESARROLLO -->
                 <div class="section-title">Saberes por Desarrollo</div>
                 <div class="saberes-grid">
                     <div class="saber-columna">
@@ -2713,13 +2683,11 @@
                     </div>
                 </div>
                 
-                <!-- SABERES CONCEPTUALES PARA ESTA SEMANA -->
                 <div class="section-title">Saberes conceptuales para esta semana</div>
                 <div class="saberes-conceptuales-container" id="saberes-conceptuales-${numero}">
                     <div style="color: #666; font-style: italic; font-size: 11px;">Seleccione ciclo, nivel y áreas de conocimiento para ver los saberes disponibles</div>
                 </div>
                 
-                <!-- 3 COLUMNAS (MODO SIMPLE POR DEFECTO) -->
                 <div class="tres-columnas">
                     <div class="campo-editable">
                         <div class="columna-titulo">Indicadores de logro</div>
@@ -2741,7 +2709,6 @@
                     </div>
                 </div>
                 
-                <!-- BOTÓN PROMPT IA PARA SEMANA -->
                 <div style="text-align: center; margin-top: 12px;">
                     <button onclick="generarPromptSemana(${numero})" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">🤖 Prompt IA para Semana ${numero}</button>
                 </div>
@@ -2990,10 +2957,7 @@
             const nivel = document.getElementById('nivel').value;
             
             if (modoAvanzadoActivo) {
-                // MODO AVANZADO: Actualizar Quill
-                const editorId = `editor-avanzado-${numeroSemana}-indicadores`;
-                const editorElement = document.getElementById(editorId);
-                
+                const editorElement = document.querySelector(`#semana-${numeroSemana} .quill-editor`);
                 if (editorElement && editorElement.__quill) {
                     const quill = editorElement.__quill;
                     
@@ -3003,13 +2967,11 @@
                         return;
                     }
                     
-                    // EXTRAER INDICADORES REALES del PNFT_DATA
-                    let indicadoresEncontrados = [];
+                    let indicadoresConModulo = [];
                     
                     semana.saberes.forEach(saber => {
                         let encontrado = false;
                         
-                        // Buscar en Módulo 1
                         if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
                             for (const area in PNFT_DATA[nivel]["Módulo 1"]) {
                                 const areaData = PNFT_DATA[nivel]["Módulo 1"][area];
@@ -3017,14 +2979,15 @@
                                     const saberData = areaData.saberes.find(s => s.nombre === saber);
                                     if (saberData) {
                                         encontrado = true;
-                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        saberData.indicadores.forEach(ind => {
+                                            indicadoresConModulo.push({ texto: ind, modulo: 'M1' });
+                                        });
                                         break;
                                     }
                                 }
                             }
                         }
                         
-                        // Buscar en Módulo 2 si no se encontró
                         if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
                             for (const area in PNFT_DATA[nivel]["Módulo 2"]) {
                                 const areaData = PNFT_DATA[nivel]["Módulo 2"][area];
@@ -3032,7 +2995,9 @@
                                     const saberData = areaData.saberes.find(s => s.nombre === saber);
                                     if (saberData) {
                                         encontrado = true;
-                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        saberData.indicadores.forEach(ind => {
+                                            indicadoresConModulo.push({ texto: ind, modulo: 'M2' });
+                                        });
                                         break;
                                     }
                                 }
@@ -3040,19 +3005,22 @@
                         }
                     });
                     
-                    // Eliminar duplicados y formatear como lista
-                    const indicadoresUnicos = [...new Set(indicadoresEncontrados)];
-                    let html = '<ul>';
-                    indicadoresUnicos.forEach(ind => {
-                        html += `<li>${ind}</li>`;
+                    const unicos = new Map();
+                    indicadoresConModulo.forEach(item => {
+                        if (!unicos.has(item.texto)) {
+                            unicos.set(item.texto, item);
+                        }
                     });
-                    html += '</ul>';
                     
-                    quill.root.innerHTML = html;
-                    semana.indicadores = quill.root.innerHTML;
+                    let html = '';
+                    unicos.forEach(item => {
+                        html += `<p><strong>${item.modulo}:</strong> ${item.texto}</p>`;
+                    });
+                    
+                    quill.root.innerHTML = html || '<p><em>No hay indicadores disponibles</em></p>';
+                    semana.indicadores = html;
                 }
             } else {
-                // MODO SIMPLE: Actualizar contenteditable
                 const selector = `#semana-${numeroSemana} .contenedor-editable[data-placeholder*="indicadores"]`;
                 const contenedor = document.querySelector(selector);
                 
@@ -3063,13 +3031,11 @@
                         return;
                     }
                     
-                    // EXTRAER INDICADORES REALES del PNFT_DATA
-                    let indicadoresEncontrados = [];
+                    let indicadoresConModulo = [];
                     
                     semana.saberes.forEach(saber => {
                         let encontrado = false;
                         
-                        // Buscar en Módulo 1
                         if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
                             for (const area in PNFT_DATA[nivel]["Módulo 1"]) {
                                 const areaData = PNFT_DATA[nivel]["Módulo 1"][area];
@@ -3077,14 +3043,15 @@
                                     const saberData = areaData.saberes.find(s => s.nombre === saber);
                                     if (saberData) {
                                         encontrado = true;
-                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        saberData.indicadores.forEach(ind => {
+                                            indicadoresConModulo.push({ texto: ind, modulo: 'M1' });
+                                        });
                                         break;
                                     }
                                 }
                             }
                         }
                         
-                        // Buscar en Módulo 2 si no se encontró
                         if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
                             for (const area in PNFT_DATA[nivel]["Módulo 2"]) {
                                 const areaData = PNFT_DATA[nivel]["Módulo 2"][area];
@@ -3092,7 +3059,9 @@
                                     const saberData = areaData.saberes.find(s => s.nombre === saber);
                                     if (saberData) {
                                         encontrado = true;
-                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        saberData.indicadores.forEach(ind => {
+                                            indicadoresConModulo.push({ texto: ind, modulo: 'M2' });
+                                        });
                                         break;
                                     }
                                 }
@@ -3100,11 +3069,16 @@
                         }
                     });
                     
-                    // Eliminar duplicados y formatear
-                    const indicadoresUnicos = [...new Set(indicadoresEncontrados)];
+                    const unicos = new Map();
+                    indicadoresConModulo.forEach(item => {
+                        if (!unicos.has(item.texto)) {
+                            unicos.set(item.texto, item);
+                        }
+                    });
+                    
                     let html = '';
-                    indicadoresUnicos.forEach(ind => {
-                        html += `• ${ind}<br>`;
+                    unicos.forEach(item => {
+                        html += `[${item.modulo}] ${item.texto}<br>`;
                     });
                     
                     contenedor.innerHTML = html || '<br>';
@@ -3291,20 +3265,36 @@
                         if (checkbox) checkbox.checked = true;
                     });
                     
-                    // Restaurar contenido de los editores
                     const indicadoresContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="indicadores"]`);
                     if (indicadoresContainer && semana.indicadores) {
-                        indicadoresContainer.innerHTML = semana.indicadores;
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = semana.indicadores;
+                        let textContent = tempDiv.textContent || tempDiv.innerText || '';
+                        
+                        if (!textContent.trim()) {
+                            indicadoresContainer.innerHTML = '<br>';
+                        } else {
+                            const lineas = textContent.split('\n').filter(l => l.trim());
+                            let html = '';
+                            lineas.forEach(linea => {
+                                if (linea.trim()) html += `• ${linea.trim()}<br>`;
+                            });
+                            indicadoresContainer.innerHTML = html || '<br>';
+                        }
                     }
                     
                     const actividadesContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="Mediación"]`);
                     if (actividadesContainer && semana.actividades) {
-                        actividadesContainer.innerHTML = semana.actividades;
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = semana.actividades;
+                        actividadesContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '<br>';
                     }
                     
                     const evaluacionContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="evaluación"]`);
                     if (evaluacionContainer && semana.evaluacion) {
-                        evaluacionContainer.innerHTML = semana.evaluacion;
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = semana.evaluacion;
+                        evaluacionContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '<br>';
                     }
                     
                 }, 100);
@@ -3431,7 +3421,7 @@
 
         function cargarPlan(plan) {
             if (plan.membrete) {
-                if (plan.membrete.escudo) {
+                if (plan.membrete.escudo && plan.membrete.escudo.startsWith('data:image')) {
                     const img = document.getElementById('escudoInstitucional');
                     img.src = plan.membrete.escudo;
                     img.style.display = 'block';
@@ -3611,8 +3601,19 @@
         .tabla th { background-color: #45258F; color: white; font-weight: bold; text-align: center; padding: 2mm; border: 0.5pt solid black; font-size: 10pt; }
         .tabla td { border: 0.5pt solid #ccc; padding: 2mm; vertical-align: top; font-size: 10pt; }
         .encabezado-semana { background-color: #45258F; color: white; font-weight: bold; padding: 2mm; font-size: 11pt; border-radius: 2mm 2mm 0 0; }
-        .no-imprimir { display: none; }
-        @media print { @page { size: A4 landscape; margin: 15mm; } body { margin: 0; padding: 15mm; } .titulo-seccion, .encabezado-semana, .tabla th { background-color: #45258F !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+        .mensaje-flotante, .no-imprimir { display: none; }
+        @media print {
+            .mensaje-flotante, .no-imprimir, [style*="position: fixed"] {
+                display: none !important;
+            }
+            @page { size: A4 landscape; margin: 15mm; } 
+            body { margin: 0; padding: 15mm; } 
+            .titulo-seccion, .encabezado-semana, .tabla th { 
+                background-color: #45258F !important; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -3723,7 +3724,7 @@
                 contenidoHTML += `<div class="seccion"><div class="titulo-seccion">PLANIFICACIÓN POR SEMANAS</div>`;
                 semanas.forEach((semana, index) => {
                     contenidoHTML += `
-            <div style="margin-bottom: 6mm;">
+            <div style="margin-bottom: 6mm; page-break-inside: avoid;">
                 <div class="encabezado-semana">
                     📅 Semana ${index + 1} - ${semana.lecciones}<br>
                     <span style="font-size: 9pt; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 12px; display: inline-block; margin-top: 2px;">
@@ -3731,10 +3732,16 @@
                     </span>
                 </div>
                 <table class="tabla">
-                    <tr><th>Indicadores de logro</th><th>Estrategias de Mediación</th><th>Indicadores de evaluación</th></tr>
-                    <tr><td>${limpiarContenido(semana.indicadores) || 'No especificado'}</td>
-                        <td>${limpiarContenido(semana.actividades) || 'No especificado'}</td>
-                        <td>${limpiarContenido(semana.evaluacion) || 'No especificado'}</td></tr>
+                    <tr>
+                        <th width="33%">Indicadores de logro</th>
+                        <th width="34%">Estrategias de Mediación</th>
+                        <th width="33%">Indicadores de evaluación</th>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;">${limpiarContenido(semana.indicadores) || 'No especificado'}</td>
+                        <td style="vertical-align: top;">${limpiarContenido(semana.actividades) || 'No especificado'}</td>
+                        <td style="vertical-align: top;">${limpiarContenido(semana.evaluacion) || 'No especificado'}</td>
+                    </tr>
                 </table>
             </div>`;
                 });
@@ -3792,6 +3799,7 @@
                 ventanaPreview.focus();
                 
                 const mensajeDiv = ventanaPreview.document.createElement('div');
+                mensajeDiv.className = 'mensaje-flotante no-imprimir';
                 mensajeDiv.style.cssText = `
                     position: fixed;
                     top: 10px;
@@ -4209,7 +4217,6 @@
             }, 4000);
         }
 
-        // ===== FUNCIONES PARA MEMBRETE Y EJES =====
         function configurarMembrete() {
             const uploadInput = document.getElementById('uploadEscudo');
             const escudoImg = document.getElementById('escudoInstitucional');
@@ -4296,7 +4303,6 @@
             return mapa[valor] || valor;
         }
 
-        // ===== FUNCIONES PARA EDITOR AVANZADO (OPCIONAL) =====
         function preguntarActivarEditorAvanzado() {
             if (confirm('¿Activar editor con formato?\n\nEsto permitirá dar formato a los textos (negritas, listas, etc.). Se cargará una biblioteca externa solo si es necesario.')) {
                 activarEditorAvanzado();
@@ -4339,23 +4345,30 @@
                 
                 const contenedores = document.querySelectorAll(`#semana-${numSemana} .contenedor-editable`);
                 
-                contenedores.forEach((contenedor, pos) => {
+                contenedores.forEach((contenedor) => {
+                    if (contenedor.parentNode.querySelector('.quill-editor')) return;
+                    
                     let tipo = 'indicadores';
                     if (contenedor.getAttribute('data-placeholder')?.includes('Mediación')) tipo = 'actividades';
                     if (contenedor.getAttribute('data-placeholder')?.includes('evaluación')) tipo = 'evaluacion';
                     
                     const contenidoActual = contenedor.innerHTML;
                     
+                    const quillContainer = document.createElement('div');
+                    quillContainer.className = 'quill-wrapper';
+                    
                     const nuevoDiv = document.createElement('div');
-                    nuevoDiv.id = `editor-avanzado-${numSemana}-${tipo}`;
+                    nuevoDiv.id = `editor-avanzado-${numSemana}-${tipo}-${Date.now()}`;
                     nuevoDiv.className = 'quill-editor';
                     nuevoDiv.style.height = '200px';
                     
-                    contenedor.parentNode.replaceChild(nuevoDiv, contenedor);
+                    quillContainer.appendChild(nuevoDiv);
+                    contenedor.parentNode.replaceChild(quillContainer, contenedor);
                     
-                    const editor = new Quill(`#editor-avanzado-${numSemana}-${tipo}`, {
+                    const editor = new Quill(`#${nuevoDiv.id}`, {
                         theme: 'snow',
-                        placeholder: contenedor.getAttribute('data-placeholder') || 'Escriba aquí...',
+                        placeholder: tipo === 'indicadores' ? 'Los indicadores aparecerán automáticamente...' : 
+                                   (tipo === 'actividades' ? 'Describa las estrategias de mediación...' : 'Describa los indicadores de evaluación...'),
                         modules: {
                             toolbar: [
                                 ['bold', 'italic', 'underline'],
@@ -4365,7 +4378,61 @@
                         }
                     });
                     
-                    if (contenidoActual && contenidoActual !== '<br>') {
+                    if (tipo === 'indicadores' && semana.saberes.length > 0) {
+                        const nivel = document.getElementById('nivel').value;
+                        let indicadoresConModulo = [];
+                        
+                        semana.saberes.forEach(saber => {
+                            let encontrado = false;
+                            
+                            if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
+                                for (const area in PNFT_DATA[nivel]["Módulo 1"]) {
+                                    const areaData = PNFT_DATA[nivel]["Módulo 1"][area];
+                                    if (areaData && areaData.saberes) {
+                                        const saberData = areaData.saberes.find(s => s.nombre === saber);
+                                        if (saberData) {
+                                            encontrado = true;
+                                            saberData.indicadores.forEach(ind => {
+                                                indicadoresConModulo.push({ texto: ind, modulo: 'M1' });
+                                            });
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
+                                for (const area in PNFT_DATA[nivel]["Módulo 2"]) {
+                                    const areaData = PNFT_DATA[nivel]["Módulo 2"][area];
+                                    if (areaData && areaData.saberes) {
+                                        const saberData = areaData.saberes.find(s => s.nombre === saber);
+                                        if (saberData) {
+                                            encontrado = true;
+                                            saberData.indicadores.forEach(ind => {
+                                                indicadoresConModulo.push({ texto: ind, modulo: 'M2' });
+                                            });
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        
+                        const unicos = new Map();
+                        indicadoresConModulo.forEach(item => {
+                            if (!unicos.has(item.texto)) {
+                                unicos.set(item.texto, item);
+                            }
+                        });
+                        
+                        let html = '';
+                        unicos.forEach(item => {
+                            html += `<p><strong>${item.modulo}:</strong> ${item.texto}</p>`;
+                        });
+                        
+                        editor.root.innerHTML = html;
+                        semana.indicadores = html;
+                    } else if (contenidoActual && contenidoActual !== '<br>') {
                         editor.root.innerHTML = contenidoActual;
                     }
                     
@@ -4388,6 +4455,7 @@
             
             document.querySelectorAll('.quill-editor').forEach(el => el.remove());
             document.querySelectorAll('.ql-toolbar').forEach(el => el.remove());
+            document.querySelectorAll('.quill-wrapper').forEach(el => el.remove());
             
             const container = document.getElementById('semanasContainer');
             container.innerHTML = '';
@@ -4449,21 +4517,32 @@
                     if (indicadoresContainer && semana.indicadores) {
                         const tempDiv = document.createElement('div');
                         tempDiv.innerHTML = semana.indicadores;
-                        indicadoresContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '';
+                        let textContent = tempDiv.textContent || tempDiv.innerText || '';
+                        
+                        if (!textContent.trim()) {
+                            indicadoresContainer.innerHTML = '<br>';
+                        } else {
+                            const lineas = textContent.split('\n').filter(l => l.trim());
+                            let html = '';
+                            lineas.forEach(linea => {
+                                if (linea.trim()) html += `• ${linea.trim()}<br>`;
+                            });
+                            indicadoresContainer.innerHTML = html || '<br>';
+                        }
                     }
                     
                     const actividadesContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="Mediación"]`);
                     if (actividadesContainer && semana.actividades) {
                         const tempDiv = document.createElement('div');
                         tempDiv.innerHTML = semana.actividades;
-                        actividadesContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '';
+                        actividadesContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '<br>';
                     }
                     
                     const evaluacionContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="evaluación"]`);
                     if (evaluacionContainer && semana.evaluacion) {
                         const tempDiv = document.createElement('div');
                         tempDiv.innerHTML = semana.evaluacion;
-                        evaluacionContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '';
+                        evaluacionContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '<br>';
                     }
                     
                 }, 100);
@@ -4474,3 +4553,4 @@
     </script>
 </body>
 </html>
+        
