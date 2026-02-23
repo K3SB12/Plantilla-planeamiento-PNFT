@@ -774,6 +774,11 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+            display: none;
+        }
+
+        .escudo-container img[src]:not([src=""]) {
+            display: block !important;
         }
 
         .ejes-transversales-semana {
@@ -913,9 +918,10 @@
 </head>
 <body>
     <div class="container">
+        <!-- PANEL INSTITUCIONAL PERSONALIZABLE (VERSIÓN QUE FUNCIONA) -->
         <div class="panel-institucional">
             <div class="escudo-container" onclick="document.getElementById('uploadEscudo').click()">
-                <img id="escudoInstitucional" src="" alt="Escudo" style="display: none; width: 100%; height: 100%; object-fit: contain;">
+                <img id="escudoInstitucional" src="" alt="Escudo">
                 <div id="escudoPlaceholder" style="color: #999; font-size: 24px; text-align: center;">
                     <div>🖼️</div>
                     <small>Subir escudo</small>
@@ -1245,6 +1251,12 @@
 
     <script>
         // ====================================================
+        // ===== PEGA AQUÍ TU CONST PNFT_DATA =================
+        // ====================================================
+        // const PNFT_DATA = { ... };
+        // ====================================================
+
+        / ====================================================
         // ===== PEGA AQUÍ TU CONST PNFT_DATA =================
         // ====================================================
         // const PNFT_DATA = { ... };
@@ -2483,6 +2495,7 @@
 }  // ← CIERRA "9°"
 };  // ← CIERRA todo PNFT_DATA (solo UNA vez al final)
     
+
         const RDA_POR_CICLO = {
             "Materno Infantil/Transición": {
                 "Apropiación tecnológica y Digital": "Identifica los dispositivos digitales considerando características funcionales, experimentando su utilidad y reconociendo la autoría, durante la accesibilidad, interacción y comunicación en la creación de recursos digitales.",
@@ -2531,6 +2544,11 @@
             inicializarSemanas();
             configurarEventListeners();
             configurarMembrete();
+            
+            // Verificar escudo guardado
+            setTimeout(() => {
+                console.log('🔍 Escudo en memoria:', membreteInstitucional.escudo ? '✅ Sí hay' : '❌ No hay');
+            }, 1000);
         });
 
         function configurarEventListeners() {
@@ -3622,8 +3640,10 @@
             if (incluirEncabezado) {
                 let escudoHTML = '';
                 
+                console.log('Exportando escudo:', membreteInstitucional.escudo ? '✅ Sí hay' : '❌ No hay');
+                
                 if (membreteInstitucional.escudo && membreteInstitucional.escudo.startsWith('data:image')) {
-                    escudoHTML = `<img src="${membreteInstitucional.escudo}" alt="Escudo">`;
+                    escudoHTML = `<img src="${membreteInstitucional.escudo}" alt="Escudo" style="width:100%; height:100%; object-fit: contain;">`;
                 } else if (membreteInstitucional.escudo) {
                     escudoHTML = `<div style="text-align:center; color:#999; font-size: 24px;">🖼️</div><div style="font-size: 9px;">Formato no soportado</div>`;
                 } else {
@@ -4222,54 +4242,46 @@
             const escudoImg = document.getElementById('escudoInstitucional');
             const escudoPlaceholder = document.getElementById('escudoPlaceholder');
             
-            if (uploadInput) {
-                uploadInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        if (!file.type.match('image.*')) {
-                            mostrarMensaje('❌ Solo se permiten imágenes', true);
-                            return;
-                        }
-                        
-                        const reader = new FileReader();
-                        
-                        reader.onload = function(event) {
-                            escudoImg.src = event.target.result;
-                            escudoImg.style.display = 'block';
-                            escudoImg.style.width = '100%';
-                            escudoImg.style.height = '100%';
-                            escudoImg.style.objectFit = 'contain';
-                            escudoPlaceholder.style.display = 'none';
-                            membreteInstitucional.escudo = event.target.result;
-                            
-                            const contenedor = document.querySelector('.escudo-container');
-                            contenedor.style.display = 'flex';
-                            
-                            mostrarMensaje('✅ Escudo cargado correctamente');
-                        };
-                        
-                        reader.onerror = function() {
-                            mostrarMensaje('❌ Error al leer el archivo', true);
-                        };
-                        
-                        reader.readAsDataURL(file);
+            if (!uploadInput || !escudoImg || !escudoPlaceholder) return;
+            
+            uploadInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                if (!file.type.match('image.*')) {
+                    mostrarMensaje('❌ Solo se permiten imágenes', true);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    escudoImg.src = event.target.result;
+                    escudoImg.style.display = 'block';
+                    escudoImg.style.width = '100%';
+                    escudoImg.style.height = '100%';
+                    escudoImg.style.objectFit = 'contain';
+                    escudoPlaceholder.style.display = 'none';
+                    membreteInstitucional.escudo = event.target.result;
+                    
+                    const contenedor = document.querySelector('.escudo-container');
+                    if (contenedor) {
+                        contenedor.style.display = 'flex';
+                        contenedor.style.alignItems = 'center';
+                        contenedor.style.justifyContent = 'center';
                     }
-                });
-            }
+                    
+                    mostrarMensaje('✅ Escudo cargado correctamente');
+                };
+                reader.readAsDataURL(file);
+            });
 
-            const nombreInput = document.getElementById('nombreInstitucion');
-            if (nombreInput) {
-                nombreInput.addEventListener('input', function(e) {
-                    membreteInstitucional.nombre = e.target.value;
-                });
-            }
+            document.getElementById('nombreInstitucion').addEventListener('input', function(e) {
+                membreteInstitucional.nombre = e.target.value;
+            });
 
-            const lemaInput = document.getElementById('lemaInstitucion');
-            if (lemaInput) {
-                lemaInput.addEventListener('input', function(e) {
-                    membreteInstitucional.lema = e.target.value;
-                });
-            }
+            document.getElementById('lemaInstitucion').addEventListener('input', function(e) {
+                membreteInstitucional.lema = e.target.value;
+            });
         }
 
         function actualizarEjeSemana(numeroSemana, valorEje) {
