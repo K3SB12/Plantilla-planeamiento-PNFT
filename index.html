@@ -169,7 +169,7 @@
             border: 2px solid var(--primary-color);
             border-radius: 10px;
             padding: 15px;
-            margin-bottom: 4px; /* CAMBIO CRÍTICO: Era 20px, ahora 4px */
+            margin-bottom: 4px;
             background: white;
         }
 
@@ -385,23 +385,6 @@
             font-size: 12px;
         }
 
-        .contenedor-editable {
-            min-height: 120px;
-            padding: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 12px;
-            line-height: 1.4;
-            background: white;
-            resize: vertical;
-            outline: none;
-        }
-
-        .contenedor-editable[contenteditable="true"]:empty:before {
-            content: attr(data-placeholder);
-            color: #999;
-            font-style: italic;
-        }
-
         .action-buttons {
             display: flex;
             justify-content: center;
@@ -410,13 +393,14 @@
             padding-top: 15px;
             border-top: 2px solid var(--light-purple);
             align-items: center;
+            flex-wrap: wrap;
         }
 
         /* CONTENEDOR DE BOTÓN DE GUARDAR CON MENÚ */
         .guardar-container {
             position: relative;
-            display: inline-flex; /* Cambiado a flex */
-            height: 36px; /* Misma altura que los demás botones */
+            display: inline-flex;
+            height: 36px;
         }
 
         .btn-guardar-principal {
@@ -427,13 +411,13 @@
             padding: 8px 16px;
             cursor: pointer;
             font-size: 13px;
-            height: 100%; /* Ocupa toda la altura del contenedor */
+            height: 100%;
             display: flex;
             align-items: center;
             gap: 6px;
             transition: all 0.3s ease;
             font-weight: 600;
-            line-height: 1; /* Elimina espacio extra */
+            line-height: 1;
         }
 
         .btn-guardar-principal:hover {
@@ -446,11 +430,11 @@
             color: white;
             border: none;
             border-radius: 0 6px 6px 0;
-            padding: 8px 10px; /* Ajustado para mejor proporción */
+            padding: 8px 10px;
             cursor: pointer;
             font-size: 12px;
-            height: 100%; /* Misma altura que el principal */
-            width: 36px; /* Un poco más ancho */
+            height: 100%;
+            width: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -514,7 +498,7 @@
             background: #e9ecef;
         }
 
-        /* MENSAJE TEMPORAL (retroalimentación sutil) */
+        /* MENSAJE TEMPORAL */
         .mensaje-temporal {
             position: fixed;
             bottom: 20px;
@@ -533,21 +517,12 @@
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+            to { opacity: 0; transform: translateY(10px); }
         }
 
         .btn {
@@ -712,7 +687,7 @@
             }
             
             .indicador-logro, .area-item small, .rda-item, 
-            .saber-conceptual-item, .contenedor-editable {
+            .saber-conceptual-item {
                 color: #000000 !important;
             }
             
@@ -744,7 +719,6 @@
             box-sizing: border-box;
         }
 
-        /* Nuevos estilos para metodología personalizada */
         .metodologia-personalizada-container {
             display: none;
             margin-top: 10px;
@@ -758,7 +732,7 @@
             display: block;
         }
 
-        /* ===== NUEVOS ESTILOS PARA MEMBRETE ===== */
+        /* ===== NUEVOS ESTILOS ===== */
         .panel-institucional {
             display: flex;
             align-items: center;
@@ -797,7 +771,6 @@
             object-fit: contain;
         }
 
-        /* ===== EJES POR SEMANA ===== */
         .ejes-transversales-semana {
             display: flex;
             gap: 10px;
@@ -827,7 +800,6 @@
             background: var(--light-purple);
         }
 
-        /* ===== EDITORES QUILL ===== */
         .quill-editor {
             height: 200px;
             background: white;
@@ -840,7 +812,6 @@
             background: #f8f9fa;
         }
 
-        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1024px) {
             .container { padding: 20px; }
             .saberes-grid { grid-template-columns: 1fr; }
@@ -906,7 +877,7 @@
             }
             
             .input-field, .select-field, .btn {
-                font-size: 16px; /* Evita zoom en iOS */
+                font-size: 16px;
             }
             
             .modal-content {
@@ -924,7 +895,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- NUEVO: PANEL INSTITUCIONAL PERSONALIZABLE -->
+        <!-- PANEL INSTITUCIONAL PERSONALIZABLE -->
         <div class="panel-institucional">
             <div class="escudo-container" onclick="document.getElementById('uploadEscudo').click()">
                 <img id="escudoInstitucional" src="" alt="Escudo" style="display: none;">
@@ -1039,7 +1010,7 @@
                 <label>
                     <input type="checkbox" name="eje" value="pensamiento">
                     <span><strong>Pensamiento computacional</strong><br>
-                    <small>Competencias para la vida: Sociales, emocionales y de aprendizaje </small></span>
+                    <small>Competencias para la vida: Sociales, emocionales y de aprendizaje</small></span>
                 </label>
             </div>
             <div class="eje-option">
@@ -1051,7 +1022,7 @@
             </div>
         </div>
 
-        <!-- METODOLOGÍA ACTIVA - MODIFICADA -->
+        <!-- METODOLOGÍA ACTIVA -->
         <div class="section-title">Metodología activa:</div>
         <select id="metodologiaActiva" class="select-field" onchange="mostrarDetalleMetodologia(this.value)">
             <option value="">Seleccionar metodología</option>
@@ -1066,8 +1037,6 @@
             <label for="metodologiaPersonalizada"><strong>Especifique la metodología:</strong></label>
             <input type="text" id="metodologiaPersonalizada" class="input-field" placeholder="Escriba la metodología que desea utilizar...">
         </div>
-
-        <!-- DETALLES DE METODOLOGÍAS - ELIMINADOS -->
 
         <!-- PLANIFICACIÓN POR SEMANAS -->
         <div class="section-title espacio-optimizado">Planificación por Semanas</div>
@@ -1103,17 +1072,16 @@
             </tr>
         </table>
 
-        <!-- OBSERVACIONES CON NUEVO TEXTO -->
+        <!-- OBSERVACIONES -->
         <div class="section-title">Observaciones y/o recomendaciones didácticas por nivel:</div>
         <div style="font-size: 11px; color: #666; margin-bottom: 8px; font-style: italic;">
-            En este apartado la persona docente podrá realizar los apuntes que considere necesarios: antes, durante y después de la aplicación del planeamiento didáctico. Por ejemplo: las observaciones sobre los avances en el proceso de recuperación académica, el desarrollo de los saberes disciplinares, las habilidades, las competencias y el contexto, las valoraciones sobre las particularidades del estudiantado, los aprendizajes esperados que quedaron pendientes o se deban retomar, entre otros.
+            En este apartado la persona docente podrá realizar los apuntes que considere necesarios: antes, durante y después de la aplicación del planeamiento didáctico.
         </div>
         <textarea id="observaciones" class="textarea-field" placeholder="Escriba aquí sus observaciones..." style="height: 80px;"></textarea>
 
         <hr style="margin: 15px 0; border: 1px solid #45258F;">
         <p style="font-size: 12px; color: #555; text-align: justify; font-style: italic;">
         <strong>📄Nota de Licencia:</strong> Este documento de planificación didáctica fue elaborado utilizando la <strong>Plantilla de Planeamiento Didáctico del PNFT del Departamento de Investigación, Desarrollo e Implementación-MEP.</strong> <br><br>
-
         <strong>📄Licencia de Uso:</strong> Este recurso y sus derivados se ofrecen bajo una <strong>Licencia de Uso Educativo</strong> que permite su uso, adaptación y distribución no comercial dentro del sistema educativo nacional, con la obligación de atribución al autor original. Queda <strong>prohibida su venta</strong> o inclusión en materiales comerciales.<br><br>
 
         <!-- NOTA SOBRE IA -->
@@ -1130,44 +1098,31 @@
             Dirección de Recursos Tecnológicos en Educación
         </div>
 
-        <!-- BOTONES DE ACCIÓN CON MENÚ MEJORADO -->
+        <!-- BOTONES DE ACCIÓN -->
         <div class="action-buttons">
             <button onclick="nuevoPlan()" class="btn btn-outline">🆕 Nuevo</button>
             <button onclick="abrirPlan()" class="btn btn-outline">📂 Abrir</button>
             
-        <!-- CONTENEDOR PARA BOTÓN DE GUARDAR CON MENÚ -->
-        <div class="guardar-container">
-            <button onclick="ejecutarGuardarNormal()" class="btn-guardar-principal">
-                💾 Guardar
-            </button>
-            <button onclick="toggleMenuGuardar(event)" class="btn-flecha-menu">
-                ▼
-            </button>
-            
-            <!-- MENÚ DESPLEGABLE (OCULTO POR DEFECTO) -->
-            <div id="menuGuardar" class="menu-desplegable">
-                <div class="menu-header">
-                    Opciones de guardado
+            <div class="guardar-container">
+                <button onclick="ejecutarGuardarNormal()" class="btn-guardar-principal">💾 Guardar</button>
+                <button onclick="toggleMenuGuardar(event)" class="btn-flecha-menu">▼</button>
+                
+                <div id="menuGuardar" class="menu-desplegable">
+                    <div class="menu-header">Opciones de guardado</div>
+                    <button class="menu-opcion" onclick="ejecutarGuardarNormal()">💾 Guardar archivo (.json)</button>
+                    <button class="menu-opcion" onclick="ejecutarGuardarOffline()">💻 Descargar plantilla offline</button>
                 </div>
-                <button class="menu-opcion" onclick="ejecutarGuardarNormal()">
-                    💾 Guardar archivo (.json)
-                </button>
-                <button class="menu-opcion" onclick="ejecutarGuardarOffline()">
-                    💻 Descargar plantilla offline
-                </button>
-            </div>
-        </div>    
+            </div>    
             
             <button onclick="mostrarOpcionesExportar()" class="btn btn-secondary">📄 Exportar</button>
             <button onclick="generarPromptCompleto()" class="btn btn-primary">🤖 Prompt IA General</button>
             <button onclick="mostrarGuiaIA()" class="btn btn-info">📘 Guía IA</button>
         </div>
 
-        <!-- MODAL PARA EXPORTAR - VERSIÓN CORREGIDA Y FUNCIONAL -->
+        <!-- MODAL PARA EXPORTAR -->
         <div id="exportarModal" class="modal">
             <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
-                <button class="modal-close" onclick="cerrarExportModal()" 
-                        style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer; z-index: 10;">&times;</button>
+                <button class="modal-close" onclick="cerrarExportModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer; z-index: 10;">&times;</button>
                 
                 <h3 style="margin-right: 30px;">📄 Exportar Plan</h3>
                 
@@ -1175,13 +1130,11 @@
                     <strong>💡 Información:</strong> Los archivos se guardarán en la carpeta de descargas.
                 </div>
                 
-                <!-- NOMBRE DEL ARCHIVO -->
                 <div style="margin: 12px 0;">
                     <label for="nombreArchivo"><strong>Nombre del archivo:</strong></label>
                     <input type="text" id="nombreArchivo" class="input-field" value="Planeamiento-Didáctico">
                 </div>
                 
-                <!-- OPCIONES DE CONTENIDO -->
                 <div class="checkbox-group">
                     <h4>¿Qué desea incluir en la exportación?</h4>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -1213,7 +1166,6 @@
                     </div>
                 </div>
                 
-                <!-- FORMATOS DE EXPORTACIÓN - SOLO PDF -->
                 <div style="margin: 15px 0;">
                     <h4 style="margin-bottom: 10px;">Formato de exportación:</h4>
                     <div class="export-options">
@@ -1224,12 +1176,10 @@
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 10px; font-size: 12px; color: #666; font-style: italic;">
-                        El recurso se generará como vista previa en una nueva pestaña.
-                        Desde allí podrá imprimirlo como PDF usando las opciones de su navegador.
+                        El recurso se generará como vista previa en una nueva pestaña. Desde allí podrá imprimirlo como PDF.
                     </div>
                 </div>
                 
-                <!-- BOTONES DE ACCIÓN -->
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button onclick="confirmarExportacion()" class="btn btn-primary" style="flex: 1; padding: 10px 16px;">🚀 Exportar PDF</button>
                     <button onclick="cerrarExportModal()" class="btn btn-outline" style="flex: 1; padding: 10px 16px;">❌ Cancelar</button>
@@ -1237,7 +1187,7 @@
             </div>
         </div>
 
-    <!-- MODAL PARA PROMPT IA -->
+        <!-- MODAL PARA PROMPT IA GENERAL -->
         <div id="promptModal" class="modal">
             <div class="modal-content">
                 <button class="modal-close" onclick="cerrarPromptModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
@@ -1246,9 +1196,9 @@
                 <div class="info-note">
                     <strong>📋 Instrucciones para usar el prompt:</strong><br>
                     1. Revise el texto completo y luego presione el botón copiar prompt.<br>
-                    2. Da click en la IA de preferencia y pegue el texto (Ctrl+V). <br>
+                    2. Da click en la IA de preferencia y pegue el texto (Ctrl+V).<br>
                     3. La IA generará estrategias de mediación específicas, las cuales deben ser personalizadas según contexto educativo.<br>
-                    4. Siéntase en la libertad de crear su propio prompt, esto es sólo un ejemplo el cual lo puede sobrescribir.
+                    4. Siéntase en la libertad de crear su propio prompt, esto es sólo un ejemplo.
                 </div>
                 
                 <div style="margin: 12px 0;">
@@ -1265,9 +1215,7 @@
             </div>
         </div>
 
-        <!-- *********************** -->
-        <!-- NUEVO MODAL PARA SEMANAS -->
-        <!-- *********************** -->
+        <!-- MODAL PARA PROMPT POR SEMANA -->
         <div id="promptSemanaModal" class="modal">
             <div class="modal-content">
                 <button class="modal-close" onclick="cerrarPromptSemanaModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
@@ -1277,7 +1225,7 @@
                     <strong>📋 Instrucciones:</strong><br>
                     1. Copie el prompt completo (Ctrl+A, Ctrl+C).<br>
                     2. Péguelo en su IA preferida (Ctrl+V).<br>
-                    3. Siéntase en la libertad de crear su propio prompt, esto es sólo un ejemplo el cual lo puede sobrescribir.
+                    3. Siéntase en la libertad de crear su propio prompt.
                 </div>
                 
                 <div style="margin: 12px 0;">
@@ -1294,10 +1242,15 @@
             </div>
         </div>
 
-    </div> <!-- Este cierra el container principal -->
+    </div> <!-- Cierre del container principal -->
 
-        <script>
-            const PNFT_DATA = {
+    <script>
+        // ====================================================
+        // ===== ESPACIO PARA INSERTAR TU PNFT_DATA =========
+        // ====================================================
+        // const PNFT_DATA = { ... };
+        // ====================================================
+        const PNFT_DATA = {
             // ========== MATERNO INFANTIL / TRANSICIÓN ==========
             "0°": {
                 "Módulo 1": {
@@ -2524,15 +2477,15 @@
                 { 
                     nombre: "Desafíos de la IA", 
                     indicadores: ["Reconocer los desafíos de la inteligencia artificial, identificando riesgos como sesgos, manipulación de información, dependencia tecnológica y privacidad de datos, reflexionando sobre su impacto en la vida laboral, personal y social."]
-                }
-            ]
-        }
-    }
-}
-};
-    
-            // ===== RESULTADOS DE APRENDIZAJE (RdA) POR CICLO Y ÁREA =====
-            const RDA_POR_CICLO = {
+                }  // ← Solo CIERRA este objeto del array
+            ]  // ← CIERRA el array saberes
+        }  // ← CIERRA "Ciencia de datos e Inteligencia Artificial"
+    }  // ← CIERRA "Módulo 2"
+}  // ← CIERRA "9°"
+};  // ← CIERRA todo PNFT_DATA (solo UNA vez al final)
+
+        // ===== RESULTADOS DE APRENDIZAJE (RdA) POR CICLO Y ÁREA =====
+        const RDA_POR_CICLO = {
             "Materno Infantil/Transición": {
                 "Apropiación tecnológica y Digital": "Identifica los dispositivos digitales considerando características funcionales, experimentando su utilidad y reconociendo la autoría, durante la accesibilidad, interacción y comunicación en la creación de recursos digitales.",
                 "Programación y Algoritmos": "Ordena secuencias integrando conceptos de programación como dato, evento, estado, ciclos, así como nociones de lateralidad y orientación espacial, en la solución de desafíos propuestos, utilizando la programación iconográfica por bloques.",
@@ -2551,22 +2504,21 @@
                 "Computación física y Robótica": "Crea algoritmos que permiten la simulación de comportamientos de aparatos tecnológicos, aplicando elementos de computación física, programación y electrónica para la resolución de un problema.",
                 "Ciencia de datos e Inteligencia artificial": "Reconoce el uso de la inteligencia artificial en contextos cotidianos y aplica técnicas básicas de recolección, análisis y representación de datos mediante tablas y gráficos."
             },
-             "III Ciclo": {
-        "Apropiación tecnológica y Digital": "Crea diferentes tipos de archivos digitales (como texto, presentaciones, hojas de cálculo y otros), aplicando técnicas de gestión y seguridad de la información para organizar, proteger y comunicar eficazmente su trabajo académico y proyectos personales en entornos digitales locales y en la nube.",
-        "Programación y Algoritmos": "Crea algoritmos y programas que integren estructuras de control (condicionales, ciclos), colecciones de datos, operadores y funciones, aplicando la lógica de programación para resolver problemas de complejidad media en contextos cotidianos o escolares.",
-        "Computación física y Robótica": "Crea prototipos que integren elementos de computación física y/o robótica, aplicando conocimientos de electrónica, programación de microcontroladores, y uso de sensores y actuadores para automatizar procesos o resolver problemas específicos de su entorno.",
-        "Ciencia de datos e Inteligencia artificial": "Aplica técnicas básicas de ciencia de datos (recolección, organización, visualización) e identifica el funcionamiento y aplicaciones de la inteligencia artificial, reconociendo sus usos, beneficios y desafíos éticos en diferentes contextos cotidianos."
-            },
+            "III Ciclo": {
+                "Apropiación tecnológica y Digital": "Crea diferentes tipos de archivos digitales (como texto, presentaciones, hojas de cálculo y otros), aplicando técnicas de gestión y seguridad de la información para organizar, proteger y comunicar eficazmente su trabajo académico y proyectos personales en entornos digitales locales y en la nube.",
+                "Programación y Algoritmos": "Crea algoritmos y programas que integren estructuras de control (condicionales, ciclos), colecciones de datos, operadores y funciones, aplicando la lógica de programación para resolver problemas de complejidad media en contextos cotidianos o escolares.",
+                "Computación física y Robótica": "Crea prototipos que integren elementos de computación física y/o robótica, aplicando conocimientos de electrónica, programación de microcontroladores, y uso de sensores y actuadores para automatizar procesos o resolver problemas específicos de su entorno.",
+                "Ciencia de datos e Inteligencia artificial": "Aplica técnicas básicas de ciencia de datos (recolección, organización, visualización) e identifica el funcionamiento y aplicaciones de la inteligencia artificial, reconociendo sus usos, beneficios y desafíos éticos en diferentes contextos cotidianos."
+            }
         };
 
-        // Variables globales - SOLO UNA DECLARACIÓN DE formatoExportacion
+        // Variables globales
         let semanas = [];
         let saberesSeleccionados = new Set();
         let saberesProcedimentalesGlobales = new Set();
         let saberesActitudinalesGlobales = new Set();
-        let formatoExportacion = 'pdf'; // ← Cambiado a PDF por defecto
+        let formatoExportacion = 'pdf';
         
-        // NUEVAS VARIABLES GLOBALES
         let membreteInstitucional = {
             escudo: '',
             nombre: 'Ministerio de Educación Pública',
@@ -2575,9 +2527,12 @@
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
+            if (typeof PNFT_DATA === 'undefined') {
+                console.warn('⚠️ PNFT_DATA no está definido. Algunas funciones podrían no trabajar correctamente.');
+            }
             inicializarSemanas();
             configurarEventListeners();
-            configurarMembrete(); // NUEVO
+            configurarMembrete();
         });
 
         function configurarEventListeners() {
@@ -2588,12 +2543,7 @@
         function manejarCambioMetodologia() {
             const metodologia = document.getElementById('metodologiaActiva').value;
             const container = document.getElementById('metodologiaPersonalizadaContainer');
-            
-            if (metodologia === 'otra') {
-                container.classList.add('visible');
-            } else {
-                container.classList.remove('visible');
-            }
+            container.classList.toggle('visible', metodologia === 'otra');
         }
 
         function actualizarNiveles() {
@@ -2602,20 +2552,17 @@
             
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
             
-            if (ciclo === 'Materno Infantil/Transición') {
-                nivelSelect.innerHTML += '<option value="0°">"Grupo Interactivo II y Transición"</option>';
-            } else if (ciclo === 'I Ciclo') {
-                nivelSelect.innerHTML += '<option value="1°">1°</option>';
-                nivelSelect.innerHTML += '<option value="2°">2°</option>';
-                nivelSelect.innerHTML += '<option value="3°">3°</option>';
-            } else if (ciclo === 'II Ciclo') {
-                nivelSelect.innerHTML += '<option value="4°">4°</option>';
-                nivelSelect.innerHTML += '<option value="5°">5°</option>';
-                nivelSelect.innerHTML += '<option value="6°">6°</option>';
-            } else if (ciclo === 'III Ciclo') {
-                nivelSelect.innerHTML += '<option value="7°">7°</option>';
-                nivelSelect.innerHTML += '<option value="8°">8°</option>';
-                nivelSelect.innerHTML += '<option value="9°">9°</option>';
+            const opciones = {
+                'Materno Infantil/Transición': ['0°'],
+                'I Ciclo': ['1°', '2°', '3°'],
+                'II Ciclo': ['4°', '5°', '6°'],
+                'III Ciclo': ['7°', '8°', '9°']
+            };
+            
+            if (opciones[ciclo]) {
+                opciones[ciclo].forEach(nivel => {
+                    nivelSelect.innerHTML += `<option value="${nivel}">${nivel}</option>`;
+                });
             }
         }
 
@@ -2635,7 +2582,7 @@
                     id: i,
                     nombre: `Semana ${i}`,
                     lecciones: `Lecciones ${leccionInicio} y ${leccionFin}`,
-                    eje: '', // NUEVO: eje transversal por semana
+                    eje: '',
                     areas: [],
                     rda: '',
                     saberes: [],
@@ -2647,74 +2594,10 @@
                     indicadores: ''
                 });
                 
-                const semanaElement = crearElementoSemana(i, leccionInicio, leccionFin);
-                container.appendChild(semanaElement);
+                container.appendChild(crearElementoSemana(i, leccionInicio, leccionFin));
             }
             
             actualizarContadoresSemanas();
-        }
-
-        function actualizarSemanasPreservandoContenido() {
-            const leccionesActual = parseInt(document.getElementById('leccionesPlanificadas').value) || 8;
-            const numSemanasNecesarias = Math.ceil(leccionesActual / 2);
-            
-            console.log(`Actualizando semanas: ${semanas.length} → ${numSemanasNecesarias}`);
-            
-            // PRESERVAR datos existentes completamente
-            const semanasBackup = JSON.parse(JSON.stringify(semanas));
-            const saberesBackup = new Set(saberesSeleccionados);
-            const procBackup = new Set(saberesProcedimentalesGlobales);
-            const actBackup = new Set(saberesActitudinalesGlobales);
-            
-            // Solo preguntar si estamos reduciendo semanas
-            if (semanas.length > numSemanasNecesarias) {
-                if (!confirm(`Al reducir las lecciones se eliminarán ${semanas.length - numSemanasNecesarias} semana(s) y su contenido. ¿Desea continuar?`)) {
-                    document.getElementById('leccionesPlanificadas').value = semanas.length * 2;
-                    return;
-                }
-            }
-            
-            semanas = [];
-            const container = document.getElementById('semanasContainer');
-            container.innerHTML = '';
-            
-            for (let i = 1; i <= numSemanasNecesarias; i++) {
-                const leccionInicio = (i - 1) * 2 + 1;
-                const leccionFin = Math.min(i * 2, leccionesActual);
-                
-                // PRESERVAR datos de la semana si existe en el backup
-                const semanaBackup = semanasBackup[i-1];
-                
-                semanas.push({
-                    id: i,
-                    nombre: `Semana ${i}`,
-                    lecciones: `Lecciones ${leccionInicio} y ${leccionFin}`,
-                    eje: semanaBackup?.eje || '', // NUEVO
-                    areas: semanaBackup ? semanaBackup.areas : [],
-                    rda: semanaBackup ? semanaBackup.rda : '',
-                    saberes: semanaBackup ? semanaBackup.saberes : [],
-                    procedimentales: semanaBackup ? semanaBackup.procedimentales : [],
-                    actitudinales: semanaBackup ? semanaBackup.actitudinales : [],
-                    actividades: semanaBackup ? semanaBackup.actividades : '',
-                    recursos: semanaBackup ? semanaBackup.recursos : '',
-                    evaluacion: semanaBackup ? semanaBackup.evaluacion : '',
-                    indicadores: semanaBackup ? semanaBackup.indicadores : ''
-                });
-                
-                const semanaElement = crearElementoSemana(i, leccionInicio, leccionFin);
-                container.appendChild(semanaElement);
-            }
-            
-            // RESTAURAR datos globales
-            saberesSeleccionados = new Set(saberesBackup);
-            saberesProcedimentalesGlobales = new Set(procBackup);
-            saberesActitudinalesGlobales = new Set(actBackup);
-            
-            // ACTUALIZAR interfaz preservando todo el contenido
-            setTimeout(() => {
-                reconstruirVistaSemanasPreservandoContenido();
-                actualizarContadoresSemanas();
-            }, 100);
         }
 
         function crearElementoSemana(numero, leccionInicio, leccionFin) {
@@ -2724,9 +2607,7 @@
             
             semanaDiv.innerHTML = `
                 <div class="semana-header">
-                    <div>
-                        <strong>Semana ${numero}</strong>
-                    </div>
+                    <div><strong>Semana ${numero}</strong></div>
                     <div>
                         <input type="text" class="semana-nombre input-field" value="Lecciones ${leccionInicio} y ${leccionFin}" 
                                onchange="actualizarLeccionesSemana(${numero}, this.value)">
@@ -2736,24 +2617,22 @@
                             ${semanas.length <= 1 ? 'disabled' : ''}>✕</button>
                 </div>
                 
-                <!-- NUEVO: EJE TRANSVERSAL POR SEMANA -->
                 <div class="section-title" style="font-size: 13px; margin: 5px 0;">Eje transversal del PNFT (Semana ${numero})</div>
                 <div class="ejes-transversales-semana">
-                    <label class="eje-semana-option" style="flex:1; background: #f8f9fa; padding: 8px; border-radius: 6px; border: 2px solid #dee2e6; text-align: center; cursor: pointer;">
+                    <label class="eje-semana-option">
                         <input type="radio" name="eje-semana-${numero}" value="ciudadania" onchange="actualizarEjeSemana(${numero}, this.value)">
                         <span style="font-size: 11px;">Ciudadanía digital</span>
                     </label>
-                    <label class="eje-semana-option" style="flex:1; background: #f8f9fa; padding: 8px; border-radius: 6px; border: 2px solid #dee2e6; text-align: center; cursor: pointer;">
+                    <label class="eje-semana-option">
                         <input type="radio" name="eje-semana-${numero}" value="pensamiento" onchange="actualizarEjeSemana(${numero}, this.value)">
                         <span style="font-size: 11px;">Pensamiento computacional</span>
                     </label>
-                    <label class="eje-semana-option" style="flex:1; background: #f8f9fa; padding: 8px; border-radius: 6px; border: 2px solid #dee2e6; text-align: center; cursor: pointer;">
+                    <label class="eje-semana-option">
                         <input type="radio" name="eje-semana-${numero}" value="emprendimiento" onchange="actualizarEjeSemana(${numero}, this.value)">
                         <span style="font-size: 11px;">Emprendimiento</span>
                     </label>
                 </div>
                 
-                <!-- ÁREAS DE CONOCIMIENTO Y RDA EN PARALELO -->
                 <div class="areas-rda-container">
                     <div class="areas-container">
                         <div class="section-title">Áreas de conocimiento para esta semana</div>
@@ -2784,13 +2663,12 @@
                     </div>
                 </div>
                 
-                <!-- SABERES 2x3 -->
                 <div class="section-title">Saberes por Desarrollo</div>
                 <div class="saberes-grid">
                     <div class="saber-columna">
                         <div class="saber-titulo">Saberes Conceptuales (Saber)</div>
                         <div class="saber-contenido" id="conceptuales-semana-${numero}">
-                            <div style="color: #666; font-style: italic; font-size: 11px;">"Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas, junto con aquellos que elijas específicamente para esta semana en el espacio correspondiente."</div>
+                            <div style="color: #666; font-style: italic; font-size: 11px;">"Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas."</div>
                         </div>
                     </div>
                     <div class="saber-columna">
@@ -2807,13 +2685,11 @@
                     </div>
                 </div>
                 
-                <!-- SABERES CONCEPTUALES PARA ESTA SEMANA -->
                 <div class="section-title">Saberes conceptuales para esta semana</div>
                 <div class="saberes-conceptuales-container" id="saberes-conceptuales-${numero}">
                     <div style="color: #666; font-style: italic; font-size: 11px;">Seleccione ciclo, nivel y áreas de conocimiento para ver los saberes disponibles</div>
                 </div>
                 
-                <!-- EDITORES QUILL (reemplazan los contenteditable) -->
                 <div class="tres-columnas">
                     <div class="campo-editable">
                         <div class="columna-titulo">Indicadores de logro</div>
@@ -2829,7 +2705,6 @@
                     </div>
                 </div>
                 
-                <!-- BOTÓN PROMPT IA -->
                 <div style="text-align: center; margin-top: 12px;">
                     <button onclick="generarPromptSemana(${numero})" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">🤖 Prompt IA para Semana ${numero}</button>
                 </div>
@@ -2840,19 +2715,19 @@
 
         function generarOpcionesProcedimentales(numeroSemana) {
             const procedimentales = [
-                { value: "reconoce", label: "Reconoce patrones", tooltip: "Predice a partir de las regularidades, similitudes o características comunes de un conjunto de datos o situaciones, patrones que pueda aplicar en la solución a un problema o situación." },
-                { value: "abstrae", label: "Abstrae", tooltip: "Concluye cuáles son las características relevantes que debe considerar y cuáles debe omitir al resolver un problema o situación." },
-                { value: "generaliza", label: "Generaliza", tooltip: "Generaliza las funcionalidades o estructuras generales de un elemento que pueda aprovechar en otros contextos al resolver un problema o situación." },
-                { value: "transfiere", label: "Transfiere", tooltip: "Transfiere conocimientos, habilidades y estrategias aprendidas previamente en un contexto específico, a situaciones diferentes y nuevas al resolver un problema o situación." },
-                { value: "modulariza", label: "Modulariza", tooltip: "Resuelve un problema por partes menos complejas, sin perder de vista el todo que las origina, al resolver un problema o situación." },
-                { value: "formula", label: "Formula algoritmos", tooltip: "Formula algoritmos por medio de una secuencia ordenada y detallada de pasos para resolver un problema o situación." },
-                { value: "remezcla", label: "Remezcla", tooltip: "Combina diferentes ideas, técnicas o soluciones existentes, con la autorización correspondiente, de manera innovadora y creativa para resolver un problema o situación." },
-                { value: "depura", label: "Depura", tooltip: "Valida el funcionamiento de los algoritmos en busca de errores para corregirlos, al resolver un problema o situación." },
-                { value: "programa", label: "Programa", tooltip: "Programa mediante un entorno o IDE de programación para resolver un problema o situación." },
-                { value: "comunica", label: "Comunica", tooltip: "Comunica ideas o soluciones a problemas o situaciones de manera creativa, coherente y comprensible, compartiendo conocimientos con otros al resolver un problema o situación." },
-                { value: "colabora", label: "Colabora", tooltip: "Demuestra un trato constructivo y respetuoso para resolver un problema o situación específica, al trabajar con otros y así apoyar su aprendizaje y contribuir al de los demás, al resolver un problema o situación." },
-                { value: "piensa", label: "Piensa de forma creativa", tooltip: "Desarrolla soluciones ingeniosas, innovadoras, originales con enfoques no convencionales, al resolver un problema o situación." },
-                { value: "maneja", label: "Maneja las tecnologías de forma ética y segura", tooltip: "Aplica de manera consciente fundamentos de ética y seguridad digital al utilizar herramientas y recursos tecnológicos, al resolver un problema o situación." }
+                { value: "reconoce", label: "Reconoce patrones", tooltip: "Predice a partir de las regularidades, similitudes o características comunes de un conjunto de datos o situaciones." },
+                { value: "abstrae", label: "Abstrae", tooltip: "Concluye cuáles son las características relevantes que debe considerar y cuáles debe omitir al resolver un problema." },
+                { value: "generaliza", label: "Generaliza", tooltip: "Generaliza las funcionalidades o estructuras generales de un elemento que pueda aprovechar en otros contextos." },
+                { value: "transfiere", label: "Transfiere", tooltip: "Transfiere conocimientos, habilidades y estrategias aprendidas previamente a situaciones nuevas." },
+                { value: "modulariza", label: "Modulariza", tooltip: "Resuelve un problema por partes menos complejas." },
+                { value: "formula", label: "Formula algoritmos", tooltip: "Formula algoritmos por medio de una secuencia ordenada y detallada de pasos." },
+                { value: "remezcla", label: "Remezcla", tooltip: "Combina diferentes ideas, técnicas o soluciones existentes de manera innovadora." },
+                { value: "depura", label: "Depura", tooltip: "Valida el funcionamiento de los algoritmos en busca de errores para corregirlos." },
+                { value: "programa", label: "Programa", tooltip: "Programa mediante un entorno o IDE de programación." },
+                { value: "comunica", label: "Comunica", tooltip: "Comunica ideas o soluciones de manera creativa, coherente y comprensible." },
+                { value: "colabora", label: "Colabora", tooltip: "Demuestra un trato constructivo y respetuoso para resolver un problema al trabajar con otros." },
+                { value: "piensa", label: "Piensa creativamente", tooltip: "Desarrolla soluciones ingeniosas, innovadoras, originales con enfoques no convencionales." },
+                { value: "maneja", label: "Maneja tecnologías éticamente", tooltip: "Aplica de manera consciente fundamentos de ética y seguridad digital." }
             ];
             
             return procedimentales.map(proc => `
@@ -2868,10 +2743,10 @@
 
         function generarOpcionesActitudinales(numeroSemana) {
             const actitudinales = [
-                { value: "gusto", label: "Gusto por la precisión", tooltip: "Demuestra ante los procesos de aprendizaje un comportamiento hacia la búsqueda de la exactitud, al ser minucioso con los detalles." },
-                { value: "aprender", label: "Aprender del error", tooltip: "Demuestra ante los errores un comportamiento que le permita ganar experiencia a partir de lecciones aprendidas producto de los errores, convirtiendo los desaciertos en oportunidades de aprendizaje." },
-                { value: "flexibilidad", label: "Flexibilidad para manejar problemas", tooltip: "Demuestra un comportamiento hacia la adaptabilidad, flexibilidad y resiliencia ante los desafíos o situaciones imprevistas producto del entorno, la interacción con otros, o bien, con los recursos." },
-                { value: "tolerancia", label: "Tolerancia a la frustración", tooltip: "Demuestra ante los desafíos, un comportamiento hacia la búsqueda de la autoconfianza, motivación, autocontrol, paciencia y persistencia." }
+                { value: "gusto", label: "Gusto por la precisión", tooltip: "Demuestra un comportamiento hacia la búsqueda de la exactitud, al ser minucioso con los detalles." },
+                { value: "aprender", label: "Aprender del error", tooltip: "Demuestra un comportamiento que le permita ganar experiencia a partir de lecciones aprendidas producto de los errores." },
+                { value: "flexibilidad", label: "Flexibilidad", tooltip: "Demuestra un comportamiento hacia la adaptabilidad, flexibilidad y resiliencia ante los desafíos." },
+                { value: "tolerancia", label: "Tolerancia a la frustración", tooltip: "Demuestra un comportamiento hacia la búsqueda de la autoconfianza, motivación, autocontrol, paciencia y persistencia." }
             ];
             
             return actitudinales.map(act => `
@@ -2902,15 +2777,8 @@
                 }
             } else {
                 semana.areas = semana.areas.filter(a => a !== areaNombre);
-                // Limpiar saberes de esta área
-                semana.saberes = semana.saberes.filter(saber => {
-                    const saberData = Object.values(PNFT_DATA[document.getElementById('nivel').value] || {})
-                        .find(area => area.saberes?.find(s => s.nombre === saber));
-                    return !saberData || saberData.saberes.find(s => s.nombre === saber);
-                });
             }
             
-            // ESTAS TRES LÍNEAS SON LAS QUE ACTUALIZAN LA INTERFAZ
             actualizarRdASemana(numeroSemana);
             actualizarOpcionesSaberesSemana(numeroSemana); 
             actualizarIndicadoresSemana(numeroSemana);
@@ -2945,8 +2813,6 @@
             if (container) {
                 container.innerHTML = generarSaberesConceptuales(numeroSemana);
             }
-            
-            // ACTUALIZAR TAMBIÉN EL CONTENEDOR DE SABERES CONCEPTUALES EN LA PARTE SUPERIOR
             actualizarSaberesConceptualesContenedor(numeroSemana);
         }
 
@@ -2958,91 +2824,19 @@
                 return '<div style="color: #666; font-style: italic; font-size: 11px;">Seleccione ciclo, nivel y al menos un área de conocimiento</div>';
             }
             
+            if (typeof PNFT_DATA === 'undefined') {
+                return '<div style="color: #d32f2f; font-style: italic; font-size: 11px;">⚠️ PNFT_DATA no está cargado. Los saberes no pueden mostrarse.</div>';
+            }
+            
             let html = '';
             
-            // Mostrar solo los saberes de las áreas seleccionadas
             semana.areas.forEach(areaNombre => {
                 html += `<div style="margin-bottom: 15px;">`;
                 html += `<div style="font-weight: 600; color: var(--primary-color); margin-bottom: 8px; border-bottom: 1px solid var(--light-purple); padding-bottom: 4px; font-size: 12px;">${areaNombre}</div>`;
                 
                 let encontroSaberes = false;
                 
-                // ===== VERIFICAR ESTRUCTURA CON MÓDULOS (Módulo 1 y Módulo 2) =====
-                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
-                    // Mostrar saberes del MÓDULO 1 con identificación
-                    if (PNFT_DATA[nivel]["Módulo 1"][areaNombre]) {
-                        encontroSaberes = true;
-                        html += `<div style="margin: 5px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #45258F; background: #f0ebf9; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 1</div>`;
-                        
-                        PNFT_DATA[nivel]["Módulo 1"][areaNombre].saberes.forEach(saber => {
-                            const estaSeleccionado = semana.saberes.includes(saber.nombre);
-                            
-                            html += `
-                                <div class="saber-conceptual-item ${estaSeleccionado ? 'seleccionado' : ''}">
-                                    <input type="checkbox" 
-                                        ${estaSeleccionado ? 'checked' : ''}
-                                        onchange="manejarSeleccionSaber(${numeroSemana}, '${saber.nombre}', this.checked, '${areaNombre}', \`${saber.indicadores.join('|')}\`)">
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 500; font-size: 11px;">
-                                            ${saber.nombre}
-                                            <span style="font-size: 9px; background: #45258F15; color: #45258F; padding: 1px 6px; border-radius: 10px; margin-left: 6px; border: 1px solid #45258F30; font-weight: 600;">M1</span>
-                                        </div>
-                                        <div class="indicador-logro">${saber.indicadores[0]}</div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                    
-                    // Mostrar saberes del MÓDULO 2 con identificación
-                    if (PNFT_DATA[nivel]["Módulo 2"] && PNFT_DATA[nivel]["Módulo 2"][areaNombre]) {
-                        encontroSaberes = true;
-                        html += `<div style="margin: 10px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #6c47c9; background: #f5f2ff; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 2</div>`;
-                        
-                        PNFT_DATA[nivel]["Módulo 2"][areaNombre].saberes.forEach(saber => {
-                            const estaSeleccionado = semana.saberes.includes(saber.nombre);
-                            
-                            html += `
-                                <div class="saber-conceptual-item ${estaSeleccionado ? 'seleccionado' : ''}">
-                                    <input type="checkbox" 
-                                        ${estaSeleccionado ? 'checked' : ''}
-                                        onchange="manejarSeleccionSaber(${numeroSemana}, '${saber.nombre}', this.checked, '${areaNombre}', \`${saber.indicadores.join('|')}\`)">
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 500; font-size: 11px;">
-                                            ${saber.nombre}
-                                            <span style="font-size: 9px; background: #6c47c915; color: #6c47c9; padding: 1px 6px; border-radius: 10px; margin-left: 6px; border: 1px solid #6c47c930; font-weight: 600;">M2</span>
-                                        </div>
-                                        <div class="indicador-logro">${saber.indicadores[0]}</div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                }
-                // ===== ESTRUCTURA SIMPLE (para niveles 7°, 8°, 9°) =====
-                else if (PNFT_DATA[nivel]) {
-                    encontroSaberes = buscarSaberesEnTodasEstructuras(nivel, areaNombre, numeroSemana, semana);
-                }
-                
-                if (!encontroSaberes) {
-                    html += `<div style="color: #666; font-style: italic; font-size: 11px; padding: 8px; background: #f9f9f9; border-radius: 4px;">No hay saberes disponibles para esta área en el nivel seleccionado</div>`;
-                }
-                
-                html += `</div>`;
-            });
-            
-            return html;
-        }
-
-        // FUNCIÓN SIMPLIFICADA PARA BUSCAR SABERES
-        function buscarSaberesEnTodasEstructuras(nivel, areaNombre, numeroSemana, semana) {
-            let encontroSaberes = false;
-            let html = '';
-            
-            // Verificar si el nivel tiene la estructura normalizada
-            if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
-                // Buscar en Módulo 1
-                if (PNFT_DATA[nivel]["Módulo 1"][areaNombre]) {
+                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"] && PNFT_DATA[nivel]["Módulo 1"][areaNombre]) {
                     encontroSaberes = true;
                     html += `<div style="margin: 5px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #45258F; background: #f0ebf9; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 1</div>`;
                     
@@ -3066,16 +2860,11 @@
                     });
                 }
                 
-                // Buscar en Módulo 2
-                if (PNFT_DATA[nivel]["Módulo 2"]) {
-                    // Lógica para buscar en Módulo 2
-                }
-            } else {
-                // Para compatibilidad con versiones anteriores
-                if (PNFT_DATA[nivel] && PNFT_DATA[nivel][areaNombre]) {
+                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"] && PNFT_DATA[nivel]["Módulo 2"][areaNombre]) {
                     encontroSaberes = true;
+                    html += `<div style="margin: 10px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #6c47c9; background: #f5f2ff; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 2</div>`;
                     
-                    PNFT_DATA[nivel][areaNombre].saberes.forEach(saber => {
+                    PNFT_DATA[nivel]["Módulo 2"][areaNombre].saberes.forEach(saber => {
                         const estaSeleccionado = semana.saberes.includes(saber.nombre);
                         
                         html += `
@@ -3084,16 +2873,25 @@
                                     ${estaSeleccionado ? 'checked' : ''}
                                     onchange="manejarSeleccionSaber(${numeroSemana}, '${saber.nombre}', this.checked, '${areaNombre}', \`${saber.indicadores.join('|')}\`)">
                                 <div style="flex: 1;">
-                                    <div style="font-weight: 500; font-size: 11px;">${saber.nombre}</div>
+                                    <div style="font-weight: 500; font-size: 11px;">
+                                        ${saber.nombre}
+                                        <span style="font-size: 9px; background: #6c47c915; color: #6c47c9; padding: 1px 6px; border-radius: 10px; margin-left: 6px; border: 1px solid #6c47c930; font-weight: 600;">M2</span>
+                                    </div>
                                     <div class="indicador-logro">${saber.indicadores[0]}</div>
                                 </div>
                             </div>
                         `;
                     });
                 }
-            }
+                
+                if (!encontroSaberes) {
+                    html += `<div style="color: #666; font-style: italic; font-size: 11px; padding: 8px; background: #f9f9f9; border-radius: 4px;">No hay saberes disponibles para esta área en el nivel seleccionado</div>`;
+                }
+                
+                html += `</div>`;
+            });
             
-            return encontroSaberes ? html : '';
+            return html;
         }
 
         function actualizarSaberesConceptualesContenedor(numeroSemana) {
@@ -3103,7 +2901,7 @@
             if (!contenedor) return;
             
             if (semana.saberes.length === 0) {
-                contenedor.innerHTML = '<div style="color: #666; font-style: italic; font-size: 11px;">"Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas, junto con aquellos que elijas específicamente para esta semana en el espacio correspondiente."</div>';
+                contenedor.innerHTML = '<div style="color: #666; font-style: italic; font-size: 11px;">"Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas, junto con aquellos que elijas específicamente para esta semana."</div>';
                 return;
             }
             
@@ -3139,7 +2937,6 @@
                 }
             }
             
-            // Actualizar la clase de selección visual
             const checkboxes = document.querySelectorAll(`#saberes-conceptuales-${numeroSemana} input[type="checkbox"]`);
             checkboxes.forEach(checkbox => {
                 if (checkbox.nextElementSibling?.querySelector('div')?.textContent.includes(nombreSaber)) {
@@ -3147,7 +2944,6 @@
                 }
             });
             
-            // ACTUALIZAR EL CONTENEDOR DE SABERES CONCEPTUALES
             actualizarSaberesConceptualesContenedor(numeroSemana);
             actualizarIndicadoresSemana(numeroSemana);
         }
@@ -3155,118 +2951,82 @@
         function actualizarIndicadoresSemana(numeroSemana) {
             const semana = semanas[numeroSemana-1];
             const nivel = document.getElementById('nivel').value;
-            const indicadoresContainer = document.querySelector(`#semana-${numeroSemana} .contenedor-editable[data-placeholder*="indicadores"]`);
-            
-            if (!indicadoresContainer) return;
-            
+            const editorId = `editor-indicadores-${numeroSemana}`;
+            const indicadorEditor = document.getElementById(editorId);
+
+            if (!indicadorEditor || !indicadorEditor.__quill) return;
+
+            const quillInstance = indicadorEditor.__quill;
+
+            if (!nivel || semana.saberes.length === 0) {
+                quillInstance.root.innerHTML = '<p><em>Los indicadores aparecerán automáticamente según los saberes conceptuales seleccionados...</em></p>';
+                semana.indicadores = quillInstance.root.innerHTML;
+                return;
+            }
+
+            if (typeof PNFT_DATA === 'undefined') {
+                quillInstance.root.innerHTML = '<p><em>⚠️ PNFT_DATA no está cargado. Los indicadores no pueden mostrarse.</em></p>';
+                semana.indicadores = quillInstance.root.innerHTML;
+                return;
+            }
+
             let indicadoresHTML = '';
+
             semana.saberes.forEach(saber => {
                 let encontrado = false;
-                
-                // ===== BUSCAR EN ESTRUCTURA CON MÓDULOS =====
+
                 if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
-                    // Buscar en Módulo 1
                     for (const moduloArea in PNFT_DATA[nivel]["Módulo 1"]) {
-                        const saberData = PNFT_DATA[nivel]["Módulo 1"][moduloArea].saberes.find(s => s.nombre === saber);
-                        if (saberData) {
-                            encontrado = true;
-                            saberData.indicadores.forEach(indicador => {
-                                indicadoresHTML += `
-                                    <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
-                                        • ${indicador} 
-                                        <span style="color: #45258F; font-size: 9px; background: #45258F10; padding: 1px 4px; border-radius: 3px; margin-left: 4px;">[Módulo 1]</span>
-                                    </div>
-                                `;
-                            });
-                            break;
-                        }
-                    }
-                    
-                    // Buscar en Módulo 2 (solo si no se encontró en Módulo 1)
-                    if (!encontrado && PNFT_DATA[nivel]["Módulo 2"]) {
-                        for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
-                            const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea].saberes.find(s => s.nombre === saber);
+                        const areaData = PNFT_DATA[nivel]["Módulo 1"][moduloArea];
+                        if (areaData && areaData.saberes) {
+                            const saberData = areaData.saberes.find(s => s.nombre === saber);
                             if (saberData) {
                                 encontrado = true;
                                 saberData.indicadores.forEach(indicador => {
-                                    indicadoresHTML += `
-                                        <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
-                                            • ${indicador} 
-                                            <span style="color: #6c47c9; font-size: 9px; background: #6c47c910; padding: 1px 4px; border-radius: 3px; margin-left: 4px;">[Módulo 2]</span>
-                                        </div>
-                                    `;
+                                    indicadoresHTML += `<li>${indicador} <em>(Módulo 1)</em></li>`;
                                 });
                                 break;
                             }
                         }
                     }
-                }
-                // ===== BUSCAR EN ESTRUCTURA SIMPLE =====
-                else if (PNFT_DATA[nivel]) {
-                    // Para niveles con estructura simple (7°, 8°, 9°)
+
+                    if (!encontrado && PNFT_DATA[nivel]["Módulo 2"]) {
+                        for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
+                            const areaData = PNFT_DATA[nivel]["Módulo 2"][moduloArea];
+                            if (areaData && areaData.saberes) {
+                                const saberData = areaData.saberes.find(s => s.nombre === saber);
+                                if (saberData) {
+                                    encontrado = true;
+                                    saberData.indicadores.forEach(indicador => {
+                                        indicadoresHTML += `<li>${indicador} <em>(Módulo 2)</em></li>`;
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if (PNFT_DATA[nivel]) {
                     for (const area in PNFT_DATA[nivel]) {
-                        if (PNFT_DATA[nivel][area].saberes) {
+                        if (PNFT_DATA[nivel][area] && PNFT_DATA[nivel][area].saberes) {
                             const saberData = PNFT_DATA[nivel][area].saberes.find(s => s.nombre === saber);
                             if (saberData) {
                                 encontrado = true;
                                 saberData.indicadores.forEach(indicador => {
-                                    indicadoresHTML += `<div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">• ${indicador}</div>`;
+                                    indicadoresHTML += `<li>${indicador}</li>`;
                                 });
                                 break;
                             }
                         }
                     }
                 }
-                
+
                 if (!encontrado) {
-                    indicadoresHTML += `<div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px; color: #999;">• ${saber} (indicador no encontrado)</div>`;
+                    indicadoresHTML += `<li><em>${saber} (indicador no encontrado)</em></li>`;
                 }
             });
-            
-            if (indicadoresHTML === '') {
-                indicadoresHTML = '<div style="color: #666; font-style: italic; font-size: 11px;">Los indicadores aparecerán automáticamente según los saberes conceptuales seleccionados...</div>';
-            }
-            
-            indicadoresContainer.innerHTML = indicadoresHTML;
-            semanas[numeroSemana-1].indicadores = indicadoresHTML;
-        }
-        
-        function obtenerIndicadoresLogroSemana(numeroSemana) {
-            const semana = semanas[numeroSemana-1];
-            const nivel = document.getElementById('nivel').value;
-            let indicadores = [];
-            
-            semana.saberes.forEach(saber => {
-                let encontrado = false;
-                
-                // Buscar en Módulo 1
-                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
-                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 1"]) {
-                        const saberData = PNFT_DATA[nivel]["Módulo 1"][moduloArea].saberes.find(s => s.nombre === saber);
-                        if (saberData) {
-                            indicadores = indicadores.concat(saberData.indicadores);
-                            encontrado = true;
-                            break;
-                        }
-                    }
-                }
-                
-                // Buscar en Módulo 2 si no se encontró
-                if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
-                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
-                        const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea].saberes.find(s => s.nombre === saber);
-                        if (saberData) {
-                            indicadores = indicadores.concat(saberData.indicadores);
-                            break;
-                        }
-                    }
-                }
-            });
-            
-            // Filtrar duplicados y limpiar
-            return [...new Set(indicadores)].map(ind => 
-                ind.replace(/•/g, '').trim()
-            );
+
+            quillInstance.root.innerHTML = `<ul>${indicadoresHTML}</ul>`;
+            semana.indicadores = quillInstance.root.innerHTML;
         }
 
         function actualizarProcedimentalSemana(numeroSemana, checkbox) {
@@ -3311,23 +3071,19 @@
             semanas[numero-1].lecciones = nuevoNombre;
         }
 
-        function actualizarContenidoSemana(numero, tipo, contenido) {
-            semanas[numero-1][tipo] = contenido;
-        }
-
         function agregarSemanaManual() {
             const leccionesActual = parseInt(document.getElementById('leccionesPlanificadas').value) || 8;
             const nuevoNumero = semanas.length + 1;
             const leccionInicio = leccionesActual + 1;
             const leccionFin = leccionInicio + 1;
             
-            // Actualizar lecciones planificadas
             document.getElementById('leccionesPlanificadas').value = leccionFin;
             
             semanas.push({
                 id: nuevoNumero,
                 nombre: `Semana ${nuevoNumero}`,
                 lecciones: `Lecciones ${leccionInicio} y ${leccionFin}`,
+                eje: '',
                 areas: [],
                 rda: '',
                 saberes: [],
@@ -3340,8 +3096,7 @@
             });
             
             const container = document.getElementById('semanasContainer');
-            const nuevaSemana = crearElementoSemana(nuevoNumero, leccionInicio, leccionFin);
-            container.appendChild(nuevaSemana);
+            container.appendChild(crearElementoSemana(nuevoNumero, leccionInicio, leccionFin));
             
             actualizarContadoresSemanas();
         }
@@ -3352,13 +3107,12 @@
                 return;
             }
             
-            if (!confirm('¿Está seguro de que desea eliminar esta semana? Se perderá todo el contenido de esta semana.')) {
+            if (!confirm('¿Está seguro de que desea eliminar esta semana? Se perderá todo el contenido.')) {
                 return;
             }
             
             const semanaAEliminar = semanas[numero-1];
             
-            // SOLO eliminar los datos de ESTA semana específica
             semanaAEliminar.saberes.forEach(saber => {
                 const enOtraSemana = semanas.some((s, index) => 
                     index !== numero-1 && s.saberes.includes(saber)
@@ -3386,14 +3140,10 @@
                 }
             });
             
-            // Eliminar solo la semana específica
             semanas.splice(numero-1, 1);
             
-            // Reconstruir vista SIN afectar otras semanas
             reconstruirVistaSemanasPreservandoContenido();
             actualizarContadoresSemanas();
-            
-            console.log(`Semana ${numero} eliminada. Semanas restantes: ${semanas.length}`);
         }
 
         function reconstruirVistaSemanasPreservandoContenido() {
@@ -3408,9 +3158,7 @@
                 const semanaElement = crearElementoSemana(index + 1, leccionInicio, leccionFin);
                 container.appendChild(semanaElement);
                 
-                // Restaurar TODO el estado de la semana
                 setTimeout(() => {
-                    // 1. PRIMERO restaurar áreas seleccionadas (esto dispara actualizaciones automáticas)
                     semana.areas.forEach(area => {
                         const areaMapping = {
                             'Apropiación tecnológica y Digital': 'apropiacion',
@@ -3424,51 +3172,38 @@
                             const checkbox = document.querySelector(`input[name="area-semana-${index+1}"][value="${areaKey}"]`);
                             if (checkbox) {
                                 checkbox.checked = true;
-                                // EJECUTAR MANUALMENTE la función que se ejecutaría al marcar el checkbox
                                 actualizarAreaSemana(index + 1, checkbox);
                             }
                         }
                     });
                     
-                    // 2. LUEGO restaurar saberes conceptuales seleccionados
+                    if (semana.eje) {
+                        const radio = document.querySelector(`input[name="eje-semana-${index+1}"][value="${semana.eje}"]`);
+                        if (radio) radio.checked = true;
+                    }
+                    
                     semana.saberes.forEach(saber => {
                         const checkboxes = document.querySelectorAll(`#saberes-conceptuales-${index+1} input[type="checkbox"]`);
                         checkboxes.forEach(checkbox => {
                             const saberNombre = checkbox.nextElementSibling?.querySelector('div')?.textContent;
-                            if (saberNombre === saber) {
+                            if (saberNombre && saberNombre.includes(saber)) {
                                 checkbox.checked = true;
                                 checkbox.parentElement.classList.add('seleccionado');
                             }
                         });
                     });
                     
-                    // 3. RESTAURAR procedimentales
                     semana.procedimentales.forEach(proc => {
                         const checkbox = document.querySelector(`input[name="procedimental-semana-${index+1}"][value="${proc}"]`);
                         if (checkbox) checkbox.checked = true;
                     });
                     
-                    // 4. RESTAURAR actitudinales  
                     semana.actitudinales.forEach(act => {
                         const checkbox = document.querySelector(`input[name="actitudinal-semana-${index+1}"][value="${act}"]`);
                         if (checkbox) checkbox.checked = true;
                     });
                     
-                    // 5. RESTAURAR contenido de campos editables
-                    const indicadoresContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="indicadores"]`);
-                    if (indicadoresContainer && semana.indicadores) {
-                        indicadoresContainer.innerHTML = semana.indicadores;
-                    }
-                    
-                    const actividadesContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="estrategias"]`);
-                    if (actividadesContainer && semana.actividades) {
-                        actividadesContainer.innerHTML = semana.actividades;
-                    }
-                    
-                    const evaluacionContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="evaluación"]`);
-                    if (evaluacionContainer && semana.evaluacion) {
-                        evaluacionContainer.innerHTML = semana.evaluacion;
-                    }
+                    inicializarEditoresSemana(index + 1);
                     
                 }, 100);
             });
@@ -3480,12 +3215,9 @@
         }
 
         function mostrarDetalleMetodologia(metodologia) {
-            // Esta función ya no es necesaria ya que eliminamos los detalles
-            // Solo manejamos la visibilidad del campo personalizado
             manejarCambioMetodologia();
         }
 
-        // Funciones para los botones de acción
         function nuevoPlan() {
             if (confirm('¿Está seguro de que desea crear un nuevo plan? Se perderán los cambios no guardados.')) {
                 location.reload();
@@ -3493,17 +3225,12 @@
         }
 
         function abrirPlan() {
-            console.log("🚨 USANDO VERSIÓN DE EMERGENCIA");
-            
-            // Método SUPER simple - nada de overlays
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
             
-            // Agregar al body inmediatamente
             document.body.appendChild(input);
             
-            // Función de cambio
             input.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) {
@@ -3511,7 +3238,6 @@
                     return;
                 }
                 
-                // Validar que sea JSON
                 if (!file.name.endsWith('.json')) {
                     alert('Solo archivos .json');
                     input.remove();
@@ -3522,7 +3248,6 @@
                 reader.onload = function(e) {
                     try {
                         const data = JSON.parse(e.target.result);
-                        alert('Archivo válido. Cargando...');
                         cargarPlan(data);
                         input.remove();
                     } catch (err) {
@@ -3533,32 +3258,18 @@
                 reader.readAsText(file);
             });
             
-            // Disparar el selector de archivos
             setTimeout(() => {
                 input.click();
-                // Limpiar después de 10 segundos
                 setTimeout(() => {
                     if (input.parentNode) input.remove();
                 }, 10000);
             }, 50);
         }
 
-        // FUNCIÓN guardarPlan() - VERSIÓN MEJORADA
-        function guardarPlan() {
-            // Llama a la función mejorada que incluye mensaje de confirmación
-            ejecutarGuardarNormal();
-            return false; // Previene cualquier comportamiento no deseado
-        }
-
-        // FUNCIÓN ejecutarGuardarNormal() - NUEVA FUNCIÓN COMPLETA
         function ejecutarGuardarNormal() {
-            // Cerrar menú si está abierto
             const menu = document.getElementById('menuGuardar');
-            if (menu) {
-                menu.classList.remove('abierto');
-            }
+            if (menu) menu.classList.remove('abierto');
             
-            // Ejecutar guardado normal (código original de guardarPlan)
             const plan = obtenerDatosPlan();
             const dataStr = JSON.stringify(plan, null, 2);
             const dataBlob = new Blob([dataStr], {type: 'application/json'});
@@ -3570,18 +3281,21 @@
             
             setTimeout(() => URL.revokeObjectURL(enlace.href), 100);
             
-            // Mostrar retroalimentación sutil
             mostrarMensaje('✅ Archivo .json guardado exitosamente');
         }
 
         function obtenerDatosPlan() {
-            // Obtener metodología activa
             let metodologia = document.getElementById('metodologiaActiva').value;
             if (metodologia === 'otra') {
                 metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
             }
             
             return {
+                membrete: {
+                    escudo: document.getElementById('escudoInstitucional').src || '',
+                    nombre: document.getElementById('nombreInstitucion').value,
+                    lema: document.getElementById('lemaInstitucion').value
+                },
                 informacionGeneral: {
                     cursoLectivo: document.getElementById('cursoLectivo').value,
                     semestre: document.getElementById('semestre').value,
@@ -3614,6 +3328,16 @@
         }
 
         function cargarPlan(plan) {
+            if (plan.membrete) {
+                if (plan.membrete.escudo) {
+                    document.getElementById('escudoInstitucional').src = plan.membrete.escudo;
+                    document.getElementById('escudoInstitucional').style.display = 'block';
+                    document.getElementById('escudoPlaceholder').style.display = 'none';
+                }
+                document.getElementById('nombreInstitucion').value = plan.membrete.nombre || 'Ministerio de Educación Pública';
+                document.getElementById('lemaInstitucion').value = plan.membrete.lema || '';
+            }
+            
             if (plan.informacionGeneral) {
                 document.getElementById('cursoLectivo').value = plan.informacionGeneral.cursoLectivo || '2026';
                 document.getElementById('semestre').value = plan.informacionGeneral.semestre || 'I';
@@ -3640,7 +3364,6 @@
             }
             
             if (plan.metodologiaActiva) {
-                // Manejar metodología personalizada
                 const metodologia = plan.metodologiaActiva;
                 if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
                     document.getElementById('metodologiaActiva').value = 'ABJ';
@@ -3684,75 +3407,47 @@
             
             actualizarContadoresSemanas();
             
-            // FORZAR ACTUALIZACIÓN DE SABERES CONCEPTUALES
             setTimeout(() => {
                 semanas.forEach((semana, index) => {
                     actualizarRdASemana(index + 1);
                     actualizarOpcionesSaberesSemana(index + 1);
-                    actualizarIndicadoresSemana(index + 1);
-                    actualizarSaberesConceptualesContenedor(index + 1);
                 });
             }, 500);
             
             alert('Plan cargado exitosamente');
         }
 
-        // ===== FUNCIONES DE EXPORTACIÓN CORREGIDAS =====
-
-        // Función para mostrar el modal CON INICIALIZACIÓN
         function mostrarOpcionesExportar() {
-            // 1. Inicializar formato a PDF por defecto (ya no hay Word)
             formatoExportacion = 'pdf';
             
-            // 2. Limpiar selecciones visuales
             document.querySelectorAll('.export-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
             
-            // 3. Seleccionar PDF visualmente
             const opcionPDF = document.getElementById('opcionPDF');
-            if (opcionPDF) {
-                opcionPDF.classList.add('selected');
-            }
+            if (opcionPDF) opcionPDF.classList.add('selected');
             
-            // 4. Mostrar modal
             document.getElementById('exportarModal').style.display = 'block';
         }
 
-        // Función para cerrar el modal
         function cerrarExportModal() {
             document.getElementById('exportarModal').style.display = 'none';
         }
 
-        // ✅ FUNCIÓN CORREGIDA - Con parámetro 'elemento'
         function seleccionarFormato(formato, elemento) {
-            console.log(`Seleccionando formato: ${formato}`);
             formatoExportacion = formato;
             
-            // Remover selección de todas las opciones
             document.querySelectorAll('.export-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
             
-            // Agregar selección a la opción clickeada
-            if (elemento) {
-                elemento.classList.add('selected');
-            }
+            if (elemento) elemento.classList.add('selected');
         }
 
-        // ✅ FUNCIÓN CORREGIDA - Con validación
         function confirmarExportacion() {
-            console.log(`Exportando en formato: ${formatoExportacion}`);
-            
-            if (!formatoExportacion) {
-                formatoExportacion = 'pdf'; // Por defecto PDF
-            }
-            
-            // Solo permite exportar a PDF
             if (formatoExportacion === 'pdf') {
                 exportarAPDF();
             } else {
-                // Si por algún motivo no es PDF, forzar PDF
                 formatoExportacion = 'pdf';
                 exportarAPDF();
             }
@@ -3760,966 +3455,93 @@
             cerrarExportModal();
         }
 
-        function exportarAWord() {
-            const nombreArchivo = document.getElementById('nombreArchivo').value || 'Planeamiento-Didáctico';
-            const exportarInformacionGeneral = document.getElementById('exportarInformacionGeneral').checked;
-            const exportarSaberes = document.getElementById('exportarSaberes').checked;
-            const exportarSemanas = document.getElementById('exportarSemanas').checked;
-            const exportarReflexiones = document.getElementById('exportarReflexiones').checked;
-            const exportarSaberesGlobales = document.getElementById('exportarSaberesGlobales').checked;
-            
-            // Obtener áreas únicas de todas las semanas para RdA globales
-            const areasUnicas = new Set();
-            semanas.forEach(semana => {
-                semana.areas.forEach(area => areasUnicas.add(area));
-            });
-
-            // Crear contenido HTML para Word
-            let contenidoHTML = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>${nombreArchivo}</title>
-                    <style>
-                        @page {
-                            size: A4 landscape;
-                            margin: 0.5in;
-                        }
-                        body { 
-                            font-family: 'Poppins', sans-serif; 
-                            margin: 0; 
-                            padding: 0; 
-                            line-height: 1.4;
-                            color: #000;
-                            font-size: 12px;
-                        }
-                        .container {
-                            width: 100%;
-                            max-width: 10in;
-                            margin: 0 auto;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-bottom: 10px;
-                            border: 1px solid #000;
-                        }
-                        td, th {
-                            border: 1px solid #000;
-                            padding: 6px;
-                            vertical-align: top;
-                            font-size: 11px;
-                        }
-                        th {
-                            background: #45258F;
-                            color: white;
-                            font-weight: bold;
-                            text-align: center;
-                        }
-                        .section-title {
-                            background: #45258F;
-                            color: white;
-                            font-weight: bold;
-                            text-align: center;
-                            padding: 8px;
-                            margin: 10px 0 5px 0;
-                            border: 1px solid #000;
-                            font-size: 12px;
-                            width: 100%;
-                            box-sizing: border-box;
-                        }
-                        .header {
-                            text-align: center;
-                            font-weight: bold;
-                            font-size: 14px;
-                            margin-bottom: 15px;
-                            padding: 10px;
-                            background: #f0f0f0;
-                            border: 1px solid #000;
-                        }
-                        .semana-container {
-                            margin-bottom: 10px;
-                            page-break-inside: avoid;
-                        }
-
-                        .footer {
-                            text-align: center;
-                            margin-top: 20px;
-                            font-weight: bold;
-                            color: #45258F;
-                            padding: 15px;
-                            border-top: 2px solid #45258F;
-                        }
-                        .note {
-                            margin: 15px 0;
-                            padding: 10px;
-                            background: #e7f3ff;
-                            border-left: 3px solid #007bff;
-                            border-radius: 4px;
-                            font-size: 11px;
-                        }
-                        .checkbox-table {
-                            width: 100%;
-                            border: none;
-                        }
-                        .checkbox-table td {
-                            border: none;
-                            text-align: center;
-                            vertical-align: middle;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-            `;
-            
-            // ENCABEZADO
-            contenidoHTML += `
-                <div class="header">
-                    <strong>Plantilla de Planeamiento Didáctico</strong><br>
-                    <strong>Programa Nacional de Formación Tecnológica</strong>
-                </div>
-            `;
-            
-            // INFORMACIÓN GENERAL
-            if (exportarInformacionGeneral) {
-                contenidoHTML += `
-                    <table>
-                        <tr>
-                            <td width="25%"><strong>Dirección Regional de Educación:</strong><br>${document.getElementById('direccionRegional').value || ''}</td>
-                            <td width="25%"><strong>Centro educativo:</strong><br>${document.getElementById('centroEducativo').value || ''}</td>
-                            <td width="25%"><strong>Código:</strong><br>${document.getElementById('codigoCentro').value || ''}</td>
-                            <td width="25%"><strong>Circuito:</strong><br>${document.getElementById('circuito').value || ''}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Nombre de la persona docente:</strong><br>${document.getElementById('nombreDocente').value || ''}</td>
-                            <td colspan="2"><strong>Asignatura: Formación tecnológica/Informática educativa</strong></td>
-                            <td><strong>Curso lectivo:</strong><br>${document.getElementById('cursoLectivo').value || ''}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ciclo:</strong><br>${document.getElementById('ciclo').value || ''}</td>
-                            <td><strong>Nivel:</strong><br>${document.getElementById('nivel').value || ''}</td>
-                            <td><strong>Lecciones planificadas:</strong><br>${document.getElementById('leccionesPlanificadas').value || ''}</td>
-                            <td><strong>Mes inicio - Mes final:</strong><br>${document.getElementById('mesInicio').value || ''} - ${document.getElementById('mesFinal').value || ''}</td>
-                        </tr>
-                    </table>
-                `;
-            }
-            
-            // EJES TRANSVERSALES
-            if (exportarInformacionGeneral) {
-                const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
-                
-                contenidoHTML += `
-                    <div class="section-title">Eje transversal del PNFT según competencia MEP, marque con una equis (x) el eje a desarrollar.</div>
-                    <table class="checkbox-table">
-                        <tr>
-                            <td width="33%" style="text-align: center; padding: 10px;">
-                                <strong>Ciudadanía y ética digital</strong><br>
-                                Competencias para la ciudadanía responsable y solidaria<br><br>
-                                <strong>${ejesSeleccionados.includes('ciudadania') ? '[X]' : '[ ]'}</strong>
-                            </td>
-                            <td width="34%" style="text-align: center; padding: 10px;">
-                                <strong>Pensamiento computacional para la resolución de problemas</strong><br>
-                                Competencias para la vida<br><br>
-                                <strong>${ejesSeleccionados.includes('pensamiento') ? '[X]' : '[ ]'}</strong>
-                            </td>
-                            <td width="33%" style="text-align: center; padding: 10px;">
-                                <strong>Emprendimiento e Innovación</strong><br>
-                                Competencias para el empleo digno<br><br>
-                                <strong>${ejesSeleccionados.includes('emprendimiento') ? '[X]' : '[ ]'}</strong>
-                            </td>
-                        </tr>
-                    </table>
-                `;
-            }
-            
-            // METODOLOGÍA ACTIVA
-            if (exportarInformacionGeneral) {
-                let metodologia = document.getElementById('metodologiaActiva').value;
-                if (metodologia === 'otra') {
-                    metodologia = document.getElementById('metodologiaPersonalizada').value || 'Metodología personalizada';
-                }
-                
-                if (metodologia) {
-                    let metodologiaTexto = '';
-                    if (metodologia === 'ABJ') metodologiaTexto = 'Aprendizaje basado en juegos (ABJ)';
-                    else if (metodologia === 'ABR') metodologiaTexto = 'Aprendizaje basado en retos (ABR)';
-                    else if (metodologia === 'APD') metodologiaTexto = 'Aprendizaje Pensamiento por Diseño (APD)';
-                    else metodologiaTexto = metodologia;
-                    
-                    contenidoHTML += `
-                        <div class="section-title">Metodología activa:</div>
-                        <table>
-                            <tr>
-                                <td>${metodologiaTexto}</td>
-                            </tr>
-                        </table>
-                    `;
-                }
-            }
-            
-            // ✅ ÁREAS Y RDA GLOBALES - CORREGIDO: Solo muestra las áreas seleccionadas globalmente
-            if (exportarSaberes && areasUnicas.size > 0) {
-                const ciclo = document.getElementById('ciclo').value;
-                
-                contenidoHTML += `
-                    <div class="section-title">Área de conocimiento y RdA:</div>
-                    <table>
-                        <tr>
-                            <th width="40%">Área de conocimiento</th>
-                            <th width="60%">RdA:</th>
-                        </tr>
-                `;
-                
-                areasUnicas.forEach(area => {
-                    const rda = RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][area] ? RDA_POR_CICLO[ciclo][area] : 'No definido';
-                    contenidoHTML += `
-                        <tr>
-                            <td>${area}</td>
-                            <td>${rda}</td>
-                        </tr>
-                    `;
-                });
-                
-                contenidoHTML += `</table>`;
-            }
-            
-            // ✅ SABERES GLOBALES ELEGIDOS POR EL DOCENTE - CORREGIDO: Solo muestra los saberes realmente seleccionados
-            if (exportarSaberesGlobales) {
-                contenidoHTML += `
-                    <div class="section-title">Saberes Globales</div>
-                    <table>
-                        <tr>
-                            <th width="33%">Saberes conceptuales (saber)</th>
-                            <th width="33%">Saberes procedimentales (saber hacer)</th>
-                            <th width="34%">Saberes actitudinales (saber ser)</th>
-                        </tr>
-                        <tr>
-                            <td style="vertical-align: top;">
-                `;
-                
-                // ✅ SABERES CONCEPTUALES GLOBALES - Solo los seleccionados por el docente
-                if (saberesSeleccionados.size > 0) {
-                    contenidoHTML += Array.from(saberesSeleccionados).map(saber => `• ${saber}`).join('<br>');
-                } else {
-                    contenidoHTML += 'No se han seleccionado saberes conceptuales';
-                }
-                
-                contenidoHTML += `
-                            </td>
-                            <td style="vertical-align: top;">
-                `;
-                
-                // ✅ SABERES PROCEDIMENTALES GLOBALES - Solo los seleccionados por el docente
-                if (saberesProcedimentalesGlobales.size > 0) {
-                    contenidoHTML += Array.from(saberesProcedimentalesGlobales).map(proc => {
-                        const mapping = {
-                            'reconoce': '• Reconoce patrones',
-                            'abstrae': '• Abstrae',
-                            'generaliza': '• Generaliza',
-                            'transfiere': '• Transfiere',
-                            'modulariza': '• Modulariza',
-                            'formula': '• Formula algoritmos',
-                            'remezcla': '• Remezcla',
-                            'depura': '• Depura',
-                            'programa': '• Programa',
-                            'comunica': '• Comunica',
-                            'colabora': '• Colabora',
-                            'piensa': '• Piensa de forma creativa',
-                            'maneja': '• Maneja las tecnologías de forma ética y segura'
-                        };
-                        return mapping[proc] || `• ${proc}`;
-                    }).join('<br>');
-                } else {
-                    contenidoHTML += 'No se han seleccionado saberes procedimentales';
-                }
-                
-                contenidoHTML += `
-                            </td>
-                            <td style="vertical-align: top;">
-                `;
-                
-                // ✅ SABERES ACTITUDINALES GLOBALES - Solo los seleccionados por el docente
-                if (saberesActitudinalesGlobales.size > 0) {
-                    contenidoHTML += Array.from(saberesActitudinalesGlobales).map(act => {
-                        const mapping = {
-                            'gusto': '• Gusto por la precisión',
-                            'aprender': '• Aprender del error',
-                            'flexibilidad': '• Flexibilidad para manejar problemas',
-                            'tolerancia': '• Tolerancia a la frustración'
-                        };
-                        return mapping[act] || `• ${act}`;
-                    }).join('<br>');
-                } else {
-                    contenidoHTML += 'No se han seleccionado saberes actitudinales';
-                }
-                
-                contenidoHTML += `
-                            </td>
-                        </tr>
-                    </table>
-                `;
-            }
-            
-            // ✅ PLANIFICACIÓN POR SEMANAS - CORREGIDO: Solo las 3 columnas requeridas
-            if (exportarSemanas && semanas.length > 0) {
-                contenidoHTML += `<div class="section-title">Planificación por Semanas</div>`;
-                
-                semanas.forEach((semana, index) => {
-                    contenidoHTML += `
-                        <div class="semana-container">
-                            <table>
-                                <tr>
-                                    <td colspan="3" style="background: #45258F; color: white; font-weight: bold; text-align: center;">
-                                        <strong>Semana ${index + 1}: ${semana.lecciones}</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="33%">Indicadores de logro</th>
-                                    <th width="34%">Estrategias de Mediación</th>
-                                    <th width="33%">Indicadores de evaluación</th>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: top;">${semana.indicadores || 'No especificado'}</td>
-                                    <td style="vertical-align: top;">${semana.actividades || 'No especificado'}</td>
-                                    <td style="vertical-align: top;">${semana.evaluacion || 'No especificado'}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    `;
-                });
-            }
-            
-            // REFLEXIONES DOCENTES
-            if (exportarReflexiones) {
-                contenidoHTML += `
-                    <div class="section-title">Reflexiones Docentes</div>
-                    <table>
-                        <tr>
-                            <th width="33%">¿Qué funcionó?</th>
-                            <th width="34%">¿Qué no funcionó?</th>
-                            <th width="33%">¿Qué puedo mejorar?</th>
-                        </tr>
-                        <tr>
-                            <td>${document.getElementById('queFunciono').value || ''}</td>
-                            <td>${document.getElementById('queNoFunciono').value || ''}</td>
-                            <td>${document.getElementById('queMejorar').value || ''}</td>
-                        </tr>
-                    </table>
-                    
-                    <div class="section-title">Observaciones y/o recomendaciones didácticas por nivel:</div>
-                    <table>
-                        <tr>
-                            <td>${document.getElementById('observaciones').value || ''}</td>
-                        </tr>
-                    </table>
-                `;
-            }
-            
-            // NOTA SOBRE IA
-            contenidoHTML += `
-                <div class="note">
-                    <strong>Nota importante sobre el uso de IA:</strong> Lo que brinda la IA debe ser contextualizado por el educador, 
-                    quien decide, observa y ejecuta según su criterio y conocimiento del grupo. La IA proporciona estrategias de mediación 
-                    que deben ser definidas, reagrupadas y reestructuradas por el educador considerando el orden, estructura y forma de 
-                    implementación más adecuada.
-                </div>
-            `;
-            
-            // FOOTER
-            contenidoHTML += `
-                <div class="footer">
-                    DIDI - Departamento de Investigación, Desarrollo e Implementación <br>
-                    Dirección de Recursos Tecnológicos en Educación
-                </div>
-            `;
-
-            contenidoHTML += `
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            // Crear y descargar el archivo Word
-            const blob = new Blob([contenidoHTML], {type: 'application/msword'});
-            const enlace = document.createElement('a');
-            enlace.download = `${nombreArchivo}.doc`;
-            enlace.href = URL.createObjectURL(blob);
-            enlace.click();
-            
-            setTimeout(() => URL.revokeObjectURL(enlace.href), 100);
-        }
-
         function exportarAPDF() {
-    try {
-        console.log("Iniciando exportación a PDF...");
-        
-        // OBTENER VALORES DE CHECKBOXES
-        const nombreArchivo = document.getElementById('nombreArchivo').value || 'Planeamiento-Didáctico';
-        const exportarInformacionGeneral = document.getElementById('exportarInformacionGeneral')?.checked ?? true;
-        const exportarSaberes = document.getElementById('exportarSaberes')?.checked ?? true;
-        const exportarSemanas = document.getElementById('exportarSemanas')?.checked ?? true;
-        const exportarReflexiones = document.getElementById('exportarReflexiones')?.checked ?? true;
-        const exportarSaberesGlobales = document.getElementById('exportarSaberesGlobales')?.checked ?? true;
-        const incluirEncabezado = document.getElementById('incluirEncabezado')?.checked ?? true;
-        const incluirPiePagina = document.getElementById('incluirPiePagina')?.checked ?? true;
-        
-        // ÁREAS ÚNICAS
-        const areasUnicas = new Set();
-        semanas.forEach(semana => {
-            semana.areas.forEach(area => areasUnicas.add(area));
-        });
-        
-        // ===== FUNCIONES AUXILIARES MEJORADAS =====
-        function limpiarContenidoParaPDF(texto) {
-            if (!texto || texto.toString().trim() === '') {
-                return 'No especificado';
+            const nombreArchivo = document.getElementById('nombreArchivo').value || 'Planeamiento-Didáctico';
+            const exportarInformacionGeneral = document.getElementById('exportarInformacionGeneral')?.checked ?? true;
+            const exportarSaberes = document.getElementById('exportarSaberes')?.checked ?? true;
+            const exportarSemanas = document.getElementById('exportarSemanas')?.checked ?? true;
+            const exportarReflexiones = document.getElementById('exportarReflexiones')?.checked ?? true;
+            const exportarSaberesGlobales = document.getElementById('exportarSaberesGlobales')?.checked ?? true;
+            const incluirEncabezado = document.getElementById('incluirEncabezado')?.checked ?? true;
+            const incluirPiePagina = document.getElementById('incluirPiePagina')?.checked ?? true;
+            
+            const areasUnicas = new Set();
+            semanas.forEach(semana => semana.areas.forEach(area => areasUnicas.add(area)));
+
+            function limpiarContenido(texto) {
+                if (!texto || texto.toString().trim() === '') return '';
+                let contenido = texto.toString();
+                contenido = contenido.replace(/<[^>]*>/g, ' ');
+                contenido = contenido.replace(/&nbsp;/g, ' ');
+                contenido = contenido.replace(/&lt;/g, '<');
+                contenido = contenido.replace(/&gt;/g, '>');
+                contenido = contenido.replace(/&amp;/g, '&');
+                contenido = contenido.replace(/&quot;/g, '"');
+                contenido = contenido.replace(/&#39;/g, "'");
+                contenido = contenido.replace(/\s+/g, ' ');
+                return contenido.trim();
             }
             
-            let contenido = texto.toString();
-            
-            // 1. Convertir HTML a texto plano controlado
-            contenido = contenido.replace(/<[^>]*>/g, ' ');
-            
-            // 2. Convertir entidades HTML
-            contenido = contenido.replace(/&nbsp;/g, ' ');
-            contenido = contenido.replace(/&lt;/g, '<');
-            contenido = contenido.replace(/&gt;/g, '>');
-            contenido = contenido.replace(/&amp;/g, '&');
-            contenido = contenido.replace(/&quot;/g, '"');
-            contenido = contenido.replace(/&#39;/g, "'");
-            
-            // 3. Normalizar espacios
-            contenido = contenido.replace(/\s+/g, ' ');
-            contenido = contenido.trim();
-            
-            return contenido;
-        }
-        
-        function formatearContenidoComoHTML(texto) {
-            const contenidoLimpio = limpiarContenidoParaPDF(texto);
-            
-            // Si está vacío
-            if (contenidoLimpio === 'No especificado' || contenidoLimpio.trim() === '') {
-                return '<div style="color: #999; font-style: italic; font-size: 8.5pt;">No especificado</div>';
-            }
-            
-            // Dividir por puntos para mejor legibilidad
-            const lineas = contenidoLimpio.split(/(?<=\.)\s+/).filter(linea => linea.trim());
-            
-            if (lineas.length === 0) {
-                return '<div style="color: #999; font-style: italic; font-size: 8.5pt;">No especificado</div>';
-            }
-            
-            // Crear párrafos más compactos para PDF
-            let resultado = '';
-            
-            lineas.forEach(linea => {
-                // Si es una lista con números o viñetas
-                if (linea.match(/^\d+[-).]/) || linea.match(/^[•\-]/)) {
-                    resultado += `<div style="margin-bottom: 1.5mm; padding-left: 1mm; line-height: 1.3; font-size: 8.5pt;">${linea.trim()}</div>`;
-                } else {
-                    resultado += `<div style="margin-bottom: 1.5mm; line-height: 1.3; font-size: 8.5pt; text-indent: 2mm;">${linea.trim()}</div>`;
-                }
-            });
-            
-            return resultado;
-        }
-        
-        // ✅ FUNCIÓN NUEVA: AJUSTAR FUENTE SEGÚN LONGITUD
-        function ajustarFuenteSegunLongitud(texto) {
-            if (!texto || texto.toString().trim() === '') return '9.5pt';
-            
-            const contenidoLimpio = limpiarContenidoParaPDF(texto);
-            const longitud = contenidoLimpio.length;
-            
-            // Escala progresiva según longitud
-            if (longitud > 3000) return '7.5pt';      // Contenido muy largo
-            if (longitud > 2000) return '8pt';        // Contenido largo
-            if (longitud > 1000) return '8.5pt';      // Contenido medio-largo
-            if (longitud > 500) return '9pt';         // Contenido medio
-            return '9.5pt';                           // Contenido corto
-        }
-        
-        // ✅ FUNCIÓN NUEVA: AJUSTAR ALTURA MÍNIMA SEGÚN CONTENIDO
-        function ajustarAlturaMinima(texto) {
-            if (!texto || texto.toString().trim() === '') return '25mm';
-            
-            const contenidoLimpio = limpiarContenidoParaPDF(texto);
-            const longitud = contenidoLimpio.length;
-            
-            // Ajustar altura mínima según longitud
-            if (longitud > 2000) return '60mm';
-            if (longitud > 1000) return '45mm';
-            if (longitud > 500) return '35mm';
-            return '25mm';
-        }
-        
-        // ✅ FUNCIÓN NUEVA: FORMATEAR CONTENIDO CON AJUSTE DINÁMICO
-        function formatearContenidoConAjuste(texto, tipoContenido = 'general') {
-            const contenidoLimpio = limpiarContenidoParaPDF(texto);
-            
-            // Si está vacío
-            if (contenidoLimpio === 'No especificado' || contenidoLimpio.trim() === '') {
-                return {
-                    html: '<div style="color: #999; font-style: italic;">No especificado</div>',
-                    fontSize: '9pt',
-                    minHeight: '25mm'
-                };
-            }
-            
-            // Determinar tamaño de fuente óptimo
-            const fontSize = ajustarFuenteSegunLongitud(texto);
-            const minHeight = ajustarAlturaMinima(texto);
-            
-            // Formatear contenido con el tamaño adecuado
-            const lineas = contenidoLimpio.split(/(?<=\.)\s+/).filter(linea => linea.trim());
-            let html = '';
-            
-            lineas.forEach(linea => {
-                const esLista = linea.match(/^\d+[-).]/) || linea.match(/^[•\-]/);
-                const estiloLinea = esLista 
-                    ? `margin: 0 0 1mm ${tipoContenido === 'estrategias' ? '3mm' : '1mm'}; padding-left: 1mm;`
-                    : `margin: 0 0 1mm 0; text-indent: 2mm;`;
-                
-                html += `
-                    <div style="
-                        ${estiloLinea}
-                        line-height: 1.35;
-                        font-size: ${fontSize};
-                        text-align: ${tipoContenido === 'estrategias' ? 'justify' : 'left'};
-                        hyphens: auto;
-                        word-wrap: break-word;
-                    ">
-                        ${linea.trim()}
-                    </div>
-                `;
-            });
-            
-            return {
-                html: html,
-                fontSize: fontSize,
-                minHeight: minHeight
-            };
-        }
-        
-        // ===== GENERAR HTML PERFECTO PARA PDF =====
-        let contenidoHTML = `<!DOCTYPE html>
+            let contenidoHTML = `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>${nombreArchivo}</title>
     <style>
-        /* ESTILOS DEFINITIVOS - PARA IMPRESIÓN */   
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            font-size: 10pt;
-            line-height: 1.3;
-            color: #000000;
-            margin: 0;
-            padding: 15mm;
-        }
-        
-        .pagina {
-            width: 297mm;
-            height: 210mm;
-            padding: 10mm;
-        }
-        
-        /* ENCABEZADOS */
-        .encabezado-institucional {
-            text-align: center;
-            margin-bottom: 8mm;
-            padding-bottom: 4mm;
-            border-bottom: 1pt solid #45258F;
-        }
-        
-        .titulo-ministerio {
-            font-size: 12pt;
-            font-weight: bold;
-            color: #45258F;
-            margin-bottom: 2mm;
-        }
-        
-        .titulo-gobierno {
-            font-size: 11pt;
-            font-weight: 600;
-            color: #6c47c9;
-        }
-        
-        .titulo-principal {
-            text-align: center;
-            font-size: 14pt;
-            font-weight: bold;
-            color: white;
-            background-color: #45258F;
-            padding: 4mm;
-            margin: 6mm 0 4mm 0;
-            border-radius: 2mm;
-        }
-        
-        .subtitulo {
-            text-align: center;
-            font-size: 11pt;
-            color: #6c47c9;
-            margin-bottom: 8mm;
-        }
-        
-        /* SECCIONES */
-        .seccion {
-            margin-bottom: 6mm;
-            page-break-inside: avoid;
-        }
-        
-        .titulo-seccion {
-            background-color: #45258F;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 3mm;
-            margin: 4mm 0 3mm 0;
-            border-radius: 2mm;
-            font-size: 11pt;
-            page-break-after: avoid;
-        }
-        
-        /* TABLAS PERFECTAS */
-        .tabla {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 3mm 0;
-            page-break-inside: avoid;
-        }
-        
-        .tabla th {
-            background-color: #45258F;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 2mm;
-            border: 0.5pt solid black;
-            font-size: 10pt;
-        }
-        
-        .tabla td {
-            border: 0.5pt solid #cccccc;
-            padding: 2mm;
-            vertical-align: top;
-            font-size: 10pt;
-            line-height: 1.3;
-        }
-        
-        /* CONTENIDO */
-        .contenido-celda {
-            font-size: 10pt;
-            line-height: 1.3;
-            text-align: left;
-        }
-        
-        .contenido-celda div {
-            margin-bottom: 1mm;
-        }
-        
-        /* SEMANAS */
-        .encabezado-semana {
-            background-color: #45258F;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 2mm;
-            font-size: 11pt;
-        }
-        
-        /* TRANSICIÓN SIN ESPACIOS */
-        .linea-transicion {
-            border-top: 0.5pt solid #6c47c9;
-            margin: 3mm 0 2mm 0;
-            height: 0;
-        }
-        
-        .texto-transicion {
-            text-align: center;
-            color: #6c47c9;
-            font-size: 10pt;
-            font-style: italic;
-            margin: 1mm 0 3mm 0;
-        }
-        
-        /* ELEMENTOS DE DISEÑO */
-        .tarjeta {
-            background: white;
-            border: 0.5pt solid #dddddd;
-            border-radius: 2mm;
-            padding: 3mm;
-            margin-bottom: 3mm;
-        }
-        
-        .tarjeta-titulo {
-            font-weight: bold;
-            color: #45258F;
-            margin-bottom: 2mm;
-            font-size: 10.5pt;
-        }
-        
-        .tarjeta-contenido {
-            font-size: 10pt;
-            line-height: 1.3;
-        }
-        
-        /* CONTROL DE IMPRESIÓN MEJORADO */
-        @media print {
-            @page {
-                size: A4 landscape;
-                margin: 15mm;
-            }
-            
-            body {
-                margin: 0 !important;
-                padding: 15mm !important;
-                orphans: 3;
-                widows: 3;
-            }
-            
-            .pagina {
-                page-break-after: always;
-            }
-            
-            .no-imprimir {
-                display: none !important;
-            }
-            
-            .titulo-seccion, .encabezado-semana-mejorado, .tabla th {
-                background-color: #45258F !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                page-break-after: avoid;
-            }
-            
-            /* MEJOR CONTROL DE DIVISIÓN DE CONTENIDO */
-            .contenido-adaptable {
-                page-break-inside: auto !important;
-                break-inside: auto !important;
-            }
-            
-            /* Evitar que los encabezados queden solos */
-            .encabezado-contenido {
-                page-break-after: avoid;
-            }
-            
-            /* Mejor legibilidad para texto pequeño */
-            .texto-ajustado {
-                -webkit-font-smoothing: antialiased;
-                text-rendering: optimizeLegibility;
-            }
-        }
-        
-        /* UTILIDADES */
-        .columna-33 {
-            width: 33.33%;
-        }
-        
-        .texto-centrado {
-            text-align: center;
-        }
-        
-        .texto-izquierda {
-            text-align: left;
-        }
-        
-        .margen-abajo {
-            margin-bottom: 3mm;
-        }
-        
-        /* GRID SIMPLE */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3mm;
-            margin: 3mm 0;
-        }
-        
-        /* NUEVOS ESTILOS PARA DISEÑO MEJORADO */
-        .grid-2-columnas {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6mm;
-            margin: 4mm 0;
-            align-items: stretch;
-        }
-        
-        .columna-areas {
-            border: 0.75pt solid #45258F;
-            border-radius: 3mm;
-            padding: 4mm;
-            background: #f8f9fa;
-        }
-        
-        .columna-rda {
-            border: 0.75pt solid #6c47c9;
-            border-radius: 3mm;
-            padding: 4mm;
-            background: #f0ebf9;
-        }
-        
-        .titulo-columna {
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 4mm;
-            padding-bottom: 2mm;
-            border-bottom: 1pt solid;
-            font-size: 11pt;
-        }
-        
-        .item-area {
-            padding: 3mm;
-            background: white;
-            border-radius: 2mm;
-            border-left: 3pt solid #45258F;
-            font-weight: 500;
-            font-size: 10pt;
-            margin-bottom: 2mm;
-            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
-        }
-        
-        .item-rda {
-            padding: 3mm;
-            background: white;
-            border-radius: 2mm;
-            border-left: 3pt solid #6c47c9;
-            margin-bottom: 3mm;
-            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
-        }
-        
-        .ejes-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4mm;
-            margin: 3mm 0;
-        }
-        
-        .eje-item {
-            border: 0.75pt solid #cccccc;
-            border-radius: 3mm;
-            padding: 4mm;
-            text-align: center;
-            background: white;
-            transition: all 0.3s;
-        }
-        
-        .eje-seleccionado {
-            border: 1.5pt solid #45258F;
-            background: #f0ebf9;
-        }
-        
-        .eje-titulo {
-            font-weight: bold;
-            font-size: 11pt;
-            margin-bottom: 2mm;
-        }
-        
-        .eje-descripcion {
-            font-size: 10pt;
-            color: #666;
-            margin-bottom: 3mm;
-            line-height: 1.3;
-        }
-        
-        .eje-marca {
-            font-weight: bold;
-            font-size: 12pt;
-            border-radius: 2mm;
-            padding: 2mm;
-            display: inline-block;
-            min-width: 25mm;
-        }
-        
-        .marca-seleccionada {
-            color: #28a745;
-            border: 1.5pt solid #28a745;
-        }
-        
-        .marca-no-seleccionada {
-            color: #666;
-            border: 1pt solid #666;
-        }
-        
-        /* ESTILOS PARA CONTENIDO ADAPTABLE */
-        .contenido-adaptable {
-            page-break-inside: auto;
-            break-inside: auto;
-        }
-        
-        .encabezado-semana-mejorado {
-            background: linear-gradient(135deg, #45258F, #6c47c9);
-            color: white;
-            font-weight: bold;
-            padding: 2mm 3mm;
-            font-size: 10.5pt;
-            border-radius: 1.5mm 1.5mm 0 0;
-            page-break-after: avoid;
-            box-shadow: 0 1pt 2pt rgba(0,0,0,0.1);
-        }
-        
-        .encabezado-contenido {
-            font-weight: bold;
-            color: #45258F;
-            font-size: 9.5pt;
-            margin-bottom: 1.5mm;
-            padding-bottom: 1mm;
-            border-bottom: 0.5pt solid #f0f0f0;
-            page-break-after: avoid;
-        }
-        
-        .texto-ajustado {
-            text-align: justify;
-            hyphens: auto;
-            word-wrap: break-word;
-            line-height: 1.35;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; font-size: 10pt; line-height: 1.3; color: #000; margin: 0; padding: 15mm; }
+        .pagina { width: 297mm; padding: 10mm; }
+        .encabezado-institucional { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding: 15px; border: 2px solid #45258F; border-radius: 15px; }
+        .escudo-pdf { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #45258F; }
+        .escudo-pdf img { width: 100%; height: 100%; object-fit: contain; }
+        .titulo-ministerio { font-size: 12pt; font-weight: bold; color: #45258F; }
+        .titulo-gobierno { font-size: 11pt; font-weight: 600; color: #6c47c9; }
+        .titulo-principal { text-align: center; font-size: 14pt; font-weight: bold; color: white; background-color: #45258F; padding: 4mm; margin: 6mm 0 4mm 0; border-radius: 2mm; }
+        .subtitulo { text-align: center; font-size: 11pt; color: #6c47c9; margin-bottom: 8mm; }
+        .seccion { margin-bottom: 6mm; page-break-inside: avoid; }
+        .titulo-seccion { background-color: #45258F; color: white; font-weight: bold; text-align: center; padding: 3mm; margin: 4mm 0 3mm 0; border-radius: 2mm; font-size: 11pt; }
+        .tabla { width: 100%; border-collapse: collapse; margin: 3mm 0; }
+        .tabla th { background-color: #45258F; color: white; font-weight: bold; text-align: center; padding: 2mm; border: 0.5pt solid black; font-size: 10pt; }
+        .tabla td { border: 0.5pt solid #ccc; padding: 2mm; vertical-align: top; font-size: 10pt; }
+        .encabezado-semana { background-color: #45258F; color: white; font-weight: bold; padding: 2mm; font-size: 11pt; border-radius: 2mm 2mm 0 0; }
+        .encabezado-contenido { font-weight: bold; color: #45258F; font-size: 9.5pt; margin-bottom: 1.5mm; border-bottom: 0.5pt solid #f0f0f0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin: 3mm 0; }
+        .tarjeta { background: white; border: 0.5pt solid #ddd; border-radius: 2mm; padding: 3mm; margin-bottom: 3mm; }
+        .tarjeta-titulo { font-weight: bold; color: #45258F; margin-bottom: 2mm; font-size: 10.5pt; }
+        .no-imprimir { display: none; }
+        @media print { @page { size: A4 landscape; margin: 15mm; } body { margin: 0; padding: 15mm; } .titulo-seccion, .encabezado-semana, .tabla th { background-color: #45258F !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
     </style>
 </head>
 <body>
-    <div class="pagina">
-`;
-        
-        // ENCABEZADO INSTITUCIONAL
-        if (incluirEncabezado) {
-            contenidoHTML += `
+    <div class="pagina">`;
+
+            if (incluirEncabezado) {
+                contenidoHTML += `
         <div class="encabezado-institucional">
-            <div class="titulo-ministerio">MINISTERIO DE EDUCACIÓN PÚBLICA</div>
-            <div class="titulo-gobierno">Gobierno de Costa Rica</div>
-        </div>
-`;
-        }
-        
-        // TÍTULO PRINCIPAL
-        contenidoHTML += `
-        <div class="titulo-principal">PLANTILLA DE PLANEAMIENTO DIDÁCTICO</div>
-        <div class="subtitulo">
-            PROGRAMA NACIONAL DE FORMACIÓN TECNOLÓGICA<br>
-            <span style="font-size: 10pt;">Informática educativa</span>
-        </div>
-`;
-        
-        // INFORMACIÓN GENERAL
-        if (exportarInformacionGeneral) {
+            <div class="escudo-pdf">
+                <img src="${membreteInstitucional.escudo || ''}" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=\'text-align:center; color:#999;\'>🖼️</div>'">
+            </div>
+            <div style="flex: 1;">
+                <div class="titulo-ministerio">${membreteInstitucional.nombre || 'MINISTERIO DE EDUCACIÓN PÚBLICA'}</div>
+                <div class="titulo-gobierno">${membreteInstitucional.lema || 'Gobierno de Costa Rica'}</div>
+            </div>
+        </div>`;
+            }
+
             contenidoHTML += `
+        <div class="titulo-principal">PLANTILLA DE PLANEAMIENTO DIDÁCTICO</div>
+        <div class="subtitulo">PROGRAMA NACIONAL DE FORMACIÓN TECNOLÓGICA<br>Informática educativa</div>`;
+
+            if (exportarInformacionGeneral) {
+                contenidoHTML += `
         <div class="seccion">
             <div class="titulo-seccion">INFORMACIÓN GENERAL</div>
             <table class="tabla">
                 <tr>
-                    <td style="width: 25%;"><strong>Dirección Regional:</strong><br>${document.getElementById('direccionRegional').value || ''}</td>
-                    <td style="width: 25%;"><strong>Centro educativo:</strong><br>${document.getElementById('centroEducativo').value || ''}</td>
-                    <td style="width: 25%;"><strong>Código:</strong><br>${document.getElementById('codigoCentro').value || ''}</td>
-                    <td style="width: 25%;"><strong>Circuito:</strong><br>${document.getElementById('circuito').value || ''}</td>
+                    <td><strong>Dirección Regional:</strong><br>${document.getElementById('direccionRegional').value || ''}</td>
+                    <td><strong>Centro educativo:</strong><br>${document.getElementById('centroEducativo').value || ''}</td>
+                    <td><strong>Código:</strong><br>${document.getElementById('codigoCentro').value || ''}</td>
+                    <td><strong>Circuito:</strong><br>${document.getElementById('circuito').value || ''}</td>
                 </tr>
                 <tr>
                     <td><strong>Docente:</strong><br>${document.getElementById('nombreDocente').value || ''}</td>
@@ -4728,525 +3550,113 @@
                     <td><strong>Lecciones:</strong><br>${document.getElementById('leccionesPlanificadas').value || ''}</td>
                 </tr>
             </table>
-        </div>
-`;
-        }
-        
-        // EJES TRANSVERSALES - CORREGIDO Y COMPLETO
-        if (exportarInformacionGeneral) {
-            const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
-            
-            contenidoHTML += `
-        <div class="seccion">
-            <div class="titulo-seccion">EJES TRANSVERSALES DEL PNFT SEGÚN COMPETENCIA MEP</div>
-            
-            <div style="text-align: center; font-size: 10pt; color: #666; margin-bottom: 4mm; font-style: italic;">
-                Marque con una equis (x) el eje a desarrollar
-            </div>
-            
-            <div class="ejes-grid">
-                <!-- CIUDADANÍA -->
-                <div class="eje-item ${ejesSeleccionados.includes('ciudadania') ? 'eje-seleccionado' : ''}">
-                    <div class="eje-titulo" style="color: ${ejesSeleccionados.includes('ciudadania') ? '#45258F' : '#333'}">
-                        Ciudadanía y ética digital
-                    </div>
-                    
-                    <div class="eje-descripcion">
-                        Competencias para la ciudadanía responsable y solidaria
-                    </div>
-                    
-                    <div class="eje-marca ${ejesSeleccionados.includes('ciudadania') ? 'marca-seleccionada' : 'marca-no-seleccionada'}">
-                        ${ejesSeleccionados.includes('ciudadania') ? '[X] SELECCIONADO' : '[   ]'}
-                    </div>
-                </div>
-                
-                <!-- PENSAMIENTO COMPUTACIONAL -->
-                <div class="eje-item ${ejesSeleccionados.includes('pensamiento') ? 'eje-seleccionado' : ''}">
-                    <div class="eje-titulo" style="color: ${ejesSeleccionados.includes('pensamiento') ? '#45258F' : '#333'}">
-                        Pensamiento computacional
-                    </div>
-                    
-                    <div class="eje-descripcion">
-                        Competencias para la vida y resolución de problemas
-                    </div>
-                    
-                    <div class="eje-marca ${ejesSeleccionados.includes('pensamiento') ? 'marca-seleccionada' : 'marca-no-seleccionada'}">
-                        ${ejesSeleccionados.includes('pensamiento') ? '[X] SELECCIONADO' : '[   ]'}
-                    </div>
-                </div>
-                
-                <!-- EMPRENDIMIENTO -->
-                <div class="eje-item ${ejesSeleccionados.includes('emprendimiento') ? 'eje-seleccionado' : ''}">
-                    <div class="eje-titulo" style="color: ${ejesSeleccionados.includes('emprendimiento') ? '#45258F' : '#333'}">
-                        Emprendimiento e Innovación
-                    </div>
-                    
-                    <div class="eje-descripcion">
-                        Competencias para el empleo digno
-                    </div>
-                    
-                    <div class="eje-marca ${ejesSeleccionados.includes('emprendimiento') ? 'marca-seleccionada' : 'marca-no-seleccionada'}">
-                        ${ejesSeleccionados.includes('emprendimiento') ? '[X] SELECCIONADO' : '[   ]'}
-                    </div>
-                </div>
-            </div>
-            
-            <div style="text-align: center; font-size: 9pt; color: #999; margin-top: 3mm; font-style: italic;">
-                Nota: Se marca con X el eje transversal seleccionado para desarrollar según competencia MEP
-            </div>
-        </div>
-    `;
-        }
+        </div>`;
 
-        // METODOLOGÍA ACTIVA - NUEVA SECCIÓN PARA INCLUIR EN PDF
-        if (exportarInformacionGeneral) {
-            let metodologia = document.getElementById('metodologiaActiva').value;
-            if (metodologia === 'otra') {
-                metodologia = document.getElementById('metodologiaPersonalizada').value || 'Metodología personalizada';
-            }
-            
-            if (metodologia) {
-                let metodologiaTexto = '';
-                if (metodologia === 'ABJ') metodologiaTexto = 'Aprendizaje basado en juegos (ABJ)';
-                else if (metodologia === 'ABR') metodologiaTexto = 'Aprendizaje basado en retos (ABR)';
-                else if (metodologia === 'APD') metodologiaTexto = 'Aprendizaje Pensamiento por Diseño (APD)';
-                else metodologiaTexto = metodologia;
-                
+                const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
                 contenidoHTML += `
-            <div class="seccion">
-                <div class="titulo-seccion" style="background: linear-gradient(135deg, #6c47c9, #45258F);">
-                    METODOLOGÍA ACTIVA SELECCIONADA
-                </div>
-                
-                <div class="tarjeta" style="background: #f8f9fa; border-color: #6c47c9;">
-                    <div style="text-align: center; font-weight: bold; color: #45258F; font-size: 11pt; margin-bottom: 3mm;">
-                        ${metodologiaTexto}
-                    </div>
-                    
-                    <div style="margin-top: 3mm; padding-top: 2mm; border-top: 0.5pt dashed #ddd; font-size: 9pt; color: #666; text-align: center;">
-                        <strong>Nota:</strong> Las estrategias de mediación deben adaptarse a esta metodología seleccionada.
-                    </div>
-                </div>
-            </div>
-            `;
-            }
-        }
-        
-        // ÁREAS DE CONOCIMIENTO Y RDA EN DOS COLUMNAS - VERSIÓN MEJORADA
-        if (exportarSaberes && areasUnicas.size > 0) {
-            const ciclo = document.getElementById('ciclo').value;
-            
-            contenidoHTML += `
         <div class="seccion">
-            <div class="titulo-seccion">ÁREAS DE CONOCIMIENTO Y RESULTADOS DE APRENDIZAJE (RDA)</div>
-            
-            <!-- CONTENEDOR DE DOS COLUMNAS PARALELAS -->
-            <div class="grid-2-columnas">
-                
-                <!-- COLUMNA IZQUIERDA: ÁREAS DE CONOCIMIENTO -->
-                <div class="columna-areas">
-                    <div class="titulo-columna" style="color: #45258F; border-bottom-color: #45258F;">
-                        ÁREAS DE CONOCIMIENTO
-                    </div>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 2mm;">
-            `;
-            
-            // Lista completa de áreas (para mostrar todas con su estado)
-            const todasLasAreas = [
-                "Apropiación tecnológica y Digital",
-                "Programación y Algoritmos", 
-                "Computación física y Robótica",
-                "Ciencia de datos e Inteligencia artificial"
-            ];
-            
-            todasLasAreas.forEach(area => {
-                const estaSeleccionada = areasUnicas.has(area);
-                
+            <div class="titulo-seccion">EJES TRANSVERSALES</div>
+            <table class="tabla">
+                <tr>
+                    <th>Ciudadanía digital</th>
+                    <th>Pensamiento computacional</th>
+                    <th>Emprendimiento</th>
+                </tr>
+                <tr>
+                    <td style="text-align: center; font-weight: bold;">${ejesSeleccionados.includes('ciudadania') ? '[X] SELECCIONADO' : '[ ]'}</td>
+                    <td style="text-align: center; font-weight: bold;">${ejesSeleccionados.includes('pensamiento') ? '[X] SELECCIONADO' : '[ ]'}</td>
+                    <td style="text-align: center; font-weight: bold;">${ejesSeleccionados.includes('emprendimiento') ? '[X] SELECCIONADO' : '[ ]'}</td>
+                </tr>
+            </table>
+        </div>`;
+
+                let metodologia = document.getElementById('metodologiaActiva').value;
+                if (metodologia === 'otra') metodologia = document.getElementById('metodologiaPersonalizada').value || 'Metodología personalizada';
+                const metodologiasMap = { 'ABJ': 'Aprendizaje basado en juegos (ABJ)', 'ABR': 'Aprendizaje basado en retos (ABR)', 'APD': 'Aprendizaje Pensamiento por Diseño (APD)' };
                 contenidoHTML += `
-                        <div class="item-area" style="border-left-color: ${estaSeleccionada ? '#45258F' : '#cccccc'}; background: ${estaSeleccionada ? '#f0ebf9' : 'white'}">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-weight: ${estaSeleccionada ? 'bold' : 'normal'}; color: ${estaSeleccionada ? '#45258F' : '#333'}">
-                                    ${area}
-                                </span>
-                                <span style="font-weight: bold; font-size: 11pt; color: ${estaSeleccionada ? '#28a745' : '#ccc'}">
-                                    ${estaSeleccionada ? '[✓]' : '[  ]'}
-                                </span>
-                            </div>
-                        </div>
-                `;
-            });
-            
-            contenidoHTML += `
-                    </div>
-                </div>
-                
-                <!-- COLUMNA DERECHA: RESULTADOS DE APRENDIZAJE (RDA) -->
-                <div class="columna-rda">
-                    <div class="titulo-columna" style="color: #6c47c9; border-bottom-color: #6c47c9;">
-                        RESULTADOS DE APRENDIZAJE (RDA)
-                    </div>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 3mm;">
-            `;
-            
-            // Mostrar RdA solo para áreas seleccionadas
-            if (areasUnicas.size > 0) {
-                areasUnicas.forEach(area => {
-                    const rda = RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][area] 
-                        ? RDA_POR_CICLO[ciclo][area] 
-                        : 'No definido para este ciclo/nivel';
-                    
-                    contenidoHTML += `
-                        <div class="item-rda">
-                            <div style="font-weight: 600; color: #333; margin-bottom: 1.5mm; font-size: 10pt;">
-                                ${area}:
-                            </div>
-                            <div style="font-size: 9.5pt; line-height: 1.4; color: #555;">
-                                ${rda}
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                contenidoHTML += `
-                    <div style="padding: 4mm; text-align: center; color: #999; font-style: italic; font-size: 10pt;">
-                        Seleccione áreas de conocimiento para ver los Resultados de Aprendizaje
-                    </div>
-                `;
+        <div class="seccion">
+            <div class="titulo-seccion">METODOLOGÍA ACTIVA</div>
+            <div class="tarjeta"><div style="text-align: center; font-weight: bold;">${metodologiasMap[metodologia] || metodologia}</div></div>
+        </div>`;
             }
-            
-            contenidoHTML += `
-                    </div>
-                </div>
-            </div> <!-- Fin del grid de 2 columnas -->
-            
-            <div style="text-align: center; font-size: 9pt; color: #666; margin-top: 3mm; font-style: italic;">
-                Nota: Cada Área de Conocimiento tiene su correspondiente Resultado de Aprendizaje (RdA) según el ciclo seleccionado
-            </div>
-        </div>
-    `;
-        }
-        
-        // SABERES GLOBALES - CORREGIDO
-        if (exportarSaberesGlobales) {
-            contenidoHTML += `
+
+            if (exportarSaberes && areasUnicas.size > 0) {
+                const ciclo = document.getElementById('ciclo').value;
+                contenidoHTML += `
+        <div class="seccion">
+            <div class="titulo-seccion">ÁREAS Y RESULTADOS DE APRENDIZAJE</div>
+            <table class="tabla">
+                <tr><th>Área</th><th>Resultado de Aprendizaje (RdA)</th></tr>`;
+                areasUnicas.forEach(area => {
+                    const rda = RDA_POR_CICLO[ciclo]?.[area] || 'No definido';
+                    contenidoHTML += `<tr><td>${area}</td><td>${rda}</td></tr>`;
+                });
+                contenidoHTML += `</table></div>`;
+            }
+
+            if (exportarSaberesGlobales) {
+                contenidoHTML += `
         <div class="seccion">
             <div class="titulo-seccion">SABERES GLOBALES</div>
-            
             <div class="grid-3">
-                <!-- CONCEPTUALES -->
-                <div class="tarjeta">
-                    <div class="tarjeta-titulo">Saberes Conceptuales (Saber)</div>
-                    <div class="tarjeta-contenido">
-            `;
-            
-            if (saberesSeleccionados.size > 0) {
-                contenidoHTML += Array.from(saberesSeleccionados).map(saber => 
-                    `<div style="margin-bottom: 1mm; padding-left: 2mm; border-left: 2pt solid #45258F;">• ${saber}</div>`
-                ).join('');
-            } else {
-                contenidoHTML += '<div style="color: #999; font-style: italic;">No se han seleccionado saberes conceptuales</div>';
-            }
-            
-            contenidoHTML += `
-                    </div>
-                </div>
-                
-                <!-- PROCEDIMENTALES -->
-                <div class="tarjeta">
-                    <div class="tarjeta-titulo">Saberes Procedimentales (Saber Hacer)</div>
-                    <div class="tarjeta-contenido">
-            `;
-            
-            if (saberesProcedimentalesGlobales.size > 0) {
-                const procMap = {
-                    'reconoce': 'Reconoce patrones',
-                    'abstrae': 'Abstrae',
-                    'generaliza': 'Generaliza',
-                    'transfiere': 'Transfiere',
-                    'modulariza': 'Modulariza',
-                    'formula': 'Formula algoritmos',
-                    'remezcla': 'Remezcla',
-                    'depura': 'Depura',
-                    'programa': 'Programa',
-                    'comunica': 'Comunica',
-                    'colabora': 'Colabora',
-                    'piensa': 'Piensa creativamente',
-                    'maneja': 'Maneja tecnologías éticamente'
-                };
-                
-                contenidoHTML += Array.from(saberesProcedimentalesGlobales).map(proc => 
-                    `<div style="margin-bottom: 1mm; padding-left: 2mm; border-left: 2pt solid #6c47c9;">• ${procMap[proc] || proc}</div>`
-                ).join('');
-            } else {
-                contenidoHTML += '<div style="color: #999; font-style: italic;">No se han seleccionado saberes procedimentales</div>';
-            }
-            
-            contenidoHTML += `
-                    </div>
-                </div>
-                
-                <!-- ACTITUDINALES -->
-                <div class="tarjeta">
-                    <div class="tarjeta-titulo">Saberes Actitudinales (Saber Ser)</div>
-                    <div class="tarjeta-contenido">
-            `;
-            
-            if (saberesActitudinalesGlobales.size > 0) {
-                const actMap = {
-                    'gusto': 'Gusto por la precisión',
-                    'aprender': 'Aprender del error',
-                    'flexibilidad': 'Flexibilidad',
-                    'tolerancia': 'Tolerancia a la frustración'
-                };
-                
-                contenidoHTML += Array.from(saberesActitudinalesGlobales).map(act => 
-                    `<div style="margin-bottom: 1mm; padding-left: 2mm; border-left: 2pt solid #28a745;">• ${actMap[act] || act}</div>`
-                ).join('');
-            } else {
-                contenidoHTML += '<div style="color: #999; font-style: italic;">No se han seleccionado saberes actitudinales</div>';
-            }
-            
-            contenidoHTML += `
-                    </div>
-                </div>
-            </div> <!-- Fin del grid-3 -->
-        </div>
-    `;
-        }
-        
-        // TRANSICIÓN
-        contenidoHTML += `
-        <div class="linea-transicion"></div>
-        <div class="texto-transicion">Continuación: Aplicación de saberes en la planificación semanal</div>
-`;
-        
-        // ✅ PLANIFICACIÓN POR SEMANAS - VERSIÓN MEJORADA CON AJUSTE AUTOMÁTICO
-        if (exportarSemanas && semanas.length > 0) {
-            contenidoHTML += `
-        <div class="seccion" style="page-break-inside: avoid;">
-            <div class="titulo-seccion" style="page-break-after: avoid;">PLANIFICACIÓN POR SEMANAS</div>
-    `;
-            
-            semanas.forEach((semana, index) => {
-                // ✅ Obtener contenido formateado con ajuste automático
-                const contenidoIndicadores = formatearContenidoConAjuste(semana.indicadores, 'indicadores');
-                const contenidoEstrategias = formatearContenidoConAjuste(semana.actividades, 'estrategias');
-                const contenidoEvaluacion = formatearContenidoConAjuste(semana.evaluacion, 'evaluacion');
-                
-                contenidoHTML += `
-            <!-- SEMANA ${index + 1} - CON AJUSTE DINÁMICO -->
-            <div class="contenido-adaptable" style="margin-bottom: ${index < semanas.length - 1 ? '6mm' : '0'};">
-            
-                <!-- TÍTULO DE SEMANA - NO SE SEPARA DEL CONTENIDO -->
-                <div class="encabezado-semana-mejorado" style="page-break-after: avoid;">
-                    <span style="font-size: 11pt;">📅</span> ${semana.nombre} - ${semana.lecciones}
-                </div>
-                
-                <!-- CONTENIDO: Se divide inteligentemente si es necesario -->
-                <div style="
-                    display: flex;
-                    border: 0.5pt solid #ddd;
-                    border-top: none;
-                    border-radius: 0 0 1.5mm 1.5mm;
-                    overflow: hidden;
-                    min-height: ${Math.max(
-                        contenidoIndicadores.minHeight,
-                        contenidoEstrategias.minHeight,
-                        contenidoEvaluacion.minHeight
-                    )};
-                ">
-                
-                    <!-- COLUMNA 1: INDICADORES DE LOGRO -->
-                    <div style="
-                        flex: 1;
-                        border-right: 0.5pt solid #eee;
-                        padding: 2.5mm;
-                        display: flex;
-                        flex-direction: column;
-                    ">
-                        <div class="encabezado-contenido">
-                            Indicadores de logro
-                        </div>
-                        <div style="
-                            flex-grow: 1;
-                            overflow: hidden;
-                        " class="texto-ajustado">
-                            ${contenidoIndicadores.html}
-                        </div>
-                        <div style="
-                            font-size: 7pt;
-                            color: #999;
-                            text-align: right;
-                            margin-top: 1mm;
-                            font-style: italic;
-                        ">
-                            Tamaño: ${contenidoIndicadores.fontSize}
-                        </div>
-                    </div>
-                    
-                    <!-- COLUMNA 2: ESTRATEGIAS DE MEDIACIÓN -->
-                    <div style="
-                        flex: 1;
-                        border-right: 0.5pt solid #eee;
-                        padding: 2.5mm;
-                        display: flex;
-                        flex-direction: column;
-                    ">
-                        <div class="encabezado-contenido">
-                            Estrategias de Mediación
-                        </div>
-                        <div style="
-                            flex-grow: 1;
-                            overflow: hidden;
-                        " class="texto-ajustado">
-                            ${contenidoEstrategias.html}
-                        </div>
-                        <div style="
-                            font-size: 7pt;
-                            color: #999;
-                            text-align: right;
-                            margin-top: 1mm;
-                            font-style: italic;
-                        ">
-                            Tamaño: ${contenidoEstrategias.fontSize}
-                        </div>
-                    </div>
-                    
-                    <!-- COLUMNA 3: INDICADORES DE EVALUACIÓN -->
-                    <div style="
-                        flex: 1;
-                        padding: 2.5mm;
-                        display: flex;
-                        flex-direction: column;
-                    ">
-                        <div class="encabezado-contenido">
-                            Indicadores de evaluación
-                        </div>
-                        <div style="
-                            flex-grow: 1;
-                            overflow: hidden;
-                        " class="texto-ajustado">
-                            ${contenidoEvaluacion.html}
-                        </div>
-                        <div style="
-                            font-size: 7pt;
-                            color: #999;
-                            text-align: right;
-                            margin-top: 1mm;
-                            font-style: italic;
-                        ">
-                            Tamaño: ${contenidoEvaluacion.fontSize}
-                        </div>
-                    </div>
-                    
-                </div>
-                
+                <div class="tarjeta"><div class="tarjeta-titulo">Conceptuales</div>${saberesSeleccionados.size ? Array.from(saberesSeleccionados).map(s => `• ${s}`).join('<br>') : '<em>No seleccionados</em>'}</div>
+                <div class="tarjeta"><div class="tarjeta-titulo">Procedimentales</div>${saberesProcedimentalesGlobales.size ? Array.from(saberesProcedimentalesGlobales).map(p => `• ${p}`).join('<br>') : '<em>No seleccionados</em>'}</div>
+                <div class="tarjeta"><div class="tarjeta-titulo">Actitudinales</div>${saberesActitudinalesGlobales.size ? Array.from(saberesActitudinalesGlobales).map(a => `• ${a}`).join('<br>') : '<em>No seleccionados</em>'}</div>
             </div>
-            
-            <!-- LÍNEA DIVISORIA (solo entre semanas) -->
-            ${index < semanas.length - 1 ? `
-                <div style="
-                    height: 0.5pt;
-                    background: linear-gradient(to right, transparent, #6c47c9, transparent);
-                    margin: 3mm 0;
-                "></div>
-            ` : ''}
-        `;
-            });
-            
-            contenidoHTML += `
-        </div>
-    `;
-        }
-        
-        // REFLEXIONES
-        if (exportarReflexiones) {
-            contenidoHTML += `
+        </div>`;
+            }
+
+            if (exportarSemanas && semanas.length > 0) {
+                contenidoHTML += `<div class="seccion"><div class="titulo-seccion">PLANIFICACIÓN POR SEMANAS</div>`;
+                semanas.forEach((semana, index) => {
+                    contenidoHTML += `
+            <div style="margin-bottom: 6mm;">
+                <div class="encabezado-semana">
+                    📅 Semana ${index + 1} - ${semana.lecciones}<br>
+                    <span style="font-size: 9pt; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 12px; display: inline-block; margin-top: 2px;">
+                        🎯 Eje: ${semana.eje ? (semana.eje === 'ciudadania' ? 'Ciudadanía digital' : semana.eje === 'pensamiento' ? 'Pensamiento computacional' : 'Emprendimiento') : 'No seleccionado'}
+                    </span>
+                </div>
+                <table class="tabla">
+                    <tr><th>Indicadores de logro</th><th>Estrategias de Mediación</th><th>Indicadores de evaluación</th></tr>
+                    <tr><td>${limpiarContenido(semana.indicadores) || 'No especificado'}</td>
+                        <td>${limpiarContenido(semana.actividades) || 'No especificado'}</td>
+                        <td>${limpiarContenido(semana.evaluacion) || 'No especificado'}</td></tr>
+                </table>
+            </div>`;
+                });
+                contenidoHTML += `</div>`;
+            }
+
+            if (exportarReflexiones) {
+                contenidoHTML += `
         <div class="seccion">
             <div class="titulo-seccion">REFLEXIONES DOCENTES</div>
             <div class="grid-3">
-                <div class="tarjeta">
-                    <div class="tarjeta-titulo" style="color: #28a745;">¿Qué funcionó?</div>
-                    <div class="tarjeta-contenido">
-                        ${formatearContenidoComoHTML(document.getElementById('queFunciono').value)}
-                    </div>
-                </div>
-                
-                <div class="tarjeta">
-                    <div class="tarjeta-titulo" style="color: #ff6b6b;">¿Qué no funcionó?</div>
-                    <div class="tarjeta-contenido">
-                        ${formatearContenidoComoHTML(document.getElementById('queNoFunciono').value)}
-                    </div>
-                </div>
-                
-                <div class="tarjeta">
-                    <div class="tarjeta-titulo" style="color: #ff9800;">¿Qué puedo mejorar?</div>
-                    <div class="tarjeta-contenido">
-                        ${formatearContenidoComoHTML(document.getElementById('queMejorar').value)}
-                    </div>
-                </div>
+                <div class="tarjeta"><div class="tarjeta-titulo">¿Qué funcionó?</div>${limpiarContenido(document.getElementById('queFunciono').value) || '<em>No especificado</em>'}</div>
+                <div class="tarjeta"><div class="tarjeta-titulo">¿Qué no funcionó?</div>${limpiarContenido(document.getElementById('queNoFunciono').value) || '<em>No especificado</em>'}</div>
+                <div class="tarjeta"><div class="tarjeta-titulo">¿Qué mejorar?</div>${limpiarContenido(document.getElementById('queMejorar').value) || '<em>No especificado</em>'}</div>
             </div>
-        </div>
-        
-        <div class="seccion">
-            <div class="titulo-seccion">OBSERVACIONES Y/O RECOMENDACIONES DIDÁCTICAS POR NIVEL</div>
-            <div class="tarjeta">
-                <div class="tarjeta-contenido">
-                    ${formatearContenidoComoHTML(document.getElementById('observaciones').value)}
-                </div>
+            <div class="tarjeta" style="margin-top: 4mm;">
+                <div class="tarjeta-titulo">Observaciones</div>
+                ${limpiarContenido(document.getElementById('observaciones').value) || '<em>No especificado</em>'}
             </div>
-        </div>
-`;
-        }
-        
-        // NOTA IA
-        contenidoHTML += `
-        <div class="tarjeta" style="background-color: #e8f4fd; border-color: #bbdefb;">
-            <div class="tarjeta-titulo" style="color: #0d47a1;">Nota importante sobre el uso de IA</div>
-            <div class="tarjeta-contenido">
-                Lo que brinda la IA debe ser contextualizado por el educador, quien decide, observa y ejecuta según su criterio y conocimiento del grupo. 
-                La IA proporciona estrategias de mediación que deben ser definidas, reagrupadas y reestructuradas por el educador considerando el orden, 
-                estructura y forma de implementación más adecuada.
-            </div>
-        
-            <div class="tarjeta" style="background-color: #FFFFFFFF; border-color: #FFFFFFFF;">
-            <div class="tarjeta-titulo" style="color: #0d47a1;">Nota de Licencia y de uso:</div>
-            <div class="tarjeta-contenido">
-            <p style="font-size: 12px; color: #555; text-align: justify; font-style: italic;">
-            <strong>📄</strong> Este recurso de planificación didáctica fue elaborado utilizando la <strong>Plantilla de Planeamiento Didáctico del PNFT del Departamento de Investigación, Desarrollo e Implementación-MEP.</strong> <br><br>
+        </div>`;
+            }
 
-            <strong>📄</strong>Este recurso y sus derivados se ofrecen bajo una <strong>Licencia de Uso Educativo</strong> que permite su uso, adaptación y distribución no comercial dentro del sistema educativo nacional, con la obligación de atribución al autor original. Queda <strong>prohibida su venta</strong> o inclusión en materiales comerciales.<br><br>
-            </div>
-        </div>
-`;
+            if (incluirPiePagina) {
+                contenidoHTML += `
+        <div style="text-align: center; margin-top: 8mm; padding-top: 4mm; border-top: 1pt solid #45258F;">
+            <div style="font-weight: bold; color: #45258F;">DIDI - Departamento de Investigación, Desarrollo e Implementación</div>
+            <div style="color: #6c47c9;">Dirección de Recursos Tecnológicos en Educación</div>
+        </div>`;
+            }
 
-        // PIE DE PÁGINA
-        if (incluirPiePagina) {
             contenidoHTML += `
-        <div class="texto-centrado" style="margin-top: 8mm; padding-top: 4mm; border-top: 1pt solid #45258F;">
-            <div style="font-weight: bold; color: #45258F; margin-bottom: 2mm; font-size: 11pt;">
-                DIDI - Departamento de Investigación, Desarrollo e Implementación
-            </div>
-            <div style="color: #6c47c9; margin-bottom: 2mm; font-size: 10pt;">
-                Dirección de Recursos Tecnológicos en Educación
-            </div>
-            <div style="color: #888; font-size: 9pt;">
-                Ministerio de Educación Pública - Gobierno de Costa Rica
-            </div>
-        </div>
-`;
-        }
-        
-        contenidoHTML += `
     </div>
 </body>
 </html>`;
-        
-        // ===== MÉTODO DEFINITIVO PARA GENERAR PDF =====
-        try {
-            // Crear ventana para vista previa
+
             const ventanaPreview = window.open('', '_blank');
             if (!ventanaPreview) {
                 const blob = new Blob([contenidoHTML], {type: 'text/html'});
@@ -5258,99 +3668,14 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-                
                 alert('Se ha descargado un archivo HTML. Ábrelo en tu navegador y usa Ctrl+P para imprimir.');
                 return;
             }
             
             ventanaPreview.document.write(contenidoHTML);
             ventanaPreview.document.close();
-            
-            setTimeout(() => {
-                ventanaPreview.focus();
-                
-                // Instrucciones optimizadas
-                ventanaPreview.document.body.innerHTML += `
-                    <div class="no-imprimir" style="
-                        position: fixed; 
-                        top: 10px; 
-                        right: 10px; 
-                        background: #45258F; 
-                        color: white; 
-                        padding: 10px; 
-                        border-radius: 5px; 
-                        z-index: 10000;
-                        font-size: 10pt;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-                        max-width: 300px;
-                    ">
-                        <strong>📋 Instrucciones para imprimir:</strong><br>
-                        1. Presione <strong>Ctrl+P</strong><br>
-                        2. Seleccione <strong>"Guardar como PDF"</strong><br>
-                        3. Ajuste márgenes a <strong>15mm</strong><br>
-                        4. Active <strong>"Fondo gráfico"</strong><br>
-                        5. Guarde el archivo
-                    </div>
-                `;
-                
-                const printButton = ventanaPreview.document.createElement('button');
-                printButton.innerHTML = '🖨️ Imprimir Ahora';
-                printButton.classList.add("no-imprimir");
-                printButton.style.cssText = `
-                    position: fixed;
-                    bottom: 20px;
-                    right: 10px;
-                    background: #28a745;
-                    color: white;
-                    border: none;
-                    padding: 10px 15px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-weight: bold;
-                    z-index: 10000;
-                    font-size: 11pt;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-                `;
-                printButton.onclick = () => ventanaPreview.print();
-                ventanaPreview.document.body.appendChild(printButton);
-                
-            }, 1000);
-            
-        } catch (error) {
-            console.error('Error al generar PDF:', error);
-            
-            const blob = new Blob([contenidoHTML], {type: 'text/html'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${nombreArchivo}_para_imprimir.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            alert('Se ha descargado un archivo HTML listo para imprimir. Ábrelo y usa Ctrl+P.');
         }
-        
-        cerrarExportModal();
-        
-    } catch (error) {
-        console.error('Error general:', error);
-        alert('Error: ' + error.message + '\n\nSe ha descargado un archivo HTML de respaldo.');
-        
-        const blob = new Blob(['<html><body><h1>Documento de respaldo</h1></body></html>'], {type: 'text/html'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${nombreArchivo}_respaldo.html`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-}
 
-        // ✅ FUNCIÓN DEPURADA PARA PROMPT IA GENERAL
         function generarPromptCompleto() {
             const ciclo = document.getElementById('ciclo').value;
             const nivel = document.getElementById('nivel').value;
@@ -5360,320 +3685,106 @@
                 return;
             }
 
-            // Obtener información de ejes y metodología
             const ejesSeleccionados = obtenerEjesTransversales();
             const metodologiaSeleccionada = obtenerMetodologiaActiva();
 
-            // Obtener TODOS los indicadores de logro de todas las semanas
             let todosIndicadoresLogro = [];
             semanas.forEach((semana, index) => {
                 const indicadoresSemana = obtenerIndicadoresLogroSemana(index + 1);
                 todosIndicadoresLogro = todosIndicadoresLogro.concat(indicadoresSemana);
             });
-            
-            // Filtrar duplicados
             todosIndicadoresLogro = [...new Set(todosIndicadoresLogro)];
             
-            let prompt = `CONTEXTO GENERAL:\n`;
+            let prompt = "🎯 **CONTEXTO DEL GRUPO (Complete los espacios en []):**\n";
+            prompt += "• Descripción del grupo: [Escriba aquí las características de sus estudiantes]\n";
+            prompt += "• Adecuaciones curriculares:\n";
+            prompt += "  - ¿Hay estudiantes con adecuación significativa? [Sí/No] - ¿Cuántos? [ ]\n";
+            prompt += "  - ¿Hay estudiantes con adecuación no significativa? [Sí/No] - ¿Cuántos? [ ]\n";
+            prompt += "  - ¿Hay estudiantes con adecuación de acceso? [Sí/No] - ¿Cuáles? [ ]\n";
+            prompt += "• Acceso a tecnología:\n";
+            prompt += "  - ¿Tienen dispositivos en casa? [Sí/No/Parcial]\n";
+            prompt += "  - ¿Tienen internet? [Sí/No/Parcial]\n";
+            prompt += "  - ¿Contamos con equipo en el centro? [Sí/No]\n";
+            prompt += "\n---\n\n";
+
+            prompt += `CONTEXTO GENERAL:\n`;
             prompt += `• Curso lectivo: ${document.getElementById('cursoLectivo').value}\n`;
             prompt += `• Semestre: ${document.getElementById('semestre').value}\n`;
             prompt += `• Total de lecciones: ${document.getElementById('leccionesPlanificadas').value}\n`;
             prompt += `• Meses: ${document.getElementById('mesInicio').value} a ${document.getElementById('mesFinal').value}\n`;
             prompt += `• Total de semanas: ${semanas.length}\n\n`;
 
-            // EJES Y METODOLOGÍA
             prompt += `• Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
             prompt += `• Metodología activa: ${metodologiaSeleccionada}\n\n`;
 
-            // RESUMEN POR SEMANAS
             prompt += `RESUMEN POR SEMANAS:\n`;
             semanas.forEach((semana, index) => {
-                prompt += `SEMANA ${index + 1} (${semana.lecciones}):\n`;
+                prompt += `--- SEMANA ${index + 1} (${semana.lecciones}) ---\n`;
+                prompt += `• Eje de la semana: **${semana.eje ? obtenerNombreEje(semana.eje) : 'No seleccionado'}**\n`;
                 prompt += `• Áreas: ${semana.areas.join(', ') || 'No seleccionadas'}\n`;
                 
-                // ✅ SABERES CONCEPTUALES GLOBALES
                 prompt += `• Saberes conceptuales: `;
-                if (semana.saberes.length > 0) {
-                    prompt += semana.saberes.join(', ');
-                } else {
-                    prompt += 'No seleccionados';
-                }
+                prompt += semana.saberes.length > 0 ? semana.saberes.join(', ') : 'No seleccionados';
                 prompt += `\n`;
                 
-                // ✅ SABERES PROCEDIMENTALES GLOBALES
+                const procMap = {
+                    'reconoce': 'Reconoce patrones', 'abstrae': 'Abstrae', 'generaliza': 'Generaliza',
+                    'transfiere': 'Transfiere', 'modulariza': 'Modulariza', 'formula': 'Formula algoritmos',
+                    'remezcla': 'Remezcla', 'depura': 'Depura', 'programa': 'Programa',
+                    'comunica': 'Comunica', 'colabora': 'Colabora', 'piensa': 'Piensa creativamente',
+                    'maneja': 'Maneja tecnologías éticamente'
+                };
                 prompt += `• Saberes procedimentales: `;
-                if (semana.procedimentales.length > 0) {
-                    const procMap = {
-                        'reconoce': 'Reconoce patrones',
-                        'abstrae': 'Abstrae',
-                        'generaliza': 'Generaliza',
-                        'transfiere': 'Transfiere',
-                        'modulariza': 'Modulariza',
-                        'formula': 'Formula algoritmos',
-                        'remezcla': 'Remezcla',
-                        'depura': 'Depura',
-                        'programa': 'Programa',
-                        'comunica': 'Comunica',
-                        'colabora': 'Colabora',
-                        'piensa': 'Piensa creativamente',
-                        'maneja': 'Maneja tecnologías éticamente'
-                    };
-                    const procNombres = semana.procedimentales.map(p => procMap[p] || p);
-                    prompt += procNombres.join(', ');
-                } else {
-                    prompt += 'No seleccionados';
-                }
+                prompt += semana.procedimentales.length > 0 ? semana.procedimentales.map(p => procMap[p] || p).join(', ') : 'No seleccionados';
                 prompt += `\n`;
                 
-                // ✅ SABERES ACTITUDINALES GLOBALES
+                const actMap = {
+                    'gusto': 'Gusto por la precisión', 'aprender': 'Aprender del error',
+                    'flexibilidad': 'Flexibilidad', 'tolerancia': 'Tolerancia a la frustración'
+                };
                 prompt += `• Saberes actitudinales: `;
-                if (semana.actitudinales.length > 0) {
-                    const actMap = {
-                        'gusto': 'Gusto por la precisión',
-                        'aprender': 'Aprender del error',
-                        'flexibilidad': 'Flexibilidad',
-                        'tolerancia': 'Tolerancia a la frustración'
-                    };
-                    const actNombres = semana.actitudinales.map(a => actMap[a] || a);
-                    prompt += actNombres.join(', ');
-                } else {
-                    prompt += 'No seleccionados';
-                }
+                prompt += semana.actitudinales.length > 0 ? semana.actitudinales.map(a => actMap[a] || a).join(', ') : 'No seleccionados';
                 prompt += `\n`;
                 
-                // ✅ INDICADORES DE LOGRO
-                prompt += `• Indicadores de logro: `;
                 const indicadoresSemana = obtenerIndicadoresLogroSemana(index + 1);
-                if (indicadoresSemana.length > 0) {
-                    prompt += indicadoresSemana.join(' | ');
-                } else {
-                    prompt += 'No seleccionados';
-                }
-                prompt += `\n`;
+                prompt += `• Indicadores de logro: `;
+                prompt += indicadoresSemana.length > 0 ? indicadoresSemana.join(' | ') : 'No seleccionados';
+                prompt += `\n\n`;
             });
-            prompt += `\n`;
 
-            // INDICADORES DE LOGRO GLOBALES
-            prompt += `🎯 INDICADORES DE LOGRO GLOBALES (Todas las semanas):\n`;
-            prompt += `Total de indicadores únicos: ${todosIndicadoresLogro.length}\n\n`;
-            
+            prompt += `🎯 INDICADORES DE LOGRO GLOBALES:\n`;
             if (todosIndicadoresLogro.length > 0) {
-                prompt += `Indicadores de logro que eligió en las semanas:\n`;
                 todosIndicadoresLogro.forEach((indicador, index) => {
                     prompt += `${index + 1}. ${indicador}\n`;
                 });
-                prompt += `\n`;
-            }
-
-            // SABERES CONCEPTUALES GLOBALES
-            prompt += `📚 SABERES CONCEPTUALES GLOBALES (Todas las semanas):\n`;
-            if (saberesSeleccionados.size > 0) {
-                Array.from(saberesSeleccionados).forEach(saber => {
-                    prompt += `• ${saber}\n`;
-                });
             } else {
-                prompt += `No se han seleccionado saberes conceptuales\n`;
+                prompt += `No se han seleccionado indicadores de logro\n`;
             }
             prompt += `\n`;
 
-            // SOLICITUD
             prompt += `SOLICITO UN RESUMEN GENERAL QUE:\n`;
-            prompt += `1. Distribuye los indicadores de logro por la cantidad de semanas y lecciones del ciclo, nivel y Módulo seleccionado, en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, Metodología y el indicador de evaluación sugerido. Mostrando claridad y organización.\n`;
+            prompt += `1. Distribuye los indicadores de logro por semanas en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, Metodología y el indicador de evaluación sugerido.\n`;
             prompt += `2. Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
             prompt += `3. Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
             prompt += `4. Estrategias de mediación que integren, den secuencialidad coherente y articulación de los saberes conceptuales.\n`;
             prompt += `5. Evidenciar los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
             prompt += `6. Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
-            // INSTRUMENTO SUGERIDO
-            prompt += `• Instrumento sugerido según el reglamento de evaluación del Mep: \n`;
-            
+            prompt += `🎯 **SOLICITUD DUA (considerando el contexto):**\n`;
+            prompt += `1. Valide si las actividades y metodología propuestas se ajustan al contexto y población descritos.\n`;
+            prompt += `2. Si hay estudiantes con adecuaciones, proponga modificaciones específicas para:\n`;
+            prompt += `   - Adecuación significativa\n`;
+            prompt += `   - Adecuación no significativa\n`;
+            prompt += `   - Adecuación de acceso\n`;
+            prompt += `3. Considerando el acceso a tecnología:\n`;
+            prompt += `   - Si HAY acceso: recomiende herramientas digitales específicas\n`;
+            prompt += `   - Si NO HAY acceso: proponga actividades desconectadas (offline)\n`;
+            prompt += `4. Verifique la articulación de saberes conceptuales, procedimentales y actitudinales.\n`;
+
             document.getElementById('promptText').value = prompt;
             document.getElementById('promptModal').style.display = 'block';
         }
 
-        function cerrarPromptModal() {
-            document.getElementById('promptModal').style.display = 'none';
-        }
-
-        function copiarPrompt() {
-            const promptText = document.getElementById('promptText');
-            promptText.select();
-            document.execCommand('copy');
-            alert('Prompt copiado al portapapeles');
-        }
-
-        function abrirEnCopilot() {
-            const url = `https://copilot.microsoft.com/`;
-            window.open(url, '_blank');
-        }
-
-        function abrirEnChatGPT() {
-            const url = `https://chat.openai.com/`;
-            window.open(url, '_blank');
-        }
-
-        // ===== FUNCIONES PARA EL MENÚ DE GUARDADO =====
-        function toggleMenuGuardar(event) {
-            event.stopPropagation();
-            const menu = document.getElementById('menuGuardar');
-            menu.classList.toggle('abierto');
-        }
-
-        function ejecutarGuardarNormal() {
-            // Cerrar menú
-            document.getElementById('menuGuardar').classList.remove('abierto');
-            
-            // Ejecutar guardado normal
-            const plan = obtenerDatosPlan();
-            const dataStr = JSON.stringify(plan, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const enlace = document.createElement('a');
-            enlace.download = 'planeamiento-didáctico.json';
-            enlace.href = URL.createObjectURL(dataBlob);
-            enlace.click();
-            
-            setTimeout(() => URL.revokeObjectURL(enlace.href), 100);
-            
-            // Mostrar retroalimentación sutil
-            mostrarMensaje('✅ Archivo .json guardado exitosamente');
-        }
-
-        function ejecutarGuardarOffline() {
-            // Cerrar menú
-            document.getElementById('menuGuardar').classList.remove('abierto');
-            
-            // Ejecutar guardado offline
-            descargarVersionPortable();
-        }
-
-        // Cerrar menú si se hace clic fuera
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('menuGuardar');
-            const contenedor = document.querySelector('.guardar-container');
-            
-            if (menu && contenedor && !contenedor.contains(e.target)) {
-                menu.classList.remove('abierto');
-            }
-        });
-
-        // ===== FUNCIÓN PARA VERSIÓN PORTABLE/OFFLINE =====
-        function descargarVersionPortable() {
-            try {
-                // 1. Obtener el HTML completo
-                const htmlCompleto = document.documentElement.outerHTML;
-                
-                // 2. Crear versión portable con CSS y JS incluidos
-                const fecha = new Date().toLocaleDateString('es-CR');
-                const nombreArchivo = `Planeamiento-Didáctico-Offline-${fecha.replace(/\//g, '-')}.html`;
-                
-                // 3. Crear y descargar el archivo
-                const blob = new Blob([htmlCompleto], {type: 'text/html;charset=utf-8'});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = nombreArchivo;
-                
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                // 4. Mostrar retroalimentación
-                mostrarMensaje('✅ Versión offline descargada (funciona sin internet)');
-                
-            } catch (error) {
-                console.error('Error al crear versión portable:', error);
-                mostrarMensaje('❌ Error al crear versión offline', true);
-            }
-        }
-
-        // ===== FUNCIONES PARA OBTENER DATOS PEDAGÓGICOS =====
-        function obtenerEjesTransversales() {
-            const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
-            const ejesMap = {
-                'ciudadania': 'Ciudadanía y ética digital',
-                'pensamiento': 'Pensamiento computacional',
-                'emprendimiento': 'Emprendimiento e Innovación'
-            };
-            
-            return ejesSeleccionados.map(eje => ejesMap[eje] || eje);
-        }
-
-        function obtenerMetodologiaActiva() {
-            let metodo = document.getElementById('metodologiaActiva').value;
-            if (metodo === 'otra') {
-                metodo = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología';
-            }
-            
-            const metodologiasMap = {
-                'ABJ': 'Aprendizaje basado en juegos (ABJ)',
-                'ABR': 'Aprendizaje basado en retos (ABR)',
-                'APD': 'Aprendizaje Pensamiento por Diseño (APD)'
-            };
-            
-            return metodo ? (metodologiasMap[metodo] || metodo) : 'Pendiente';
-        }
-
-        // Función para mostrar mensajes temporales
-        function mostrarMensaje(texto, esError = false) {
-            // Eliminar mensaje anterior si existe
-            const mensajeAnterior = document.querySelector('.mensaje-temporal');
-            if (mensajeAnterior) {
-                mensajeAnterior.remove();
-            }
-            
-            // Crear nuevo mensaje
-            const mensaje = document.createElement('div');
-            mensaje.className = 'mensaje-temporal';
-            mensaje.style.background = esError ? 'var(--danger-color)' : 'var(--success-color)';
-            mensaje.style.color = 'white';
-            mensaje.style.padding = '12px 20px';
-            mensaje.style.borderRadius = '6px';
-            mensaje.style.position = 'fixed';
-            mensaje.style.bottom = '20px';
-            mensaje.style.right = '20px';
-            mensaje.style.zIndex = '10000';
-            mensaje.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-            mensaje.style.display = 'flex';
-            mensaje.style.alignItems = 'center';
-            mensaje.style.gap = '10px';
-            mensaje.style.fontSize = '14px';
-            mensaje.style.maxWidth = '400px';
-            mensaje.style.wordWrap = 'break-word';
-            mensaje.style.animation = 'slideIn 0.3s ease';
-            
-            mensaje.innerHTML = `
-                ${esError ? '❌' : '✅'} 
-                <span>${texto}</span>
-            `;
-            
-            document.body.appendChild(mensaje);
-            
-            // Eliminar automáticamente después de 4 segundos
-            setTimeout(() => {
-                if (mensaje.parentNode) {
-                    mensaje.style.animation = 'fadeOut 0.3s ease';
-                    setTimeout(() => {
-                        if (mensaje.parentNode) mensaje.remove();
-                    }, 300);
-                }
-            }, 4000);
-        }
-
-        function cerrarPromptSemanaModal() {
-            document.getElementById('promptSemanaModal').style.display = 'none';
-        }
-
-        function copiarPromptSemana() {
-            const promptText = document.getElementById('promptSemanaText');
-            promptText.select();
-            document.execCommand('copy');
-            alert('Prompt de semana copiado al portapapeles');
-        }
-
-        // ✅ FUNCIÓN DEPURADA PARA PROMPT POR SEMANA
         function generarPromptSemana(numeroSemana) {
             const semana = semanas[numeroSemana-1];
             const ciclo = document.getElementById('ciclo').value;
@@ -5689,24 +3800,31 @@
                 return;
             }
 
-            // Obtener información de ejes y metodología
             const ejesSeleccionados = obtenerEjesTransversales();
             const metodologiaSeleccionada = obtenerMetodologiaActiva();
-
-            // Obtener indicadores de logro específicos
             const indicadoresLogro = obtenerIndicadoresLogroSemana(numeroSemana);
             
-            let prompt = `🔹PLANIFICACIÓN SEMANA ${numeroSemana} - ${nivel} - ${ciclo} 🔹\n\n`;
+            let prompt = "🎯 **CONTEXTO DEL GRUPO PARA ESTA SEMANA (Complete los espacios en []):**\n";
+            prompt += "• Descripción del grupo: [Escriba aquí las características de sus estudiantes]\n";
+            prompt += "• Adecuaciones curriculares para esta semana:\n";
+            prompt += "  - ¿Hay estudiantes con adecuación significativa? [Sí/No] - ¿Cuántos? [ ]\n";
+            prompt += "  - ¿Hay estudiantes con adecuación no significativa? [Sí/No] - ¿Cuántos? [ ]\n";
+            prompt += "  - ¿Hay estudiantes con adecuación de acceso? [Sí/No] - ¿Cuáles? [ ]\n";
+            prompt += "• Acceso a tecnología disponible para esta semana:\n";
+            prompt += "  - ¿Tienen dispositivos en casa? [Sí/No/Parcial]\n";
+            prompt += "  - ¿Tienen internet? [Sí/No/Parcial]\n";
+            prompt += "  - ¿Contamos con equipo en el centro? [Sí/No]\n";
+            prompt += "\n---\n\n";
+
+            prompt += `🔹 **PLANIFICACIÓN SEMANA ${numeroSemana} - ${nivel} - ${ciclo}** 🔹\n\n`;
             prompt += `📅 Periodo: ${semana.lecciones}\n`;
-            prompt += `🎯 Áreas: ${semana.areas.join(', ')}\n\n`;
-
-            // EJES Y METODOLOGÍA
-            prompt += `🎯 Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
+            prompt += `🎯 Eje transversal de la semana: **${semana.eje ? obtenerNombreEje(semana.eje) : 'No seleccionado'}**\n`;
             prompt += `🎓 Metodología activa: ${metodologiaSeleccionada}\n`;
-            prompt += `      Fase: ${metodologiaSeleccionada !== 'Pendiente' ? 'Redacte la información correspondiente según la fase que desee implementar.' : 'Pendiente'}\n\n`;
+            prompt += `📚 Áreas: ${semana.areas.join(', ')}\n\n`;
 
-            // INDICADORES DE LOGRO
-            prompt += `🎯 INDICADORES DE LOGRO SELECCIONADOS:\n`;
+            prompt += `🎯 Eje(s) transversal(es) global(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n\n`;
+
+            prompt += `🎯 **INDICADORES DE LOGRO SELECCIONADOS:**\n`;
             if (indicadoresLogro.length > 0) {
                 indicadoresLogro.forEach((indicador, index) => {
                     prompt += `${index + 1}. ${indicador}\n`;
@@ -5715,9 +3833,8 @@
                 prompt += `No se han seleccionado indicadores de logro\n`;
             }
             prompt += `\n`;
-            
-            // SABERES CONCEPTUALES
-            prompt += `📚 SABERES CONCEPTUALES:\n`;
+
+            prompt += `📚 **SABERES CONCEPTUALES:**\n`;
             if (semana.saberes.length > 0) {
                 semana.saberes.forEach(saber => {
                     prompt += `• ${saber}\n`;
@@ -5726,73 +3843,199 @@
                 prompt += `No se han seleccionado saberes conceptuales\n`;
             }
             prompt += `\n`;
-            
-            // SABERES PROCEDIMENTALES
-            prompt += `🛠️ SABERES PROCEDIMENTALES:\n`;
+
+            prompt += `🛠️ **SABERES PROCEDIMENTALES:**\n`;
             if (semana.procedimentales.length > 0) {
-                semana.procedimentales.forEach(proc => {
-                    const mapping = {
-                        'reconoce': '• Reconoce patrones',
-                        'abstrae': '• Abstrae',
-                        'generaliza': '• Generaliza',
-                        'transfiere': '• Transfiere',
-                        'modulariza': '• Modulariza',
-                        'formula': '• Formula algoritmos',
-                        'remezcla': '• Remezcla',
-                        'depura': '• Depura',
-                        'programa': '• Programa',
-                        'comunica': '• Comunica',
-                        'colabora': '• Colabora',
-                        'piensa': '• Piensa creativamente',
-                        'maneja': '• Maneja tecnologías éticamente'
-                    };
-                    prompt += `${mapping[proc] || `• ${proc}`}\n`;
-                });
+                const mapping = {
+                    'reconoce': '• Reconoce patrones', 'abstrae': '• Abstrae', 'generaliza': '• Generaliza',
+                    'transfiere': '• Transfiere', 'modulariza': '• Modulariza', 'formula': '• Formula algoritmos',
+                    'remezcla': '• Remezcla', 'depura': '• Depura', 'programa': '• Programa',
+                    'comunica': '• Comunica', 'colabora': '• Colabora', 'piensa': '• Piensa creativamente',
+                    'maneja': '• Maneja tecnologías éticamente'
+                };
+                semana.procedimentales.forEach(proc => prompt += `${mapping[proc] || `• ${proc}`}\n`);
             } else {
                 prompt += `No se han seleccionado saberes procedimentales\n`;
             }
             prompt += `\n`;
 
-            // SABERES ACTITUDINALES
-            prompt += `🌟 SABERES ACTITUDINALES:\n`;
+            prompt += `🌟 **SABERES ACTITUDINALES:**\n`;
             if (semana.actitudinales.length > 0) {
-                semana.actitudinales.forEach(act => {
-                    const mapping = {
-                        'gusto': '• Gusto por la precisión',
-                        'aprender': '• Aprender del error',
-                        'flexibilidad': '• Flexibilidad',
-                        'tolerancia': '• Tolerancia a la frustración'
-                    };
-                    prompt += `${mapping[act] || `• ${act}`}\n`;
-                });
+                const mapping = {
+                    'gusto': '• Gusto por la precisión', 'aprender': '• Aprender del error',
+                    'flexibilidad': '• Flexibilidad', 'tolerancia': '• Tolerancia a la frustración'
+                };
+                semana.actitudinales.forEach(act => prompt += `${mapping[act] || `• ${act}`}\n`);
             } else {
                 prompt += `No se han seleccionado saberes actitudinales\n`;
             }
             prompt += `\n`;
-            
-            // SOLICITUD
-            prompt += `🤖 SOLICITO:\n`;
-            prompt += `• Genera una actividad que tenga inicio, desarrollo y cierre para las ${semana.lecciones} que considere:\n`;
-            prompt += `• Articular los saberes conceptuales e indicadores de logro del módulo seleccionado.\n`;
-            prompt += `• Que las actividades sean prácticas y contextualizadas para el nivel seleccionado.\n`;
-            prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
-            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
-            prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
-            prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
-            prompt += `• Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
+
+            prompt += `🤖 **SOLICITUD (considerando el contexto DUA):**\n`;
+            prompt += `• Genere una actividad (inicio, desarrollo y cierre) para ${semana.lecciones} que:\n`;
+            prompt += `  - Articule los saberes conceptuales e indicadores de logro.\n`;
+            prompt += `  - Sea práctica y contextualizada para el nivel seleccionado.\n`;
+            prompt += `  - Integre el eje transversal de la semana "${semana.eje ? obtenerNombreEje(semana.eje) : 'seleccionado'}" en las actividades.\n`;
+            prompt += `  - Evidencie los saberes procedimentales y fortalezca los actitudinales.\n`;
+            prompt += `• **Atendiendo al contexto DUA descrito al inicio:**\n`;
+            prompt += `  - Valide si la actividad se ajusta al contexto y población.\n`;
+            prompt += `  - Si hay estudiantes con adecuaciones, proponga modificaciones específicas para cada tipo.\n`;
+            prompt += `  - Considerando el acceso a tecnología, recomiende herramientas digitales (si HAY acceso) o actividades desconectadas (si NO HAY acceso).\n`;
+            prompt += `• Redacte un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
             document.getElementById('promptSemanaModal').style.display = 'block';
         }
 
-                    // ... (Aquí iría todo el código de la respuesta anterior) ...
+        function cerrarPromptModal() {
+            document.getElementById('promptModal').style.display = 'none';
+        }
 
-        // ===== FUNCIONES PARA EXPORTACIÓN Y MENÚ (ya existentes en tu código) =====
-        // ... (El resto de tus funciones como exportarAPDF, generarPromptCompleto, etc.) ...
+        function cerrarPromptSemanaModal() {
+            document.getElementById('promptSemanaModal').style.display = 'none';
+        }
+
+        function copiarPrompt() {
+            const promptText = document.getElementById('promptText');
+            promptText.select();
+            document.execCommand('copy');
+            alert('Prompt copiado al portapapeles');
+        }
+
+        function copiarPromptSemana() {
+            const promptText = document.getElementById('promptSemanaText');
+            promptText.select();
+            document.execCommand('copy');
+            alert('Prompt de semana copiado al portapapeles');
+        }
+
+        function abrirEnCopilot() {
+            window.open('https://copilot.microsoft.com/', '_blank');
+        }
+
+        function abrirEnChatGPT() {
+            window.open('https://chat.openai.com/', '_blank');
+        }
+
+        function toggleMenuGuardar(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('menuGuardar');
+            menu.classList.toggle('abierto');
+        }
+
+        function ejecutarGuardarOffline() {
+            document.getElementById('menuGuardar').classList.remove('abierto');
+            
+            try {
+                const htmlCompleto = document.documentElement.outerHTML;
+                const fecha = new Date().toLocaleDateString('es-CR');
+                const nombreArchivo = `Planeamiento-Didáctico-Offline-${fecha.replace(/\//g, '-')}.html`;
+                
+                const blob = new Blob([htmlCompleto], {type: 'text/html;charset=utf-8'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = nombreArchivo;
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                mostrarMensaje('✅ Versión offline descargada (funciona sin internet)');
+            } catch (error) {
+                console.error('Error al crear versión portable:', error);
+                mostrarMensaje('❌ Error al crear versión offline', true);
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('menuGuardar');
+            const contenedor = document.querySelector('.guardar-container');
+            
+            if (menu && contenedor && !contenedor.contains(e.target)) {
+                menu.classList.remove('abierto');
+            }
+        });
+
+        function obtenerEjesTransversales() {
+            const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
+            const ejesMap = {
+                'ciudadania': 'Ciudadanía y ética digital',
+                'pensamiento': 'Pensamiento computacional',
+                'emprendimiento': 'Emprendimiento e Innovación'
+            };
+            return ejesSeleccionados.map(eje => ejesMap[eje] || eje);
+        }
+
+        function obtenerMetodologiaActiva() {
+            let metodo = document.getElementById('metodologiaActiva').value;
+            if (metodo === 'otra') {
+                metodo = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología';
+            }
+            const metodologiasMap = {
+                'ABJ': 'Aprendizaje basado en juegos (ABJ)',
+                'ABR': 'Aprendizaje basado en retos (ABR)',
+                'APD': 'Aprendizaje Pensamiento por Diseño (APD)'
+            };
+            return metodo ? (metodologiasMap[metodo] || metodo) : 'Pendiente';
+        }
+
+        function obtenerIndicadoresLogroSemana(numeroSemana) {
+            const semana = semanas[numeroSemana-1];
+            const nivel = document.getElementById('nivel').value;
+            let indicadores = [];
+            
+            if (typeof PNFT_DATA === 'undefined') return [];
+            
+            semana.saberes.forEach(saber => {
+                let encontrado = false;
+                
+                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
+                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 1"]) {
+                        const saberData = PNFT_DATA[nivel]["Módulo 1"][moduloArea]?.saberes.find(s => s.nombre === saber);
+                        if (saberData) {
+                            indicadores = indicadores.concat(saberData.indicadores);
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
+                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
+                        const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea]?.saberes.find(s => s.nombre === saber);
+                        if (saberData) {
+                            indicadores = indicadores.concat(saberData.indicadores);
+                            break;
+                        }
+                    }
+                }
+            });
+            
+            return [...new Set(indicadores)].map(ind => ind.replace(/•/g, '').trim());
+        }
+
+        function mostrarMensaje(texto, esError = false) {
+            const mensajeAnterior = document.querySelector('.mensaje-temporal');
+            if (mensajeAnterior) mensajeAnterior.remove();
+            
+            const mensaje = document.createElement('div');
+            mensaje.className = 'mensaje-temporal';
+            mensaje.style.background = esError ? 'var(--danger-color)' : 'var(--success-color)';
+            mensaje.innerHTML = `${esError ? '❌' : '✅'} <span>${texto}</span>`;
+            
+            document.body.appendChild(mensaje);
+            
+            setTimeout(() => {
+                if (mensaje.parentNode) {
+                    mensaje.style.animation = 'fadeOut 0.3s ease';
+                    setTimeout(() => mensaje.remove(), 300);
+                }
+            }, 4000);
+        }
 
         // ===== NUEVAS FUNCIONES =====
-
-        // NUEVA FUNCIÓN: Configurar membrete
         function configurarMembrete() {
             const uploadInput = document.getElementById('uploadEscudo');
             if (uploadInput) {
@@ -5828,7 +4071,6 @@
             }
         }
 
-        // NUEVA FUNCIÓN: Actualizar eje por semana
         function actualizarEjeSemana(numeroSemana, valorEje) {
             if (semanas[numeroSemana-1]) {
                 semanas[numeroSemana-1].eje = valorEje;
@@ -5836,78 +4078,43 @@
             }
         }
 
-        // NUEVA FUNCIÓN: Inicializar editores Quill
         function inicializarEditoresSemana(numeroSemana) {
             const semana = semanas[numeroSemana-1];
             
-            // Editor de indicadores
-            if (document.getElementById(`editor-indicadores-${numeroSemana}`)) {
+            const indicadoresEditorElem = document.getElementById(`editor-indicadores-${numeroSemana}`);
+            if (indicadoresEditorElem && !indicadoresEditorElem.__quill) {
                 const indicadoresEditor = new Quill(`#editor-indicadores-${numeroSemana}`, {
                     theme: 'snow',
                     placeholder: 'Los indicadores aparecerán automáticamente según los saberes seleccionados...',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline'],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            [{ 'align': [] }],
-                            ['clean']
-                        ]
-                    }
+                    modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }], ['clean']] }
                 });
-                
-                if (semana.indicadores) {
-                    indicadoresEditor.root.innerHTML = semana.indicadores;
-                }
-                
-                indicadoresEditor.on('text-change', function() {
-                    semana.indicadores = indicadoresEditor.root.innerHTML;
-                });
+                if (semana.indicadores) indicadoresEditor.root.innerHTML = semana.indicadores;
+                indicadoresEditor.on('text-change', function() { semana.indicadores = indicadoresEditor.root.innerHTML; });
             }
 
-            // Editor de actividades
-            if (document.getElementById(`editor-actividades-${numeroSemana}`)) {
+            const actividadesEditorElem = document.getElementById(`editor-actividades-${numeroSemana}`);
+            if (actividadesEditorElem && !actividadesEditorElem.__quill) {
                 const actividadesEditor = new Quill(`#editor-actividades-${numeroSemana}`, {
                     theme: 'snow',
                     placeholder: 'Describa las estrategias de mediación...',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline'],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            [{ 'align': [] }],
-                            ['clean']
-                        ]
-                    }
+                    modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }], ['clean']] }
                 });
-                
                 if (semana.actividades) actividadesEditor.root.innerHTML = semana.actividades;
-                actividadesEditor.on('text-change', function() {
-                    semana.actividades = actividadesEditor.root.innerHTML;
-                });
+                actividadesEditor.on('text-change', function() { semana.actividades = actividadesEditor.root.innerHTML; });
             }
 
-            // Editor de evaluación
-            if (document.getElementById(`editor-evaluacion-${numeroSemana}`)) {
+            const evaluacionEditorElem = document.getElementById(`editor-evaluacion-${numeroSemana}`);
+            if (evaluacionEditorElem && !evaluacionEditorElem.__quill) {
                 const evaluacionEditor = new Quill(`#editor-evaluacion-${numeroSemana}`, {
                     theme: 'snow',
                     placeholder: 'Describa los indicadores de evaluación...',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline'],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            [{ 'align': [] }],
-                            ['clean']
-                        ]
-                    }
+                    modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }], ['clean']] }
                 });
-                
                 if (semana.evaluacion) evaluacionEditor.root.innerHTML = semana.evaluacion;
-                evaluacionEditor.on('text-change', function() {
-                    semana.evaluacion = evaluacionEditor.root.innerHTML;
-                });
+                evaluacionEditor.on('text-change', function() { semana.evaluacion = evaluacionEditor.root.innerHTML; });
             }
         }
 
-        // NUEVA FUNCIÓN: Guía IA
         function mostrarGuiaIA() {
             const guia = 
                 "📘 **GUÍA PARA USAR EL ASISTENTE DUA**\n\n" +
@@ -5923,7 +4130,6 @@
             alert(guia);
         }
 
-        // NUEVA FUNCIÓN AUXILIAR: Obtener nombre de eje
         function obtenerNombreEje(valor) {
             const mapa = {
                 'ciudadania': 'Ciudadanía y ética digital',
@@ -5935,21 +4141,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
