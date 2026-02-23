@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Plantilla de Planeamiento Didáctico - PNFT (Doble Modo)</title>
+    <title>Plantilla de Planeamiento Didáctico - PNFT (Versión Definitiva)</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- NOTA: Quill se carga SOLO cuando el usuario activa el modo avanzado -->
+    <!-- Quill se carga SOLO cuando el usuario activa el modo avanzado -->
     
     <style>
         :root {
@@ -919,7 +919,7 @@
         <!-- PANEL INSTITUCIONAL PERSONALIZABLE -->
         <div class="panel-institucional">
             <div class="escudo-container" onclick="document.getElementById('uploadEscudo').click()">
-                <img id="escudoInstitucional" src="" alt="Escudo" style="display: none;">
+                <img id="escudoInstitucional" src="" alt="Escudo" style="display: none; width: 100%; height: 100%; object-fit: contain;">
                 <div id="escudoPlaceholder" style="color: #999; font-size: 24px; text-align: center;">
                     <div>🖼️</div>
                     <small>Subir escudo</small>
@@ -3003,14 +3003,53 @@
                         return;
                     }
                     
-                    let html = '<ul>';
+                    // EXTRAER INDICADORES REALES del PNFT_DATA
+                    let indicadoresEncontrados = [];
+                    
                     semana.saberes.forEach(saber => {
-                        html += `<li>${saber}</li>`;
+                        let encontrado = false;
+                        
+                        // Buscar en Módulo 1
+                        if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
+                            for (const area in PNFT_DATA[nivel]["Módulo 1"]) {
+                                const areaData = PNFT_DATA[nivel]["Módulo 1"][area];
+                                if (areaData && areaData.saberes) {
+                                    const saberData = areaData.saberes.find(s => s.nombre === saber);
+                                    if (saberData) {
+                                        encontrado = true;
+                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Buscar en Módulo 2 si no se encontró
+                        if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
+                            for (const area in PNFT_DATA[nivel]["Módulo 2"]) {
+                                const areaData = PNFT_DATA[nivel]["Módulo 2"][area];
+                                if (areaData && areaData.saberes) {
+                                    const saberData = areaData.saberes.find(s => s.nombre === saber);
+                                    if (saberData) {
+                                        encontrado = true;
+                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Eliminar duplicados y formatear como lista
+                    const indicadoresUnicos = [...new Set(indicadoresEncontrados)];
+                    let html = '<ul>';
+                    indicadoresUnicos.forEach(ind => {
+                        html += `<li>${ind}</li>`;
                     });
                     html += '</ul>';
                     
                     quill.root.innerHTML = html;
-                    semana.indicadores = html;
+                    semana.indicadores = quill.root.innerHTML;
                 }
             } else {
                 // MODO SIMPLE: Actualizar contenteditable
@@ -3024,10 +3063,50 @@
                         return;
                     }
                     
-                    let html = '';
+                    // EXTRAER INDICADORES REALES del PNFT_DATA
+                    let indicadoresEncontrados = [];
+                    
                     semana.saberes.forEach(saber => {
-                        html += `• ${saber}<br>`;
+                        let encontrado = false;
+                        
+                        // Buscar en Módulo 1
+                        if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
+                            for (const area in PNFT_DATA[nivel]["Módulo 1"]) {
+                                const areaData = PNFT_DATA[nivel]["Módulo 1"][area];
+                                if (areaData && areaData.saberes) {
+                                    const saberData = areaData.saberes.find(s => s.nombre === saber);
+                                    if (saberData) {
+                                        encontrado = true;
+                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Buscar en Módulo 2 si no se encontró
+                        if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
+                            for (const area in PNFT_DATA[nivel]["Módulo 2"]) {
+                                const areaData = PNFT_DATA[nivel]["Módulo 2"][area];
+                                if (areaData && areaData.saberes) {
+                                    const saberData = areaData.saberes.find(s => s.nombre === saber);
+                                    if (saberData) {
+                                        encontrado = true;
+                                        indicadoresEncontrados = indicadoresEncontrados.concat(saberData.indicadores);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     });
+                    
+                    // Eliminar duplicados y formatear
+                    const indicadoresUnicos = [...new Set(indicadoresEncontrados)];
+                    let html = '';
+                    indicadoresUnicos.forEach(ind => {
+                        html += `• ${ind}<br>`;
+                    });
+                    
                     contenedor.innerHTML = html || '<br>';
                     semana.indicadores = html;
                 }
@@ -3353,9 +3432,14 @@
         function cargarPlan(plan) {
             if (plan.membrete) {
                 if (plan.membrete.escudo) {
-                    document.getElementById('escudoInstitucional').src = plan.membrete.escudo;
-                    document.getElementById('escudoInstitucional').style.display = 'block';
+                    const img = document.getElementById('escudoInstitucional');
+                    img.src = plan.membrete.escudo;
+                    img.style.display = 'block';
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'contain';
                     document.getElementById('escudoPlaceholder').style.display = 'none';
+                    membreteInstitucional.escudo = plan.membrete.escudo;
                 }
                 document.getElementById('nombreInstitucion').value = plan.membrete.nombre || 'Ministerio de Educación Pública';
                 document.getElementById('lemaInstitucion').value = plan.membrete.lema || '';
@@ -3515,7 +3599,7 @@
         body { font-family: 'Poppins', sans-serif; font-size: 10pt; line-height: 1.3; color: #000; margin: 0; padding: 15mm; }
         .pagina { width: 297mm; padding: 10mm; }
         .encabezado-institucional { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding: 15px; border: 2px solid #45258F; border-radius: 15px; }
-        .escudo-pdf { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #45258F; }
+        .escudo-pdf { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #45258F; display: flex; align-items: center; justify-content: center; background: white; }
         .escudo-pdf img { width: 100%; height: 100%; object-fit: contain; }
         .titulo-ministerio { font-size: 12pt; font-weight: bold; color: #45258F; }
         .titulo-gobierno { font-size: 11pt; font-weight: 600; color: #6c47c9; }
@@ -3535,10 +3619,20 @@
     <div class="pagina">`;
 
             if (incluirEncabezado) {
+                let escudoHTML = '';
+                
+                if (membreteInstitucional.escudo && membreteInstitucional.escudo.startsWith('data:image')) {
+                    escudoHTML = `<img src="${membreteInstitucional.escudo}" alt="Escudo">`;
+                } else if (membreteInstitucional.escudo) {
+                    escudoHTML = `<div style="text-align:center; color:#999; font-size: 24px;">🖼️</div><div style="font-size: 9px;">Formato no soportado</div>`;
+                } else {
+                    escudoHTML = `<div style="text-align:center; color:#999; font-size: 24px;">🖼️</div><div style="font-size: 9px;">Sin escudo</div>`;
+                }
+                
                 contenidoHTML += `
         <div class="encabezado-institucional">
             <div class="escudo-pdf">
-                <img src="${membreteInstitucional.escudo || ''}" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=\'text-align:center; color:#999;\'>🖼️</div>'">
+                ${escudoHTML}
             </div>
             <div style="flex: 1;">
                 <div class="titulo-ministerio">${membreteInstitucional.nombre || 'MINISTERIO DE EDUCACIÓN PÚBLICA'}</div>
@@ -3693,6 +3787,67 @@
             
             ventanaPreview.document.write(contenidoHTML);
             ventanaPreview.document.close();
+            
+            setTimeout(() => {
+                ventanaPreview.focus();
+                
+                const mensajeDiv = ventanaPreview.document.createElement('div');
+                mensajeDiv.style.cssText = `
+                    position: fixed;
+                    top: 10px;
+                    right: 10px;
+                    background: #45258F;
+                    color: white;
+                    padding: 15px;
+                    border-radius: 8px;
+                    z-index: 10000;
+                    font-size: 12px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    max-width: 280px;
+                    border-left: 4px solid #ffc107;
+                `;
+                mensajeDiv.innerHTML = `
+                    <strong style="font-size: 14px;">🖨️ CONFIGURACIÓN PARA IMPRIMIR</strong><br><br>
+                    1. Presione <strong>Ctrl+P</strong><br>
+                    2. Seleccione <strong>"Guardar como PDF"</strong><br>
+                    3. Orientación: <strong>Horizontal</strong><br>
+                    4. Márgenes: <strong>15mm</strong><br>
+                    5. Active <strong>"Fondo gráfico"</strong><br><br>
+                    <button id="btnImprimirAhora" style="
+                        background: #28a745;
+                        color: white;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        width: 100%;
+                        font-size: 14px;
+                    ">🖨️ IMPRIMIR AHORA</button>
+                `;
+                ventanaPreview.document.body.appendChild(mensajeDiv);
+                
+                const btnImprimir = ventanaPreview.document.getElementById('btnImprimirAhora');
+                if (btnImprimir) {
+                    btnImprimir.onclick = () => ventanaPreview.print();
+                }
+                
+                const cerrarBtn = ventanaPreview.document.createElement('button');
+                cerrarBtn.innerHTML = '✕';
+                cerrarBtn.style.cssText = `
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 16px;
+                    cursor: pointer;
+                `;
+                cerrarBtn.onclick = () => mensajeDiv.remove();
+                mensajeDiv.appendChild(cerrarBtn);
+                
+            }, 1000);
         }
 
         function generarPromptCompleto() {
@@ -4057,19 +4212,39 @@
         // ===== FUNCIONES PARA MEMBRETE Y EJES =====
         function configurarMembrete() {
             const uploadInput = document.getElementById('uploadEscudo');
+            const escudoImg = document.getElementById('escudoInstitucional');
+            const escudoPlaceholder = document.getElementById('escudoPlaceholder');
+            
             if (uploadInput) {
                 uploadInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];
                     if (file) {
+                        if (!file.type.match('image.*')) {
+                            mostrarMensaje('❌ Solo se permiten imágenes', true);
+                            return;
+                        }
+                        
                         const reader = new FileReader();
+                        
                         reader.onload = function(event) {
-                            const img = document.getElementById('escudoInstitucional');
-                            img.src = event.target.result;
-                            img.style.display = 'block';
-                            document.getElementById('escudoPlaceholder').style.display = 'none';
+                            escudoImg.src = event.target.result;
+                            escudoImg.style.display = 'block';
+                            escudoImg.style.width = '100%';
+                            escudoImg.style.height = '100%';
+                            escudoImg.style.objectFit = 'contain';
+                            escudoPlaceholder.style.display = 'none';
                             membreteInstitucional.escudo = event.target.result;
+                            
+                            const contenedor = document.querySelector('.escudo-container');
+                            contenedor.style.display = 'flex';
+                            
                             mostrarMensaje('✅ Escudo cargado correctamente');
                         };
+                        
+                        reader.onerror = function() {
+                            mostrarMensaje('❌ Error al leer el archivo', true);
+                        };
+                        
                         reader.readAsDataURL(file);
                     }
                 });
@@ -4211,32 +4386,87 @@
             modoAvanzadoActivo = false;
             document.getElementById('btnDesactivarAvanzado').style.display = 'none';
             
+            document.querySelectorAll('.quill-editor').forEach(el => el.remove());
+            document.querySelectorAll('.ql-toolbar').forEach(el => el.remove());
+            
+            const container = document.getElementById('semanasContainer');
+            container.innerHTML = '';
+            
             semanas.forEach((semana, index) => {
-                const numSemana = index + 1;
+                const lecciones = semana.lecciones.match(/\d+/g) || [];
+                const leccionInicio = lecciones[0] ? parseInt(lecciones[0]) : (index * 2 + 1);
+                const leccionFin = lecciones[1] ? parseInt(lecciones[1]) : Math.min((index + 1) * 2, parseInt(document.getElementById('leccionesPlanificadas').value));
                 
-                ['indicadores', 'actividades', 'evaluacion'].forEach(tipo => {
-                    const editorQuill = document.getElementById(`editor-avanzado-${numSemana}-${tipo}`);
+                const semanaElement = crearElementoSemana(index + 1, leccionInicio, leccionFin);
+                container.appendChild(semanaElement);
+                
+                setTimeout(() => {
+                    semana.areas.forEach(area => {
+                        const areaMapping = {
+                            'Apropiación tecnológica y Digital': 'apropiacion',
+                            'Programación y Algoritmos': 'programacion',
+                            'Computación física y Robótica': 'robotica',
+                            'Ciencia de datos e Inteligencia artificial': 'ciencia'
+                        };
+                        
+                        const areaKey = areaMapping[area];
+                        if (areaKey) {
+                            const checkbox = document.querySelector(`input[name="area-semana-${index+1}"][value="${areaKey}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                                actualizarAreaSemana(index + 1, checkbox);
+                            }
+                        }
+                    });
                     
-                    if (editorQuill && editorQuill.__quill) {
-                        const quill = editorQuill.__quill;
-                        const contenidoActual = quill.getText().trim() || '';
-                        
-                        const nuevoDiv = document.createElement('div');
-                        nuevoDiv.className = 'contenedor-editable';
-                        nuevoDiv.contentEditable = 'true';
-                        
-                        if (tipo === 'indicadores') nuevoDiv.setAttribute('data-placeholder', 'Los indicadores aparecerán automáticamente según los saberes conceptuales seleccionados...');
-                        if (tipo === 'actividades') nuevoDiv.setAttribute('data-placeholder', 'Describa las estrategias de mediación... (Recuerde vincular los saberes procedimentales y actitudinales)');
-                        if (tipo === 'evaluacion') nuevoDiv.setAttribute('data-placeholder', 'Describa los indicadores de evaluación...');
-                        
-                        nuevoDiv.setAttribute('oninput', `actualizarContenidoSemana(${numSemana}, '${tipo}', this.innerHTML)`);
-                        nuevoDiv.innerHTML = contenidoActual || '<br>';
-                        
-                        editorQuill.parentNode.replaceChild(nuevoDiv, editorQuill);
-                        
-                        semana[tipo] = contenidoActual;
+                    if (semana.eje) {
+                        const radio = document.querySelector(`input[name="eje-semana-${index+1}"][value="${semana.eje}"]`);
+                        if (radio) radio.checked = true;
                     }
-                });
+                    
+                    semana.saberes.forEach(saber => {
+                        const checkboxes = document.querySelectorAll(`#saberes-conceptuales-${index+1} input[type="checkbox"]`);
+                        checkboxes.forEach(checkbox => {
+                            const saberNombre = checkbox.nextElementSibling?.querySelector('div')?.textContent;
+                            if (saberNombre && saberNombre.includes(saber)) {
+                                checkbox.checked = true;
+                                checkbox.parentElement.classList.add('seleccionado');
+                            }
+                        });
+                    });
+                    
+                    semana.procedimentales.forEach(proc => {
+                        const checkbox = document.querySelector(`input[name="procedimental-semana-${index+1}"][value="${proc}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                    
+                    semana.actitudinales.forEach(act => {
+                        const checkbox = document.querySelector(`input[name="actitudinal-semana-${index+1}"][value="${act}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                    
+                    const indicadoresContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="indicadores"]`);
+                    if (indicadoresContainer && semana.indicadores) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = semana.indicadores;
+                        indicadoresContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '';
+                    }
+                    
+                    const actividadesContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="Mediación"]`);
+                    if (actividadesContainer && semana.actividades) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = semana.actividades;
+                        actividadesContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '';
+                    }
+                    
+                    const evaluacionContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="evaluación"]`);
+                    if (evaluacionContainer && semana.evaluacion) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = semana.evaluacion;
+                        evaluacionContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '';
+                    }
+                    
+                }, 100);
             });
             
             mostrarMensaje('✅ Modo simple restaurado');
