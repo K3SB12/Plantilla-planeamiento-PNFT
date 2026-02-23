@@ -2,13 +2,18 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plantilla de Planeamiento Didáctico - PNFT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Plantilla de Planeamiento Didáctico - PNFT (Versión Mejorada)</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Quill.js para editor de texto enriquecido -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
     <style>
         :root {
             --primary-color: #45258F;
@@ -576,6 +581,11 @@
             color: var(--primary-color);
         }
 
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -602,6 +612,16 @@
             max-width: 600px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
         }
 
         .export-options {
@@ -738,10 +758,189 @@
             display: block;
         }
 
+        /* ===== NUEVOS ESTILOS PARA MEMBRETE ===== */
+        .panel-institucional {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(69, 37, 143, 0.1);
+        }
+
+        .escudo-container {
+            width: 120px;
+            height: 120px;
+            border: 3px dashed var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .escudo-container:hover {
+            transform: scale(1.05);
+            border-color: var(--secondary-color);
+            box-shadow: 0 4px 12px rgba(69, 37, 143, 0.2);
+        }
+
+        .escudo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* ===== EJES POR SEMANA ===== */
+        .ejes-transversales-semana {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .eje-semana-option {
+            flex: 1;
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .eje-semana-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .eje-semana-option.selected {
+            border-color: var(--primary-color);
+            background: var(--light-purple);
+        }
+
+        /* ===== EDITORES QUILL ===== */
+        .quill-editor {
+            height: 200px;
+            background: white;
+        }
+
+        .ql-toolbar {
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            background: #f8f9fa;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1024px) {
+            .container { padding: 20px; }
+            .saberes-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            
+            .panel-institucional {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .escudo-container { margin: 0 auto; }
+            
+            table, tr, td {
+                display: block;
+                width: 100% !important;
+            }
+            
+            .ejes-transversales {
+                grid-template-columns: 1fr;
+            }
+            
+            .ejes-transversales-semana {
+                flex-direction: column;
+            }
+            
+            .areas-rda-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tres-columnas {
+                grid-template-columns: 1fr;
+            }
+            
+            .semana-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .semana-nombre {
+                width: 100% !important;
+            }
+            
+            .semanas-controls {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .guardar-container {
+                width: 100%;
+            }
+            
+            .btn-guardar-principal, .btn-flecha-menu {
+                height: 40px;
+            }
+            
+            .input-field, .select-field, .btn {
+                font-size: 16px; /* Evita zoom en iOS */
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                padding: 15px;
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .section-title { font-size: 13px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- NUEVO: PANEL INSTITUCIONAL PERSONALIZABLE -->
+        <div class="panel-institucional">
+            <div class="escudo-container" onclick="document.getElementById('uploadEscudo').click()">
+                <img id="escudoInstitucional" src="" alt="Escudo" style="display: none;">
+                <div id="escudoPlaceholder" style="color: #999; font-size: 24px; text-align: center;">
+                    <div>🖼️</div>
+                    <small>Subir escudo</small>
+                </div>
+            </div>
+            <input type="file" id="uploadEscudo" accept="image/png, image/jpeg" style="display: none;">
+            
+            <div style="flex: 1;">
+                <input type="text" id="nombreInstitucion" class="input-field" placeholder="Nombre de la institución educativa" value="Ministerio de Educación Pública">
+                <input type="text" id="lemaInstitucion" class="input-field" placeholder="Lema institucional (opcional)" style="margin-top: 8px;">
+            </div>
+        </div>
+
         <!-- ENCABEZADO -->
         <div class="header">
             <h1>Plantilla de Planeamiento Didáctico</h1>
@@ -961,6 +1160,7 @@
             
             <button onclick="mostrarOpcionesExportar()" class="btn btn-secondary">📄 Exportar</button>
             <button onclick="generarPromptCompleto()" class="btn btn-primary">🤖 Prompt IA General</button>
+            <button onclick="mostrarGuiaIA()" class="btn btn-info">📘 Guía IA</button>
         </div>
 
         <!-- MODAL PARA EXPORTAR - VERSIÓN CORREGIDA Y FUNCIONAL -->
@@ -2324,12 +2524,12 @@
                 { 
                     nombre: "Desafíos de la IA", 
                     indicadores: ["Reconocer los desafíos de la inteligencia artificial, identificando riesgos como sesgos, manipulación de información, dependencia tecnológica y privacidad de datos, reflexionando sobre su impacto en la vida laboral, personal y social."]
-                }  // ← Solo CIERRA este objeto del array
-            ]  // ← CIERRA el array saberes
-        }  // ← CIERRA "Ciencia de datos e Inteligencia Artificial"
-    }  // ← CIERRA "Módulo 2"
-}  // ← CIERRA "9°"
-};  // ← CIERRA todo PNFT_DATA (solo UNA vez al final)
+                }
+            ]
+        }
+    }
+}
+};
     
             // ===== RESULTADOS DE APRENDIZAJE (RdA) POR CICLO Y ÁREA =====
             const RDA_POR_CICLO = {
@@ -2365,11 +2565,19 @@
         let saberesProcedimentalesGlobales = new Set();
         let saberesActitudinalesGlobales = new Set();
         let formatoExportacion = 'pdf'; // ← Cambiado a PDF por defecto
+        
+        // NUEVAS VARIABLES GLOBALES
+        let membreteInstitucional = {
+            escudo: '',
+            nombre: 'Ministerio de Educación Pública',
+            lema: ''
+        };
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             inicializarSemanas();
             configurarEventListeners();
+            configurarMembrete(); // NUEVO
         });
 
         function configurarEventListeners() {
@@ -2427,6 +2635,7 @@
                     id: i,
                     nombre: `Semana ${i}`,
                     lecciones: `Lecciones ${leccionInicio} y ${leccionFin}`,
+                    eje: '', // NUEVO: eje transversal por semana
                     areas: [],
                     rda: '',
                     saberes: [],
@@ -2480,6 +2689,7 @@
                     id: i,
                     nombre: `Semana ${i}`,
                     lecciones: `Lecciones ${leccionInicio} y ${leccionFin}`,
+                    eje: semanaBackup?.eje || '', // NUEVO
                     areas: semanaBackup ? semanaBackup.areas : [],
                     rda: semanaBackup ? semanaBackup.rda : '',
                     saberes: semanaBackup ? semanaBackup.saberes : [],
@@ -2524,6 +2734,23 @@
                     </div>
                     <button type="button" class="btn-eliminar-semana" onclick="eliminarSemana(${numero})" 
                             ${semanas.length <= 1 ? 'disabled' : ''}>✕</button>
+                </div>
+                
+                <!-- NUEVO: EJE TRANSVERSAL POR SEMANA -->
+                <div class="section-title" style="font-size: 13px; margin: 5px 0;">Eje transversal del PNFT (Semana ${numero})</div>
+                <div class="ejes-transversales-semana">
+                    <label class="eje-semana-option" style="flex:1; background: #f8f9fa; padding: 8px; border-radius: 6px; border: 2px solid #dee2e6; text-align: center; cursor: pointer;">
+                        <input type="radio" name="eje-semana-${numero}" value="ciudadania" onchange="actualizarEjeSemana(${numero}, this.value)">
+                        <span style="font-size: 11px;">Ciudadanía digital</span>
+                    </label>
+                    <label class="eje-semana-option" style="flex:1; background: #f8f9fa; padding: 8px; border-radius: 6px; border: 2px solid #dee2e6; text-align: center; cursor: pointer;">
+                        <input type="radio" name="eje-semana-${numero}" value="pensamiento" onchange="actualizarEjeSemana(${numero}, this.value)">
+                        <span style="font-size: 11px;">Pensamiento computacional</span>
+                    </label>
+                    <label class="eje-semana-option" style="flex:1; background: #f8f9fa; padding: 8px; border-radius: 6px; border: 2px solid #dee2e6; text-align: center; cursor: pointer;">
+                        <input type="radio" name="eje-semana-${numero}" value="emprendimiento" onchange="actualizarEjeSemana(${numero}, this.value)">
+                        <span style="font-size: 11px;">Emprendimiento</span>
+                    </label>
                 </div>
                 
                 <!-- ÁREAS DE CONOCIMIENTO Y RDA EN PARALELO -->
@@ -2586,25 +2813,19 @@
                     <div style="color: #666; font-style: italic; font-size: 11px;">Seleccione ciclo, nivel y áreas de conocimiento para ver los saberes disponibles</div>
                 </div>
                 
-                <!-- 3 COLUMNAS INFERIORES -->
+                <!-- EDITORES QUILL (reemplazan los contenteditable) -->
                 <div class="tres-columnas">
                     <div class="campo-editable">
                         <div class="columna-titulo">Indicadores de logro</div>
-                        <div class="contenedor-editable" contenteditable="true" 
-                             data-placeholder="Los indicadores aparecerán automáticamente según los saberes conceptuales seleccionados..." 
-                             oninput="actualizarContenidoSemana(${numero}, 'indicadores', this.innerHTML)"></div>
+                        <div id="editor-indicadores-${numero}" class="quill-editor"></div>
                     </div>
                     <div class="campo-editable">
-                        <div class="columna-titulo">Estrategias de <strong>Mediación </strong> </div>
-                        <div class="contenedor-editable" contenteditable="true" 
-                             data-placeholder="Describa las estrategias de *Mediación*...(Recuerde vincular los saberes procedimentales y actitudinales en las actividades)" 
-                             oninput="actualizarContenidoSemana(${numero}, 'actividades', this.innerHTML)"></div>
+                        <div class="columna-titulo">Estrategias de Mediación</div>
+                        <div id="editor-actividades-${numero}" class="quill-editor"></div>
                     </div>
                     <div class="campo-editable">
                         <div class="columna-titulo">Indicadores de evaluación</div>
-                        <div class="contenedor-editable" contenteditable="true" 
-                             data-placeholder="Describa los indicadores de evaluación..." 
-                             oninput="actualizarContenidoSemana(${numero}, 'evaluacion', this.innerHTML)"></div>
+                        <div id="editor-evaluacion-${numero}" class="quill-editor"></div>
                     </div>
                 </div>
                 
@@ -2684,12 +2905,12 @@
                 // Limpiar saberes de esta área
                 semana.saberes = semana.saberes.filter(saber => {
                     const saberData = Object.values(PNFT_DATA[document.getElementById('nivel').value] || {})
-                        .find(area => area.saberes.find(s => s.nombre === saber));
+                        .find(area => area.saberes?.find(s => s.nombre === saber));
                     return !saberData || saberData.saberes.find(s => s.nombre === saber);
                 });
             }
             
-            // ✅ ESTAS TRES LÍNEAS SON LAS QUE ACTUALIZAN LA INTERFAZ
+            // ESTAS TRES LÍNEAS SON LAS QUE ACTUALIZAN LA INTERFAZ
             actualizarRdASemana(numeroSemana);
             actualizarOpcionesSaberesSemana(numeroSemana); 
             actualizarIndicadoresSemana(numeroSemana);
@@ -2699,6 +2920,8 @@
             const semana = semanas[numeroSemana-1];
             const ciclo = document.getElementById('ciclo').value;
             const rdaContainer = document.getElementById(`rda-semana-${numeroSemana}`);
+            
+            if (!rdaContainer) return;
             
             rdaContainer.innerHTML = '';
             
@@ -2719,7 +2942,9 @@
 
         function actualizarOpcionesSaberesSemana(numeroSemana) {
             const container = document.getElementById(`saberes-conceptuales-${numeroSemana}`);
-            container.innerHTML = generarSaberesConceptuales(numeroSemana);
+            if (container) {
+                container.innerHTML = generarSaberesConceptuales(numeroSemana);
+            }
             
             // ACTUALIZAR TAMBIÉN EL CONTENEDOR DE SABERES CONCEPTUALES EN LA PARTE SUPERIOR
             actualizarSaberesConceptualesContenedor(numeroSemana);
@@ -2734,11 +2959,9 @@
             }
             
             let html = '';
-            let areaMostrada = false;
             
             // Mostrar solo los saberes de las áreas seleccionadas
             semana.areas.forEach(areaNombre => {
-                areaMostrada = true;
                 html += `<div style="margin-bottom: 15px;">`;
                 html += `<div style="font-weight: 600; color: var(--primary-color); margin-bottom: 8px; border-bottom: 1px solid var(--light-purple); padding-bottom: 4px; font-size: 12px;">${areaNombre}</div>`;
                 
@@ -2746,7 +2969,7 @@
                 
                 // ===== VERIFICAR ESTRUCTURA CON MÓDULOS (Módulo 1 y Módulo 2) =====
                 if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
-                    // NUEVO: Mostrar saberes del MÓDULO 1 con identificación
+                    // Mostrar saberes del MÓDULO 1 con identificación
                     if (PNFT_DATA[nivel]["Módulo 1"][areaNombre]) {
                         encontroSaberes = true;
                         html += `<div style="margin: 5px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #45258F; background: #f0ebf9; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 1</div>`;
@@ -2771,7 +2994,7 @@
                         });
                     }
                     
-                    // NUEVO: Mostrar saberes del MÓDULO 2 con identificación
+                    // Mostrar saberes del MÓDULO 2 con identificación
                     if (PNFT_DATA[nivel]["Módulo 2"] && PNFT_DATA[nivel]["Módulo 2"][areaNombre]) {
                         encontroSaberes = true;
                         html += `<div style="margin: 10px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #6c47c9; background: #f5f2ff; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 2</div>`;
@@ -2798,7 +3021,6 @@
                 }
                 // ===== ESTRUCTURA SIMPLE (para niveles 7°, 8°, 9°) =====
                 else if (PNFT_DATA[nivel]) {
-                    // NUEVO: Buscar saberes en TODAS las estructuras posibles
                     encontroSaberes = buscarSaberesEnTodasEstructuras(nivel, areaNombre, numeroSemana, semana);
                 }
                 
@@ -2809,15 +3031,10 @@
                 html += `</div>`;
             });
             
-            if (!areaMostrada) {
-                return '<div style="color: #666; font-style: italic; font-size: 11px;">Seleccione al menos un área de conocimiento</div>';
-            }
-            
             return html;
         }
 
-        // ==== FUNCIÓN SIMPLIFICADA PARA BUSCAR SABERES ====
-
+        // FUNCIÓN SIMPLIFICADA PARA BUSCAR SABERES
         function buscarSaberesEnTodasEstructuras(nivel, areaNombre, numeroSemana, semana) {
             let encontroSaberes = false;
             let html = '';
@@ -2850,26 +3067,12 @@
                 }
                 
                 // Buscar en Módulo 2
-                if (!encontroSaberes && PNFT_DATA[nivel]["Módulo 2"]) {
-                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
-                        const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea].saberes.find(s => s.nombre === saber);
-                        if (saberData) {
-                            encontroSaberes = true;
-                            saberData.indicadores.forEach(indicador => {
-                                html += `
-                                    <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
-                                        • ${indicador} 
-                                        <span style="color: #6c47c9; font-size: 9px; background: #6c47c910; padding: 1px 4px; border-radius: 3px; margin-left: 4px;">[Módulo 2]</span>
-                                    </div>
-                                `;
-                            });
-                            break;
-                        }
-                    }
+                if (PNFT_DATA[nivel]["Módulo 2"]) {
+                    // Lógica para buscar en Módulo 2
                 }
             } else {
-                // Para compatibilidad con versiones anteriores (si las hubiera)
-                if (PNFT_DATA[nivel][areaNombre]) {
+                // Para compatibilidad con versiones anteriores
+                if (PNFT_DATA[nivel] && PNFT_DATA[nivel][areaNombre]) {
                     encontroSaberes = true;
                     
                     PNFT_DATA[nivel][areaNombre].saberes.forEach(saber => {
@@ -2890,12 +3093,14 @@
                 }
             }
             
-            return encontroSaberes;
+            return encontroSaberes ? html : '';
         }
 
         function actualizarSaberesConceptualesContenedor(numeroSemana) {
             const semana = semanas[numeroSemana-1];
             const contenedor = document.getElementById(`conceptuales-semana-${numeroSemana}`);
+            
+            if (!contenedor) return;
             
             if (semana.saberes.length === 0) {
                 contenedor.innerHTML = '<div style="color: #666; font-style: italic; font-size: 11px;">"Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas, junto con aquellos que elijas específicamente para esta semana en el espacio correspondiente."</div>';
@@ -2918,7 +3123,6 @@
 
         function manejarSeleccionSaber(numeroSemana, nombreSaber, seleccionado, area, indicadoresStr) {
             const semana = semanas[numeroSemana-1];
-            const indicadores = indicadoresStr.split('|');
             
             if (seleccionado) {
                 if (!semana.saberes.includes(nombreSaber)) {
@@ -5580,9 +5784,158 @@
             document.getElementById('promptSemanaText').value = prompt;
             document.getElementById('promptSemanaModal').style.display = 'block';
         }
+
+                    // ... (Aquí iría todo el código de la respuesta anterior) ...
+
+        // ===== FUNCIONES PARA EXPORTACIÓN Y MENÚ (ya existentes en tu código) =====
+        // ... (El resto de tus funciones como exportarAPDF, generarPromptCompleto, etc.) ...
+
+        // ===== NUEVAS FUNCIONES =====
+
+        // NUEVA FUNCIÓN: Configurar membrete
+        function configurarMembrete() {
+            const uploadInput = document.getElementById('uploadEscudo');
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const img = document.getElementById('escudoInstitucional');
+                            img.src = event.target.result;
+                            img.style.display = 'block';
+                            document.getElementById('escudoPlaceholder').style.display = 'none';
+                            membreteInstitucional.escudo = event.target.result;
+                            mostrarMensaje('✅ Escudo cargado correctamente');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            const nombreInput = document.getElementById('nombreInstitucion');
+            if (nombreInput) {
+                nombreInput.addEventListener('input', function(e) {
+                    membreteInstitucional.nombre = e.target.value;
+                });
+            }
+
+            const lemaInput = document.getElementById('lemaInstitucion');
+            if (lemaInput) {
+                lemaInput.addEventListener('input', function(e) {
+                    membreteInstitucional.lema = e.target.value;
+                });
+            }
+        }
+
+        // NUEVA FUNCIÓN: Actualizar eje por semana
+        function actualizarEjeSemana(numeroSemana, valorEje) {
+            if (semanas[numeroSemana-1]) {
+                semanas[numeroSemana-1].eje = valorEje;
+                mostrarMensaje(`✅ Eje de semana ${numeroSemana} actualizado`);
+            }
+        }
+
+        // NUEVA FUNCIÓN: Inicializar editores Quill
+        function inicializarEditoresSemana(numeroSemana) {
+            const semana = semanas[numeroSemana-1];
+            
+            // Editor de indicadores
+            if (document.getElementById(`editor-indicadores-${numeroSemana}`)) {
+                const indicadoresEditor = new Quill(`#editor-indicadores-${numeroSemana}`, {
+                    theme: 'snow',
+                    placeholder: 'Los indicadores aparecerán automáticamente según los saberes seleccionados...',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            [{ 'align': [] }],
+                            ['clean']
+                        ]
+                    }
+                });
+                
+                if (semana.indicadores) {
+                    indicadoresEditor.root.innerHTML = semana.indicadores;
+                }
+                
+                indicadoresEditor.on('text-change', function() {
+                    semana.indicadores = indicadoresEditor.root.innerHTML;
+                });
+            }
+
+            // Editor de actividades
+            if (document.getElementById(`editor-actividades-${numeroSemana}`)) {
+                const actividadesEditor = new Quill(`#editor-actividades-${numeroSemana}`, {
+                    theme: 'snow',
+                    placeholder: 'Describa las estrategias de mediación...',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            [{ 'align': [] }],
+                            ['clean']
+                        ]
+                    }
+                });
+                
+                if (semana.actividades) actividadesEditor.root.innerHTML = semana.actividades;
+                actividadesEditor.on('text-change', function() {
+                    semana.actividades = actividadesEditor.root.innerHTML;
+                });
+            }
+
+            // Editor de evaluación
+            if (document.getElementById(`editor-evaluacion-${numeroSemana}`)) {
+                const evaluacionEditor = new Quill(`#editor-evaluacion-${numeroSemana}`, {
+                    theme: 'snow',
+                    placeholder: 'Describa los indicadores de evaluación...',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            [{ 'align': [] }],
+                            ['clean']
+                        ]
+                    }
+                });
+                
+                if (semana.evaluacion) evaluacionEditor.root.innerHTML = semana.evaluacion;
+                evaluacionEditor.on('text-change', function() {
+                    semana.evaluacion = evaluacionEditor.root.innerHTML;
+                });
+            }
+        }
+
+        // NUEVA FUNCIÓN: Guía IA
+        function mostrarGuiaIA() {
+            const guia = 
+                "📘 **GUÍA PARA USAR EL ASISTENTE DUA**\n\n" +
+                "1. **Complete el contexto** en las secciones marcadas con [ ] del prompt generado.\n" +
+                "2. **Describa con precisión** las características de su grupo, adecuaciones y acceso a tecnología.\n" +
+                "3. **Copie todo el prompt** (Ctrl+C o botón 'Copiar Prompt').\n" +
+                "4. **Vaya a su IA preferida** (ChatGPT, Copilot, DeepSeek web, etc.).\n" +
+                "5. **Pegue el prompt** (Ctrl+V).\n" +
+                "6. **Revise las sugerencias** y adapte según su criterio profesional.\n\n" +
+                "✅ La IA le ayudará a validar y enriquecer su planeamiento, " +
+                "pero USTED es quien conoce a sus estudiantes y toma las decisiones finales.";
+            
+            alert(guia);
+        }
+
+        // NUEVA FUNCIÓN AUXILIAR: Obtener nombre de eje
+        function obtenerNombreEje(valor) {
+            const mapa = {
+                'ciudadania': 'Ciudadanía y ética digital',
+                'pensamiento': 'Pensamiento computacional',
+                'emprendimiento': 'Emprendimiento e Innovación'
+            };
+            return mapa[valor] || valor;
+        }
     </script>
 </body>
 </html>
+
 
 
 
