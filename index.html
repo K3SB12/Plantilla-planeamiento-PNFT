@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Plantilla de Planeamiento Didáctico - PNFT (Versión CORREGIDA)</title>
+    <title>Plantilla de Planeamiento Didáctico - PNFT (VERSIÓN FINAL CORREGIDA)</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Quill para formato de texto (color, tamaño, etc.) -->
+    <!-- Quill para formato de texto -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <style>
@@ -402,7 +402,7 @@
             font-style: italic;
         }
 
-        /* Estilos mejorados para Quill */
+        /* Estilos mejorados para Quill - SE APLICA A TODAS LAS COLUMNAS */
         .ql-toolbar {
             background: #f8f9fa !important;
             border: 2px solid var(--border-color) !important;
@@ -758,7 +758,7 @@
             display: block;
         }
 
-        /* Panel institucional mejorado */
+        /* Panel institucional */
         .panel-institucional {
             display: flex;
             align-items: center;
@@ -830,22 +830,20 @@
             margin-right: 5px;
         }
 
-        /* Estilos para impresión */
+        /* Estilos mejorados para impresión */
         .instrucciones-imprimir {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 20px;
+            right: 20px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 20px;
+            border-radius: 10px;
             z-index: 100000;
-            font-size: 16px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            border-left: 5px solid #ffc107;
-            max-width: 500px;
-            width: 90%;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-left: 4px solid #ffc107;
+            max-width: 350px;
         }
 
         .boton-imprimir-flotante {
@@ -855,20 +853,20 @@
             background: #ffc107;
             color: #000;
             border: none;
-            padding: 20px 40px;
+            padding: 15px 30px;
             border-radius: 50px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             z-index: 100000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border: 3px solid var(--primary-color);
+            border: 2px solid var(--primary-color);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
@@ -881,14 +879,21 @@
                 display: none !important;
             }
             
-            .indicador-logro, .area-item small, .rda-item, 
-            .saber-conceptual-item, .contenedor-editable {
-                color: #000000 !important;
+            body {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
+            .container {
+                box-shadow: none !important;
+                padding: 15px !important;
+            }
+            
+            table, td, th {
+                border: 1px solid #000 !important;
             }
             
             .section-title {
-                color: #000000 !important;
-                background: #f0f0f0 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -999,6 +1004,7 @@
             <h2>Programa Nacional de Formación Tecnológica - Informática educativa</h2>
         </div>
 
+        <!-- TABLA DE INFORMACIÓN GENERAL -->
         <table>
             <tr>
                 <td width="33%">
@@ -1126,6 +1132,7 @@
         
         <div id="semanasContainer"></div>
 
+        <!-- REFLEXIONES -->
         <table>
             <tr>
                 <td width="33%" class="section-title">¿Qué funcionó?</td>
@@ -1165,7 +1172,7 @@
             Dirección de Recursos Tecnológicos en Educación
         </div>
 
-        <!-- Botones de acción -->
+        <!-- BOTONES DE ACCIÓN -->
         <div class="action-buttons">
             <button onclick="nuevoPlan()" class="btn btn-outline">🆕 Nuevo</button>
             <button onclick="abrirPlan()" class="btn btn-outline">📂 Abrir</button>
@@ -1184,12 +1191,12 @@
             <button onclick="mostrarOpcionesExportar()" class="btn btn-secondary">📄 Exportar</button>
             <button onclick="generarPromptCompleto()" class="btn btn-primary">🤖 Prompt IA General</button>
             <button onclick="mostrarGuiaIA()" class="btn btn-info">📘 Guía IA</button>
-            <!-- Botón amarillo CORREGIDO: SOLO activa formato en Mediación y Evaluación -->
-            <button onclick="activarFormato()" class="btn btn-warning" id="btnActivarFormato">✨ Activar color y tamaño</button>
+            <!-- BOTÓN AMARILLO CORREGIDO -->
+            <button onclick="activarFormato()" class="btn btn-warning" id="btnActivarFormato">✨ Activar formato en todas las columnas</button>
             <button onclick="desactivarFormato()" class="btn btn-secondary" style="background: #6c757d; color: white; display: none;" id="btnDesactivarFormato">🔙 Modo simple</button>
         </div>
 
-        <!-- Modal de exportación -->
+        <!-- MODAL DE EXPORTACIÓN -->
         <div id="exportarModal" class="modal">
             <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
                 <button class="modal-close" onclick="cerrarExportModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer; z-index: 10;">&times;</button>
@@ -1257,7 +1264,7 @@
             </div>
         </div>
 
-        <!-- Modal de prompt general -->
+        <!-- MODAL DE PROMPT GENERAL -->
         <div id="promptModal" class="modal">
             <div class="modal-content">
                 <button class="modal-close" onclick="cerrarPromptModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
@@ -1285,7 +1292,7 @@
             </div>
         </div>
 
-        <!-- Modal de prompt por semana -->
+        <!-- MODAL DE PROMPT POR SEMANA -->
         <div id="promptSemanaModal" class="modal">
             <div class="modal-content">
                 <button class="modal-close" onclick="cerrarPromptSemanaModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
@@ -1318,9 +1325,6 @@
     
     <script>
 
-        // ========== BASE DE DATOS COMPLETA DEL PNFT 2026 ==========
-        // Incluye todos los saberes conceptuales e indicadores de logro
-        // de Preescolar, I Ciclo, II Ciclo y III Ciclo
         const PNFT_DATA = {
             // ========== MATERNO INFANTIL / TRANSICIÓN ==========
             "0°": {
@@ -2555,7 +2559,6 @@
 }  // ← CIERRA "9°"
 };  // ← CIERRA todo PNFT_DATA (solo UNA vez al final)
     
-        
         const RDA_POR_CICLO = {
             "Materno Infantil/Transición": {
                 "Apropiación tecnológica y Digital": "Identifica los dispositivos digitales considerando características funcionales, experimentando su utilidad y reconociendo la autoría, durante la accesibilidad, interacción y comunicación en la creación de recursos digitales.",
@@ -2600,6 +2603,9 @@
 
         // ==================== INICIALIZACIÓN ====================
         document.addEventListener('DOMContentLoaded', function() {
+            if (typeof PNFT_DATA === 'undefined') {
+                console.warn('⚠️ PNFT_DATA no está definido. Algunas funciones podrían no trabajar correctamente.');
+            }
             inicializarSemanas();
             configurarEventListeners();
             configurarMembrete();
@@ -3041,7 +3047,6 @@
             const nivel = document.getElementById('nivel').value;
             
             if (modoFormatoActivo) {
-                // Si hay editor Quill, actualizarlo
                 const editor = editoresQuill.find(e => e.semana === numeroSemana && e.tipo === 'indicadores');
                 if (editor) {
                     if (!nivel || semana.saberes.length === 0 || typeof PNFT_DATA === 'undefined') {
@@ -3652,18 +3657,25 @@
 
             function limpiarContenido(texto) {
                 if (!texto || texto.toString().trim() === '') return '';
-                let contenido = texto.toString();
-                contenido = contenido.replace(/<[^>]*>/g, ' ');
-                contenido = contenido.replace(/&nbsp;/g, ' ');
-                contenido = contenido.replace(/&lt;/g, '<');
-                contenido = contenido.replace(/&gt;/g, '>');
-                contenido = contenido.replace(/&amp;/g, '&');
-                contenido = contenido.replace(/&quot;/g, '"');
-                contenido = contenido.replace(/&#39;/g, "'");
-                contenido = contenido.replace(/\s+/g, ' ');
-                return contenido.trim();
+                return texto.toString().trim();
             }
-            
+
+            function formatearProcedimentales(texto) {
+                if (!texto) return '';
+                // Capitalizar primera letra
+                return texto.charAt(0).toUpperCase() + texto.slice(1);
+            }
+
+            function formatearIndicadores(texto) {
+                if (!texto) return '';
+                // Dividir por puntos y crear lista
+                const partes = texto.split(/\.\s+/);
+                if (partes.length > 1) {
+                    return partes.map(p => p.trim()).filter(p => p).map(p => `• ${p}.`).join('<br>');
+                }
+                return texto;
+            }
+
             let contenidoHTML = `<!DOCTYPE html>
 <html>
 <head>
@@ -3686,11 +3698,11 @@
         .tabla th { background-color: #45258F; color: white; font-weight: bold; text-align: center; padding: 2mm; border: 0.5pt solid black; font-size: 10pt; }
         .tabla td { border: 0.5pt solid #ccc; padding: 2mm; vertical-align: top; font-size: 10pt; }
         .encabezado-semana { background-color: #45258F; color: white; font-weight: bold; padding: 2mm; font-size: 11pt; border-radius: 2mm 2mm 0 0; }
-        .mensaje-flotante, .no-imprimir { display: none; }
+        .saberes-lista { margin-left: 10px; }
+        .saberes-lista li { margin-bottom: 3px; }
+        .no-imprimir { display: none; }
         @media print {
-            .mensaje-flotante, .no-imprimir, [style*="position: fixed"] {
-                display: none !important;
-            }
+            .no-imprimir { display: none !important; }
             @page { size: A4 landscape; margin: 15mm; } 
             body { margin: 0; padding: 15mm; } 
             .titulo-seccion, .encabezado-semana, .tabla th { 
@@ -3709,10 +3721,8 @@
                 
                 if (membreteInstitucional.escudo && membreteInstitucional.escudo.startsWith('data:image')) {
                     escudoHTML = `<img src="${membreteInstitucional.escudo}" alt="Escudo">`;
-                } else if (membreteInstitucional.escudo) {
-                    escudoHTML = `<div style="text-align:center; color:#999; font-size: 24px;">🖼️</div><div style="font-size: 9px;">Formato no soportado</div>`;
                 } else {
-                    escudoHTML = `<div style="text-align:center; color:#999; font-size: 24px;">🖼️</div><div style="font-size: 9px;">Sin escudo</div>`;
+                    escudoHTML = `<div style="text-align:center; color:#999; font-size: 24px;">🖼️</div>`;
                 }
                 
                 contenidoHTML += `
@@ -3799,7 +3809,7 @@
             <div class="titulo-seccion">SABERES GLOBALES</div>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm;">
                 <div style="background: white; border: 1pt solid #ddd; border-radius: 2mm; padding: 3mm;"><div style="font-weight: bold; color: #45258F; margin-bottom: 2mm;">Conceptuales</div>${saberesSeleccionados.size ? Array.from(saberesSeleccionados).map(s => `• ${s}`).join('<br>') : '<em>No seleccionados</em>'}</div>
-                <div style="background: white; border: 1pt solid #ddd; border-radius: 2mm; padding: 3mm;"><div style="font-weight: bold; color: #45258F; margin-bottom: 2mm;">Procedimentales</div>${saberesProcedimentalesGlobales.size ? Array.from(saberesProcedimentalesGlobales).map(p => `• ${p}`).join('<br>') : '<em>No seleccionados</em>'}</div>
+                <div style="background: white; border: 1pt solid #ddd; border-radius: 2mm; padding: 3mm;"><div style="font-weight: bold; color: #45258F; margin-bottom: 2mm;">Procedimentales</div>${saberesProcedimentalesGlobales.size ? Array.from(saberesProcedimentalesGlobales).map(p => `• ${formatearProcedimentales(p)}`).join('<br>') : '<em>No seleccionados</em>'}</div>
                 <div style="background: white; border: 1pt solid #ddd; border-radius: 2mm; padding: 3mm;"><div style="font-weight: bold; color: #45258F; margin-bottom: 2mm;">Actitudinales</div>${saberesActitudinalesGlobales.size ? Array.from(saberesActitudinalesGlobales).map(a => `• ${a}`).join('<br>') : '<em>No seleccionados</em>'}</div>
             </div>
         </div>`;
@@ -3823,7 +3833,7 @@
                         <th width="33%">Indicadores de evaluación</th>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">${limpiarContenido(semana.indicadores) || 'No especificado'}</td>
+                        <td style="vertical-align: top;">${formatearIndicadores(limpiarContenido(semana.indicadores)) || 'No especificado'}</td>
                         <td style="vertical-align: top;">${limpiarContenido(semana.actividades) || 'No especificado'}</td>
                         <td style="vertical-align: top;">${limpiarContenido(semana.evaluacion) || 'No especificado'}</td>
                     </tr>
@@ -3874,29 +3884,26 @@
             setTimeout(() => {
                 ventanaPreview.focus();
                 
-                // BOTÓN GRANDE PARA IMPRIMIR
+                // BOTÓN GRANDE AMARILLO PARA IMPRIMIR (abajo derecha)
                 const botonImprimir = ventanaPreview.document.createElement('button');
                 botonImprimir.className = 'boton-imprimir-flotante no-imprimir';
                 botonImprimir.innerHTML = '🖨️ IMPRIMIR PDF AHORA';
                 botonImprimir.onclick = () => ventanaPreview.print();
                 ventanaPreview.document.body.appendChild(botonImprimir);
                 
-                // INSTRUCCIONES
+                // INSTRUCCIONES (arriba derecha)
                 const instrucciones = ventanaPreview.document.createElement('div');
                 instrucciones.className = 'instrucciones-imprimir no-imprimir';
                 instrucciones.innerHTML = `
-                    <h3 style="margin-bottom: 15px;">📋 INSTRUCCIONES PARA IMPRIMIR</h3>
-                    <ol style="margin-left: 20px; margin-bottom: 20px; line-height: 1.8;">
-                        <li>Haga clic en el botón <strong>AMARILLO</strong> de abajo</li>
-                        <li>Seleccione <strong>"Guardar como PDF"</strong></li>
-                        <li>Orientación: <strong>Horizontal</strong></li>
-                        <li>Márgenes: <strong>15mm</strong></li>
-                        <li>Active <strong>"Fondo gráfico"</strong></li>
+                    <h4 style="margin-bottom: 10px;">📋 Instrucciones rápidas</h4>
+                    <ol style="margin-left: 15px; font-size: 12px;">
+                        <li>Haga clic en el botón amarillo</li>
+                        <li>Seleccione "Guardar como PDF"</li>
+                        <li>Orientación: Horizontal</li>
                     </ol>
-                    <button onclick="this.parentElement.remove()" style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Cerrar</button>
+                    <button onclick="this.parentElement.remove()" style="margin-top: 10px; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Cerrar</button>
                 `;
                 ventanaPreview.document.body.appendChild(instrucciones);
-                
             }, 500);
         }
 
@@ -4348,46 +4355,31 @@
         function activarFormato() {
             if (modoFormatoActivo) return;
             
-            mostrarMensaje('🔄 Activando formato...');
+            mostrarMensaje('🔄 Activando formato en todas las columnas...');
             
-            // Guardar contenido actual
-            guardarContenidoSemanasAntesDeFormato();
+            // Guardar contenido actual antes de la conversión
+            guardarContenidoAntesDeFormato();
             
             modoFormatoActivo = true;
             document.getElementById('btnActivarFormato').style.display = 'none';
             document.getElementById('btnDesactivarFormato').style.display = 'inline-flex';
             
-            // Cargar Quill si no está disponible
             if (typeof Quill === 'undefined') {
                 cargarQuillYConvertir();
             } else {
-                convertirEditoresFormato();
+                convertirTodasLasColumnas();
             }
         }
 
-        function cargarQuillYConvertir() {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'https://cdn.quilljs.com/1.3.6/quill.snow.css';
-            document.head.appendChild(link);
-            
-            const script = document.createElement('script');
-            script.src = 'https://cdn.quilljs.com/1.3.6/quill.js';
-            script.onload = function() {
-                convertirEditoresFormato();
-            };
-            script.onerror = function() {
-                mostrarMensaje('❌ Error al cargar editor', true);
-                modoFormatoActivo = false;
-                document.getElementById('btnActivarFormato').style.display = 'inline-flex';
-                document.getElementById('btnDesactivarFormato').style.display = 'none';
-            };
-            document.head.appendChild(script);
-        }
-
-        function guardarContenidoSemanasAntesDeFormato() {
+        function guardarContenidoAntesDeFormato() {
             semanas.forEach((semana, index) => {
                 const numSemana = index + 1;
+                
+                // Guardar indicadores
+                const indContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="indicadores"]`);
+                if (indContainer) {
+                    semana.indicadores = indContainer.innerHTML;
+                }
                 
                 // Guardar actividades
                 const actContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="Mediación"]`);
@@ -4403,78 +4395,99 @@
             });
         }
 
-        function convertirEditoresFormato() {
+        function cargarQuillYConvertir() {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdn.quilljs.com/1.3.6/quill.snow.css';
+            document.head.appendChild(link);
+            
+            const script = document.createElement('script');
+            script.src = 'https://cdn.quilljs.com/1.3.6/quill.js';
+            script.onload = function() {
+                convertirTodasLasColumnas();
+            };
+            script.onerror = function() {
+                mostrarMensaje('❌ Error al cargar editor', true);
+                modoFormatoActivo = false;
+                document.getElementById('btnActivarFormato').style.display = 'inline-flex';
+                document.getElementById('btnDesactivarFormato').style.display = 'none';
+            };
+            document.head.appendChild(script);
+        }
+
+        function convertirTodasLasColumnas() {
             let convertidos = 0;
             
             semanas.forEach((semana, index) => {
                 const numSemana = index + 1;
                 
-                // Convertir SOLO Mediación
-                const actContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="Mediación"]`);
-                if (actContainer && !actContainer.parentNode.querySelector('.quill-wrapper')) {
-                    convertirAContentEditableRich(numSemana, 'actividades', actContainer, semana.actividades);
-                    convertidos++;
-                }
+                // Convertir TODAS las columnas: Indicadores, Mediación y Evaluación
+                const contenedores = document.querySelectorAll(`#semana-${numSemana} .contenedor-editable`);
                 
-                // Convertir SOLO Evaluación
-                const evalContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="evaluación"]`);
-                if (evalContainer && !evalContainer.parentNode.querySelector('.quill-wrapper')) {
-                    convertirAContentEditableRich(numSemana, 'evaluacion', evalContainer, semana.evaluacion);
+                contenedores.forEach((contenedor) => {
+                    if (contenedor.parentNode.querySelector('.quill-wrapper')) return;
+                    
+                    let tipo = 'indicadores';
+                    const titulo = contenedor.previousElementSibling;
+                    if (titulo && titulo.classList.contains('columna-titulo')) {
+                        if (titulo.textContent.includes('Mediación')) tipo = 'actividades';
+                        else if (titulo.textContent.includes('evaluación')) tipo = 'evaluacion';
+                    }
+                    
+                    const contenidoGuardado = semanas[numSemana-1][tipo] || contenedor.innerHTML;
+                    
+                    const idUnico = `editor-${tipo}-${numSemana}-${Date.now()}`;
+                    
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'quill-wrapper';
+                    
+                    const editorDiv = document.createElement('div');
+                    editorDiv.id = idUnico;
+                    editorDiv.style.height = '150px';
+                    
+                    wrapper.appendChild(editorDiv);
+                    contenedor.parentNode.replaceChild(wrapper, contenedor);
+                    
+                    const quill = new Quill(`#${idUnico}`, {
+                        theme: 'snow',
+                        modules: {
+                            toolbar: [
+                                [{ 'font': [] }],
+                                [{ 'size': ['small', false, 'large', 'huge'] }],
+                                ['bold', 'italic', 'underline', 'strike'],
+                                [{ 'color': [] }, { 'background': [] }],
+                                [{ 'script': 'sub'}, { 'script': 'super' }],
+                                [{ 'header': 1 }, { 'header': 2 }],
+                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                [{ 'indent': '-1'}, { 'indent': '+1' }],
+                                [{ 'align': [] }],
+                                ['clean']
+                            ]
+                        }
+                    });
+                    
+                    if (contenidoGuardado && contenidoGuardado !== '<br>') {
+                        quill.root.innerHTML = contenidoGuardado;
+                    }
+                    
+                    editoresQuill.push({
+                        id: idUnico,
+                        tipo: tipo,
+                        semana: numSemana,
+                        quill: quill
+                    });
+                    
+                    quill.on('text-change', function() {
+                        if (semanas[numSemana-1]) {
+                            semanas[numSemana-1][tipo] = quill.root.innerHTML;
+                        }
+                    });
+                    
                     convertidos++;
-                }
+                });
             });
             
-            mostrarMensaje(`✅ Formato activado en ${convertidos} secciones (solo Mediación y Evaluación)`);
-        }
-
-        function convertirAContentEditableRich(numSemana, tipo, contenedor, contenidoGuardado) {
-            const idUnico = `editor-${tipo}-${numSemana}-${Date.now()}`;
-            const contenidoActual = contenidoGuardado || contenedor.innerHTML;
-            
-            const wrapper = document.createElement('div');
-            wrapper.className = 'quill-wrapper';
-            
-            const editorDiv = document.createElement('div');
-            editorDiv.id = idUnico;
-            editorDiv.style.height = '150px';
-            
-            wrapper.appendChild(editorDiv);
-            contenedor.parentNode.replaceChild(wrapper, contenedor);
-            
-            const quill = new Quill(`#${idUnico}`, {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'font': [] }],
-                        [{ 'size': ['small', false, 'large', 'huge'] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'script': 'sub'}, { 'script': 'super' }],
-                        [{ 'header': 1 }, { 'header': 2 }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'indent': '-1'}, { 'indent': '+1' }],
-                        [{ 'align': [] }],
-                        ['clean']
-                    ]
-                }
-            });
-            
-            if (contenidoActual && contenidoActual !== '<br>') {
-                quill.root.innerHTML = contenidoActual;
-            }
-            
-            editoresQuill.push({
-                id: idUnico,
-                tipo: tipo,
-                semana: numSemana,
-                quill: quill
-            });
-            
-            quill.on('text-change', function() {
-                if (semanas[numSemana-1]) {
-                    semanas[numSemana-1][tipo] = quill.root.innerHTML;
-                }
-            });
+            mostrarMensaje(`✅ Formato activado en ${convertidos} columnas`);
         }
 
         function desactivarFormato() {
@@ -4534,10 +4547,42 @@
         }
 
         function actualizarSemanasPreservandoContenido() {
-            // Implementación según tu código original
-            console.log('Actualizar semanas preservando contenido');
+            // Mantener esta función como estaba originalmente
+            const nuevasLecciones = parseInt(document.getElementById('leccionesPlanificadas').value) || 8;
+            const nuevasSemanas = Math.ceil(nuevasLecciones / 2);
+            
+            if (nuevasSemanas > semanas.length) {
+                for (let i = semanas.length + 1; i <= nuevasSemanas; i++) {
+                    const leccionInicio = (i - 1) * 2 + 1;
+                    const leccionFin = Math.min(i * 2, nuevasLecciones);
+                    
+                    semanas.push({
+                        id: i,
+                        nombre: `Semana ${i}`,
+                        lecciones: `Lecciones ${leccionInicio} y ${leccionFin}`,
+                        eje: '',
+                        areas: [],
+                        rda: '',
+                        saberes: [],
+                        procedimentales: [],
+                        actitudinales: [],
+                        actividades: '',
+                        recursos: '',
+                        evaluacion: '',
+                        indicadores: ''
+                    });
+                }
+            } else if (nuevasSemanas < semanas.length) {
+                if (!confirm('¿Reducir el número de semanas? Se perderán las semanas adicionales.')) {
+                    document.getElementById('leccionesPlanificadas').value = semanas.length * 2;
+                    return;
+                }
+                semanas = semanas.slice(0, nuevasSemanas);
+            }
+            
+            reconstruirVistaSemanasPreservandoContenido();
+            actualizarContadoresSemanas();
         }
     </script>
 </body>
 </html>
-
