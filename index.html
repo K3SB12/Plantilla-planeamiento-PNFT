@@ -402,7 +402,7 @@
             font-style: italic;
         }
 
-        /* Estilos mejorados para Quill - SE APLICA A TODAS LAS COLUMNAS */
+        /* Estilos mejorados para Quill */
         .ql-toolbar {
             background: #f8f9fa !important;
             border: 2px solid var(--border-color) !important;
@@ -758,7 +758,6 @@
             display: block;
         }
 
-        /* Panel institucional */
         .panel-institucional {
             display: flex;
             align-items: center;
@@ -830,20 +829,21 @@
             margin-right: 5px;
         }
 
-        /* Estilos mejorados para impresión */
+        /* Estilos para elementos de impresión */
         .instrucciones-imprimir {
             position: fixed;
             top: 20px;
             right: 20px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 20px;
+            padding: 15px 20px;
             border-radius: 10px;
-            z-index: 100000;
+            z-index: 999999;
             font-size: 14px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             border-left: 4px solid #ffc107;
-            max-width: 350px;
+            max-width: 300px;
+            pointer-events: all;
         }
 
         .boton-imprimir-flotante {
@@ -858,10 +858,11 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            z-index: 100000;
+            z-index: 999999;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             border: 2px solid var(--primary-color);
             animation: pulse 2s infinite;
+            pointer-events: all;
         }
 
         @keyframes pulse {
@@ -1192,7 +1193,7 @@
             <button onclick="generarPromptCompleto()" class="btn btn-primary">🤖 Prompt IA General</button>
             <button onclick="mostrarGuiaIA()" class="btn btn-info">📘 Guía IA</button>
             <!-- BOTÓN AMARILLO CORREGIDO -->
-            <button onclick="activarFormato()" class="btn btn-warning" id="btnActivarFormato">✨ Activar formato en todas las columnas</button>
+            <button onclick="activarFormato()" class="btn btn-warning" id="btnActivarFormato">✨ Activar formato</button>
             <button onclick="desactivarFormato()" class="btn btn-secondary" style="background: #6c757d; color: white; display: none;" id="btnDesactivarFormato">🔙 Modo simple</button>
         </div>
 
@@ -1324,7 +1325,11 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     
     <script>
-
+        // ====================================================
+        // ===== PEGA AQUÍ TU CONST PNFT_DATA =================
+        // ====================================================
+        // const PNFT_DATA = { ... };
+        // ====================================================
         const PNFT_DATA = {
             // ========== MATERNO INFANTIL / TRANSICIÓN ==========
             "0°": {
@@ -3597,6 +3602,22 @@
                 semanas.forEach((semana, index) => {
                     actualizarRdASemana(index + 1);
                     actualizarOpcionesSaberesSemana(index + 1);
+                    
+                    // Restaurar checkboxes procedimentales
+                    if (semana.procedimentales) {
+                        semana.procedimentales.forEach(proc => {
+                            const checkbox = document.querySelector(`input[name="procedimental-semana-${index+1}"][value="${proc}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    }
+                    
+                    // Restaurar checkboxes actitudinales
+                    if (semana.actitudinales) {
+                        semana.actitudinales.forEach(act => {
+                            const checkbox = document.querySelector(`input[name="actitudinal-semana-${index+1}"][value="${act}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    }
                 });
             }, 500);
             
@@ -3662,13 +3683,11 @@
 
             function formatearProcedimentales(texto) {
                 if (!texto) return '';
-                // Capitalizar primera letra
                 return texto.charAt(0).toUpperCase() + texto.slice(1);
             }
 
             function formatearIndicadores(texto) {
                 if (!texto) return '';
-                // Dividir por puntos y crear lista
                 const partes = texto.split(/\.\s+/);
                 if (partes.length > 1) {
                     return partes.map(p => p.trim()).filter(p => p).map(p => `• ${p}.`).join('<br>');
@@ -3698,8 +3717,6 @@
         .tabla th { background-color: #45258F; color: white; font-weight: bold; text-align: center; padding: 2mm; border: 0.5pt solid black; font-size: 10pt; }
         .tabla td { border: 0.5pt solid #ccc; padding: 2mm; vertical-align: top; font-size: 10pt; }
         .encabezado-semana { background-color: #45258F; color: white; font-weight: bold; padding: 2mm; font-size: 11pt; border-radius: 2mm 2mm 0 0; }
-        .saberes-lista { margin-left: 10px; }
-        .saberes-lista li { margin-bottom: 3px; }
         .no-imprimir { display: none; }
         @media print {
             .no-imprimir { display: none !important; }
@@ -3884,14 +3901,14 @@
             setTimeout(() => {
                 ventanaPreview.focus();
                 
-                // BOTÓN GRANDE AMARILLO PARA IMPRIMIR (abajo derecha)
+                // BOTÓN GRANDE AMARILLO - AHORA SÍ APARECE
                 const botonImprimir = ventanaPreview.document.createElement('button');
                 botonImprimir.className = 'boton-imprimir-flotante no-imprimir';
                 botonImprimir.innerHTML = '🖨️ IMPRIMIR PDF AHORA';
                 botonImprimir.onclick = () => ventanaPreview.print();
                 ventanaPreview.document.body.appendChild(botonImprimir);
                 
-                // INSTRUCCIONES (arriba derecha)
+                // INSTRUCCIONES - AHORA SÍ APARECEN
                 const instrucciones = ventanaPreview.document.createElement('div');
                 instrucciones.className = 'instrucciones-imprimir no-imprimir';
                 instrucciones.innerHTML = `
@@ -3904,6 +3921,9 @@
                     <button onclick="this.parentElement.remove()" style="margin-top: 10px; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Cerrar</button>
                 `;
                 ventanaPreview.document.body.appendChild(instrucciones);
+                
+                // Verificar que los elementos tienen la clase no-imprimir
+                console.log('Elementos de impresión creados:', botonImprimir, instrucciones);
             }, 500);
         }
 
@@ -4504,6 +4524,28 @@
             document.getElementById('btnActivarFormato').style.display = 'inline-flex';
             document.getElementById('btnDesactivarFormato').style.display = 'none';
             
+            // Guardar estado actual de checkboxes antes de reconstruir
+            const procedimentalesGuardados = [];
+            const actitudinalesGuardados = [];
+            
+            semanas.forEach((semana, index) => {
+                const numSemana = index + 1;
+                
+                // Guardar procedimentales
+                document.querySelectorAll(`input[name="procedimental-semana-${numSemana}"]:checked`).forEach(cb => {
+                    if (!procedimentalesGuardados.includes(cb.value)) {
+                        procedimentalesGuardados.push(cb.value);
+                    }
+                });
+                
+                // Guardar actitudinales
+                document.querySelectorAll(`input[name="actitudinal-semana-${numSemana}"]:checked`).forEach(cb => {
+                    if (!actitudinalesGuardados.includes(cb.value)) {
+                        actitudinalesGuardados.push(cb.value);
+                    }
+                });
+            });
+            
             // Eliminar editores Quill
             document.querySelectorAll('.quill-wrapper').forEach(wrapper => wrapper.remove());
             editoresQuill = [];
@@ -4521,11 +4563,12 @@
                 container.appendChild(semanaElement);
             });
             
-            // Restaurar contenido
+            // Restaurar contenido y checkboxes
             setTimeout(() => {
                 semanas.forEach((semana, index) => {
                     const numSemana = index + 1;
                     
+                    // Restaurar texto de las columnas
                     if (semana.indicadores) {
                         const indContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="indicadores"]`);
                         if (indContainer) indContainer.innerHTML = semana.indicadores;
@@ -4540,6 +4583,22 @@
                         const evalContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="evaluación"]`);
                         if (evalContainer) evalContainer.innerHTML = semana.evaluacion;
                     }
+                    
+                    // Restaurar checkboxes procedimentales
+                    if (semana.procedimentales) {
+                        semana.procedimentales.forEach(proc => {
+                            const checkbox = document.querySelector(`input[name="procedimental-semana-${numSemana}"][value="${proc}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    }
+                    
+                    // Restaurar checkboxes actitudinales
+                    if (semana.actitudinales) {
+                        semana.actitudinales.forEach(act => {
+                            const checkbox = document.querySelector(`input[name="actitudinal-semana-${numSemana}"][value="${act}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    }
                 });
             }, 100);
             
@@ -4547,7 +4606,6 @@
         }
 
         function actualizarSemanasPreservandoContenido() {
-            // Mantener esta función como estaba originalmente
             const nuevasLecciones = parseInt(document.getElementById('leccionesPlanificadas').value) || 8;
             const nuevasSemanas = Math.ceil(nuevasLecciones / 2);
             
