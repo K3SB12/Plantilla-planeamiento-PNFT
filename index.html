@@ -912,20 +912,19 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="panel-institucional">
-            <div class="escudo-container" onclick="document.getElementById('uploadEscudo').click()">
-                <img id="escudoInstitucional" src="" alt="Escudo" style="display: none; width: 100%; height: 100%; object-fit: contain;">
-                <div id="escudoPlaceholder" style="color: #999; font-size: 24px; text-align: center;">
-                    <div>🖼️</div>
-                    <small>Subir escudo</small>
-                </div>
+        <!-- PANEL DE CONFIGURACIÓN INSTITUCIONAL -->
+        <div class="panel-institucional" style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
+            <div class="escudo-container" style="width: 100px; height: 100px; border: 2px dashed #45258F; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: white;">
+                <img id="escudoInstitucional" src="" alt="Escudo" style="max-width: 100%; max-height: 100%; display: none;">
+                <span id="escudoPlaceholder" style="color: #999;">+</span>
             </div>
-            <input type="file" id="uploadEscudo" accept="image/png, image/jpeg" style="display: none;">
-            
             <div style="flex: 1;">
-                <input type="text" id="nombreInstitucion" class="input-field" placeholder="Nombre de la institución educativa" value="Ministerio de Educación Pública">
-                <input type="text" id="lemaInstitucion" class="input-field" placeholder="Lema institucional (opcional)" style="margin-top: 8px;">
+                <label for="uploadEscudo" class="btn btn-outline" style="display: inline-block; margin-bottom: 5px;">📤 Subir Escudo</label>
+                <input type="file" id="uploadEscudo" accept="image/png, image/jpeg" style="display: none;">
+                <div style="margin-top: 10px;">
+                    <input type="text" id="nombreInstitucionPersonalizado" class="input-field" placeholder="Nombre de la Institución" style="margin-bottom: 5px;">
+                    <input type="text" id="lemaInstitucion" class="input-field" placeholder="Lema (opcional)">
+                </div>
             </div>
         </div>
 
@@ -4219,6 +4218,20 @@
             }, 4000);
         }
 
+        document.getElementById('uploadEscudo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('escudoInstitucional');
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('escudoPlaceholder').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         function configurarMembrete() {
             const uploadInput = document.getElementById('uploadEscudo');
             const escudoImg = document.getElementById('escudoInstitucional');
@@ -4556,3 +4569,4 @@
 </body>
 </html>
        
+
