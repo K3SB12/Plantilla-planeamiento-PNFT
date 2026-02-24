@@ -909,25 +909,29 @@
             .container { padding: 10px; }
             .section-title { font-size: 13px; }
         }
+        .panel-institucional {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .panel-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .btn-right {
+            align-self: flex-end;
+        }
     </style>
 </head>
 <body>
-        <!-- PANEL DE CONFIGURACIÓN INSTITUCIONAL -->
-        <div class="panel-institucional" style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
-            <div class="escudo-container" style="width: 100px; height: 100px; border: 2px dashed #45258F; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: white;">
-                <img id="escudoInstitucional" src="" alt="Escudo" style="max-width: 100%; max-height: 100%; display: none;">
-                <span id="escudoPlaceholder" style="color: #999;">+</span>
-            </div>
-            <div style="flex: 1;">
-                <label for="uploadEscudo" class="btn btn-outline" style="display: inline-block; margin-bottom: 5px;">📤 Subir Escudo</label>
-                <input type="file" id="uploadEscudo" accept="image/png, image/jpeg" style="display: none;">
-                <div style="margin-top: 10px;">
-                    <input type="text" id="nombreInstitucionPersonalizado" class="input-field" placeholder="Nombre de la Institución" style="margin-bottom: 5px;">
-                    <input type="text" id="lemaInstitucion" class="input-field" placeholder="Lema (opcional)">
-                </div>
-            </div>
-        </div>
-
         <div class="header">
             <h1>Plantilla de Planeamiento Didáctico</h1>
             <h2>Programa Nacional de Formación Tecnológica - Informática educativa</h2>
@@ -4218,59 +4222,64 @@
             }, 4000);
         }
 
-        document.getElementById('uploadEscudo').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = document.getElementById('escudoInstitucional');
-                    img.src = event.target.result;
-                    img.style.display = 'block';
-                    document.getElementById('escudoPlaceholder').style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
 
-        function configurarMembrete() {
+            function configurarMembrete() {
             const uploadInput = document.getElementById('uploadEscudo');
             const escudoImg = document.getElementById('escudoInstitucional');
             const escudoPlaceholder = document.getElementById('escudoPlaceholder');
-            
-            if (uploadInput) {
-                uploadInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        if (!file.type.match('image.*')) {
-                            mostrarMensaje('❌ Solo se permiten imágenes', true);
-                            return;
-                        }
-                        
-                        const reader = new FileReader();
-                        
-                        reader.onload = function(event) {
-                            escudoImg.src = event.target.result;
-                            escudoImg.style.display = 'block';
-                            escudoImg.style.width = '100%';
-                            escudoImg.style.height = '100%';
-                            escudoImg.style.objectFit = 'contain';
-                            escudoPlaceholder.style.display = 'none';
-                            membreteInstitucional.escudo = event.target.result;
-                            
-                            const contenedor = document.querySelector('.escudo-container');
-                            contenedor.style.display = 'flex';
-                            
-                            mostrarMensaje('✅ Escudo cargado correctamente');
-                        };
-                        
-                        reader.onerror = function() {
-                            mostrarMensaje('❌ Error al leer el archivo', true);
-                        };
-                        
-                        reader.readAsDataURL(file);
+            const contenedor = document.querySelector('.escudo-container');
+        
+            // Si algo no existe, no ejecuta nada
+            if (!uploadInput || !escudoImg || !escudoPlaceholder) return;
+        
+            uploadInput.addEventListener('change', (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+        
+                // Validar tipo de archivo
+                if (!file.type.startsWith('image/')) {
+                    mostrarMensaje?.('❌ Solo se permiten imágenes', true);
+                    uploadInput.value = '';
+                    return;
+                }
+        
+                // Validar tamaño (máximo 2MB)
+                const MAX_SIZE = 2 * 1024 * 1024;
+                if (file.size > MAX_SIZE) {
+                    mostrarMensaje?.('❌ La imagen no debe superar 2MB', true);
+                    uploadInput.value = '';
+                    return;
+                }
+        
+                const reader = new FileReader();
+        
+                reader.onload = ({ target }) => {
+                    const imageData = target.result;
+        
+                    escudoImg.src = imageData;
+                    escudoImg.style.display = 'block';
+                    escudoImg.style.objectFit = 'contain';
+                    escudoPlaceholder.style.display = 'none';
+        
+                    if (contenedor) {
+                        contenedor.style.display = 'flex';
                     }
-                });
-            }
+        
+                    // Guardar si el objeto existe
+                    if (typeof membreteInstitucional !== 'undefined') {
+                        membreteInstitucional.escudo = imageData;
+                    }
+        
+                    mostrarMensaje?.('✅ Escudo cargado correctamente');
+                };
+        
+                reader.onerror = () => {
+                    mostrarMensaje?.('❌ Error al leer el archivo', true);
+                };
+        
+                reader.readAsDataURL(file);
+            });
+        }
 
             const nombreInput = document.getElementById('nombreInstitucion');
             if (nombreInput) {
@@ -4569,4 +4578,5 @@
 </body>
 </html>
        
+
 
