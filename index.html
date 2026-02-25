@@ -3111,7 +3111,7 @@
                     });
                     
                     editor.quill.root.innerHTML = html || '<p><em>No hay indicadores disponibles</em></p>';
-                    semana.indicadores = html;
+                    semana.indicadores = editor.quill.root.innerHTML;
                 }
             } else {
                 const selector = `#semana-${numeroSemana} .contenedor-editable[data-placeholder*="indicadores"]`;
@@ -3301,9 +3301,13 @@
             actualizarContadoresSemanas();
         }
 
+        // CORREGIDO: Función mejorada para reconstruir semanas preservando TODO el contenido
         function reconstruirVistaSemanasPreservandoContenido() {
             const container = document.getElementById('semanasContainer');
             container.innerHTML = '';
+            
+            // CORREGIDO: Guardar el estado actual de los ejes transversales globales antes de reconstruir
+            const ejesGlobalesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
             
             semanas.forEach((semana, index) => {
                 const lecciones = semana.lecciones.match(/\d+/g) || [];
@@ -3313,8 +3317,21 @@
                 const semanaElement = crearElementoSemana(index + 1, leccionInicio, leccionFin);
                 container.appendChild(semanaElement);
                 
+                // CORREGIDO: Restaurar estado después de que el DOM esté listo
                 setTimeout(() => {
-                    semana.areas.forEach(area => {
+                    // Restaurar EJE de la semana (CORREGIDO)
+                    if (semana.eje) {
+                        const radioEje = document.querySelector(`input[name="eje-semana-${index+1}"][value="${semana.eje}"]`);
+                        if (radioEje) {
+                            radioEje.checked = true;
+                            // Actualizar visual del contenedor padre
+                            const label = radioEje.closest('.eje-semana-option');
+                            if (label) label.classList.add('selected');
+                        }
+                    }
+                    
+                    // Restaurar ÁREAS de conocimiento (CORREGIDO)
+                    if (semana.areas && semana.areas.length > 0) {
                         const areaMapping = {
                             'Apropiación tecnológica y Digital': 'apropiacion',
                             'Programación y Algoritmos': 'programacion',
@@ -3322,76 +3339,84 @@
                             'Ciencia de datos e Inteligencia artificial': 'ciencia'
                         };
                         
-                        const areaKey = areaMapping[area];
-                        if (areaKey) {
-                            const checkbox = document.querySelector(`input[name="area-semana-${index+1}"][value="${areaKey}"]`);
-                            if (checkbox) {
-                                checkbox.checked = true;
-                                actualizarAreaSemana(index + 1, checkbox);
-                            }
-                        }
-                    });
-                    
-                    if (semana.eje) {
-                        const radio = document.querySelector(`input[name="eje-semana-${index+1}"][value="${semana.eje}"]`);
-                        if (radio) radio.checked = true;
-                    }
-                    
-                    semana.saberes.forEach(saber => {
-                        const checkboxes = document.querySelectorAll(`#saberes-conceptuales-${index+1} input[type="checkbox"]`);
-                        checkboxes.forEach(checkbox => {
-                            const saberNombre = checkbox.nextElementSibling?.querySelector('div')?.textContent;
-                            if (saberNombre && saberNombre.includes(saber)) {
-                                checkbox.checked = true;
-                                checkbox.parentElement.classList.add('seleccionado');
+                        semana.areas.forEach(areaNombre => {
+                            const areaKey = areaMapping[areaNombre];
+                            if (areaKey) {
+                                const checkbox = document.querySelector(`input[name="area-semana-${index+1}"][value="${areaKey}"]`);
+                                if (checkbox) {
+                                    checkbox.checked = true;
+                                    actualizarAreaSemana(index + 1, checkbox);
+                                }
                             }
                         });
-                    });
+                    }
                     
-                    semana.procedimentales.forEach(proc => {
-                        const checkbox = document.querySelector(`input[name="procedimental-semana-${index+1}"][value="${proc}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                    
-                    semana.actitudinales.forEach(act => {
-                        const checkbox = document.querySelector(`input[name="actitudinal-semana-${index+1}"][value="${act}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                    
-                    const indicadoresContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="indicadores"]`);
-                    if (indicadoresContainer && semana.indicadores) {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = semana.indicadores;
-                        let textContent = tempDiv.textContent || tempDiv.innerText || '';
-                        
-                        if (!textContent.trim()) {
-                            indicadoresContainer.innerHTML = '<br>';
-                        } else {
-                            const lineas = textContent.split('\n').filter(l => l.trim());
-                            let html = '';
-                            lineas.forEach(linea => {
-                                if (linea.trim()) html += `• ${linea.trim()}<br>`;
+                    // Restaurar SABERES CONCEPTUALES (CORREGIDO)
+                    if (semana.saberes && semana.saberes.length > 0) {
+                        // Esperar a que se generen los saberes conceptuales
+                        setTimeout(() => {
+                            semana.saberes.forEach(saberNombre => {
+                                const checkboxes = document.querySelectorAll(`#saberes-conceptuales-${index+1} input[type="checkbox"]`);
+                                checkboxes.forEach(checkbox => {
+                                    const saberDiv = checkbox.closest('.saber-conceptual-item');
+                                    const nombreDiv = saberDiv?.querySelector('div > div:first-child');
+                                    if (nombreDiv && nombreDiv.textContent.includes(saberNombre)) {
+                                        checkbox.checked = true;
+                                        saberDiv.classList.add('seleccionado');
+                                    }
+                                });
                             });
-                            indicadoresContainer.innerHTML = html || '<br>';
-                        }
+                            
+                            // Actualizar contenedor de saberes seleccionados
+                            actualizarSaberesConceptualesContenedor(index + 1);
+                        }, 200);
                     }
                     
-                    const actividadesContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="Mediación"]`);
-                    if (actividadesContainer && semana.actividades) {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = semana.actividades;
-                        actividadesContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '<br>';
+                    // Restaurar PROCEDIMENTALES (CORREGIDO)
+                    if (semana.procedimentales && semana.procedimentales.length > 0) {
+                        semana.procedimentales.forEach(proc => {
+                            const checkbox = document.querySelector(`input[name="procedimental-semana-${index+1}"][value="${proc}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
                     }
                     
-                    const evaluacionContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="evaluación"]`);
-                    if (evaluacionContainer && semana.evaluacion) {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = semana.evaluacion;
-                        evaluacionContainer.innerHTML = tempDiv.textContent || tempDiv.innerText || '<br>';
+                    // Restaurar ACTITUDINALES (CORREGIDO)
+                    if (semana.actitudinales && semana.actitudinales.length > 0) {
+                        semana.actitudinales.forEach(act => {
+                            const checkbox = document.querySelector(`input[name="actitudinal-semana-${index+1}"][value="${act}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
                     }
                     
-                }, 100);
+                    // Restaurar CONTENIDO DE TEXTOS (indicadores, actividades, evaluación)
+                    if (semana.indicadores) {
+                        const indContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="indicadores"]`);
+                        if (indContainer) indContainer.innerHTML = semana.indicadores;
+                    }
+                    
+                    if (semana.actividades) {
+                        const actContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="Mediación"]`);
+                        if (actContainer) actContainer.innerHTML = semana.actividades;
+                    }
+                    
+                    if (semana.evaluacion) {
+                        const evalContainer = document.querySelector(`#semana-${index+1} .contenedor-editable[data-placeholder*="evaluación"]`);
+                        if (evalContainer) evalContainer.innerHTML = semana.evaluacion;
+                    }
+                    
+                }, 50);
             });
+            
+            // CORREGIDO: Restaurar ejes globales
+            setTimeout(() => {
+                ejesGlobalesSeleccionados.forEach(ejeValue => {
+                    const checkbox = document.querySelector(`input[name="eje"][value="${ejeValue}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        checkbox.closest('.eje-option')?.classList.add('selected');
+                    }
+                });
+            }, 100);
         }
 
         function actualizarContadoresSemanas() {
@@ -3551,6 +3576,10 @@
             if (plan.ejesTransversales) {
                 document.querySelectorAll('input[name="eje"]').forEach(checkbox => {
                     checkbox.checked = plan.ejesTransversales.includes(checkbox.value);
+                    // CORREGIDO: Actualizar visual del contenedor
+                    if (checkbox.checked) {
+                        checkbox.closest('.eje-option')?.classList.add('selected');
+                    }
                 });
             }
             
@@ -3569,11 +3598,13 @@
                 }
             }
             
+            // CORREGIDO: Cargar semanas con todos sus datos
             if (plan.semanas && plan.semanas.length > 0) {
                 semanas = plan.semanas;
                 reconstruirVistaSemanasPreservandoContenido();
             }
             
+            // CORREGIDO: Restaurar sets globales
             if (plan.saberesGlobales) {
                 saberesSeleccionados = new Set(plan.saberesGlobales);
             }
@@ -3598,6 +3629,7 @@
             
             actualizarContadoresSemanas();
             
+            // CORREGIDO: Actualizar RdA y saberes después de cargar
             setTimeout(() => {
                 semanas.forEach((semana, index) => {
                     actualizarRdASemana(index + 1);
@@ -3717,9 +3749,16 @@
         .tabla th { background-color: #45258F; color: white; font-weight: bold; text-align: center; padding: 2mm; border: 0.5pt solid black; font-size: 10pt; }
         .tabla td { border: 0.5pt solid #ccc; padding: 2mm; vertical-align: top; font-size: 10pt; }
         .encabezado-semana { background-color: #45258F; color: white; font-weight: bold; padding: 2mm; font-size: 11pt; border-radius: 2mm 2mm 0 0; }
-        .no-imprimir { display: none; }
+        
+        /* CORREGIDO: Estilos para elementos flotantes de impresión */
+        .no-imprimir { 
+            display: block !important; 
+        }
+        
         @media print {
-            .no-imprimir { display: none !important; }
+            .no-imprimir { 
+                display: none !important; 
+            }
             @page { size: A4 landscape; margin: 15mm; } 
             body { margin: 0; padding: 15mm; } 
             .titulo-seccion, .encabezado-semana, .tabla th { 
@@ -3727,6 +3766,46 @@
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact; 
             }
+        }
+        
+        /* Estilos para el botón de imprimir */
+        .boton-imprimir-flotante {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ffc107;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 999999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 2px solid #45258F;
+            animation: pulse 2s infinite;
+        }
+        
+        .instrucciones-imprimir {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #45258F, #6c47c9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 999999;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-left: 4px solid #ffc107;
+            max-width: 300px;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -3884,7 +3963,21 @@
         </div>`;
             }
 
+            // CORREGIDO: Agregar elementos de UI al final del body para que aparezcan correctamente
             contenidoHTML += `
+    </div>
+    
+    <!-- CORREGIDO: Botón e instrucciones agregados directamente al HTML, no por JS -->
+    <button class="boton-imprimir-flotante no-imprimir" onclick="window.print()">🖨️ IMPRIMIR PDF AHORA</button>
+    
+    <div class="instrucciones-imprimir no-imprimir">
+        <h4 style="margin-bottom: 10px;">📋 Instrucciones rápidas</h4>
+        <ol style="margin-left: 15px; font-size: 12px;">
+            <li>Haga clic en el botón amarillo</li>
+            <li>Seleccione "Guardar como PDF"</li>
+            <li>Orientación: Horizontal</li>
+        </ol>
+        <button onclick="this.parentElement.style.display='none'" style="margin-top: 10px; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Cerrar</button>
     </div>
 </body>
 </html>`;
@@ -3895,36 +3988,10 @@
                 return;
             }
             
+            // CORREGIDO: Escribir todo el contenido de una vez
+            ventanaPreview.document.open();
             ventanaPreview.document.write(contenidoHTML);
             ventanaPreview.document.close();
-            
-            setTimeout(() => {
-                ventanaPreview.focus();
-                
-                // BOTÓN GRANDE AMARILLO - AHORA SÍ APARECE
-                const botonImprimir = ventanaPreview.document.createElement('button');
-                botonImprimir.className = 'boton-imprimir-flotante no-imprimir';
-                botonImprimir.innerHTML = '🖨️ IMPRIMIR PDF AHORA';
-                botonImprimir.onclick = () => ventanaPreview.print();
-                ventanaPreview.document.body.appendChild(botonImprimir);
-                
-                // INSTRUCCIONES - AHORA SÍ APARECEN
-                const instrucciones = ventanaPreview.document.createElement('div');
-                instrucciones.className = 'instrucciones-imprimir no-imprimir';
-                instrucciones.innerHTML = `
-                    <h4 style="margin-bottom: 10px;">📋 Instrucciones rápidas</h4>
-                    <ol style="margin-left: 15px; font-size: 12px;">
-                        <li>Haga clic en el botón amarillo</li>
-                        <li>Seleccione "Guardar como PDF"</li>
-                        <li>Orientación: Horizontal</li>
-                    </ol>
-                    <button onclick="this.parentElement.remove()" style="margin-top: 10px; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Cerrar</button>
-                `;
-                ventanaPreview.document.body.appendChild(instrucciones);
-                
-                // Verificar que los elementos tienen la clase no-imprimir
-                console.log('Elementos de impresión creados:', botonImprimir, instrucciones);
-            }, 500);
         }
 
         function generarPromptCompleto() {
@@ -4343,6 +4410,15 @@
         function actualizarEjeSemana(numeroSemana, valorEje) {
             if (semanas[numeroSemana-1]) {
                 semanas[numeroSemana-1].eje = valorEje;
+                
+                // CORREGIDO: Actualizar visual del radio seleccionado
+                document.querySelectorAll(`input[name="eje-semana-${numeroSemana}"]`).forEach(radio => {
+                    const label = radio.closest('.eje-semana-option');
+                    if (label) {
+                        label.classList.toggle('selected', radio.checked);
+                    }
+                });
+                
                 mostrarMensaje(`✅ Eje de semana ${numeroSemana} actualizado`);
             }
         }
@@ -4510,10 +4586,24 @@
             mostrarMensaje(`✅ Formato activado en ${convertidos} columnas`);
         }
 
+        // CORREGIDO: Función desactivarFormato mejorada para preservar todos los checks
         function desactivarFormato() {
             if (!confirm('¿Volver al modo simple? Se perderá el formato pero se conservará el texto.')) return;
             
-            // Guardar contenido de los editores
+            // CORREGIDO: Guardar TODO el estado actual antes de reconstruir
+            const estadoCompleto = semanas.map((semana, index) => ({
+                numSemana: index + 1,
+                eje: semana.eje,
+                areas: [...semana.areas],
+                saberes: [...semana.saberes],
+                procedimentales: [...semana.procedimentales],
+                actitudinales: [...semana.actitudinales],
+                indicadores: semana.indicadores,
+                actividades: semana.actividades,
+                evaluacion: semana.evaluacion
+            }));
+            
+            // Guardar contenido de los editores Quill
             editoresQuill.forEach(editor => {
                 if (semanas[editor.semana-1]) {
                     semanas[editor.semana-1][editor.tipo] = editor.quill.root.innerHTML;
@@ -4523,28 +4613,6 @@
             modoFormatoActivo = false;
             document.getElementById('btnActivarFormato').style.display = 'inline-flex';
             document.getElementById('btnDesactivarFormato').style.display = 'none';
-            
-            // Guardar estado actual de checkboxes antes de reconstruir
-            const procedimentalesGuardados = [];
-            const actitudinalesGuardados = [];
-            
-            semanas.forEach((semana, index) => {
-                const numSemana = index + 1;
-                
-                // Guardar procedimentales
-                document.querySelectorAll(`input[name="procedimental-semana-${numSemana}"]:checked`).forEach(cb => {
-                    if (!procedimentalesGuardados.includes(cb.value)) {
-                        procedimentalesGuardados.push(cb.value);
-                    }
-                });
-                
-                // Guardar actitudinales
-                document.querySelectorAll(`input[name="actitudinal-semana-${numSemana}"]:checked`).forEach(cb => {
-                    if (!actitudinalesGuardados.includes(cb.value)) {
-                        actitudinalesGuardados.push(cb.value);
-                    }
-                });
-            });
             
             // Eliminar editores Quill
             document.querySelectorAll('.quill-wrapper').forEach(wrapper => wrapper.remove());
@@ -4563,41 +4631,95 @@
                 container.appendChild(semanaElement);
             });
             
-            // Restaurar contenido y checkboxes
+            // CORREGIDO: Restaurar TODO el estado guardado
             setTimeout(() => {
-                semanas.forEach((semana, index) => {
-                    const numSemana = index + 1;
+                estadoCompleto.forEach((estado) => {
+                    const numSemana = estado.numSemana;
+                    const semanaData = semanas[numSemana - 1];
                     
-                    // Restaurar texto de las columnas
-                    if (semana.indicadores) {
+                    // Restaurar datos en el objeto semana
+                    semanaData.eje = estado.eje;
+                    semanaData.areas = estado.areas;
+                    semanaData.saberes = estado.saberes;
+                    semanaData.procedimentales = estado.procedimentales;
+                    semanaData.actitudinales = estado.actitudinales;
+                    semanaData.indicadores = estado.indicadores;
+                    semanaData.actividades = estado.actividades;
+                    semanaData.evaluacion = estado.evaluacion;
+                    
+                    // Restaurar EJE
+                    if (estado.eje) {
+                        const radioEje = document.querySelector(`input[name="eje-semana-${numSemana}"][value="${estado.eje}"]`);
+                        if (radioEje) {
+                            radioEje.checked = true;
+                            radioEje.closest('.eje-semana-option')?.classList.add('selected');
+                        }
+                    }
+                    
+                    // Restaurar ÁREAS
+                    const areaMapping = {
+                        'Apropiación tecnológica y Digital': 'apropiacion',
+                        'Programación y Algoritmos': 'programacion',
+                        'Computación física y Robótica': 'robotica',
+                        'Ciencia de datos e Inteligencia artificial': 'ciencia'
+                    };
+                    
+                    estado.areas.forEach(areaNombre => {
+                        const areaKey = areaMapping[areaNombre];
+                        if (areaKey) {
+                            const checkbox = document.querySelector(`input[name="area-semana-${numSemana}"][value="${areaKey}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            }
+                        }
+                    });
+                    
+                    // Actualizar RdA y saberes disponibles
+                    actualizarRdASemana(numSemana);
+                    actualizarOpcionesSaberesSemana(numSemana);
+                    
+                    // Restaurar SABERES CONCEPTUALES (esperar a que se generen)
+                    setTimeout(() => {
+                        estado.saberes.forEach(saberNombre => {
+                            const checkboxes = document.querySelectorAll(`#saberes-conceptuales-${numSemana} input[type="checkbox"]`);
+                            checkboxes.forEach(checkbox => {
+                                const saberDiv = checkbox.closest('.saber-conceptual-item');
+                                const nombreDiv = saberDiv?.querySelector('div > div:first-child');
+                                if (nombreDiv && nombreDiv.textContent.trim().startsWith(saberNombre)) {
+                                    checkbox.checked = true;
+                                    saberDiv.classList.add('seleccionado');
+                                }
+                            });
+                        });
+                        actualizarSaberesConceptualesContenedor(numSemana);
+                    }, 300);
+                    
+                    // Restaurar PROCEDIMENTALES
+                    estado.procedimentales.forEach(proc => {
+                        const checkbox = document.querySelector(`input[name="procedimental-semana-${numSemana}"][value="${proc}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                    
+                    // Restaurar ACTITUDINALES
+                    estado.actitudinales.forEach(act => {
+                        const checkbox = document.querySelector(`input[name="actitudinal-semana-${numSemana}"][value="${act}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                    
+                    // Restaurar TEXTOS
+                    if (estado.indicadores) {
                         const indContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="indicadores"]`);
-                        if (indContainer) indContainer.innerHTML = semana.indicadores;
+                        if (indContainer) indContainer.innerHTML = estado.indicadores;
                     }
                     
-                    if (semana.actividades) {
+                    if (estado.actividades) {
                         const actContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="Mediación"]`);
-                        if (actContainer) actContainer.innerHTML = semana.actividades;
+                        if (actContainer) actContainer.innerHTML = estado.actividades;
                     }
                     
-                    if (semana.evaluacion) {
+                    if (estado.evaluacion) {
                         const evalContainer = document.querySelector(`#semana-${numSemana} .contenedor-editable[data-placeholder*="evaluación"]`);
-                        if (evalContainer) evalContainer.innerHTML = semana.evaluacion;
-                    }
-                    
-                    // Restaurar checkboxes procedimentales
-                    if (semana.procedimentales) {
-                        semana.procedimentales.forEach(proc => {
-                            const checkbox = document.querySelector(`input[name="procedimental-semana-${numSemana}"][value="${proc}"]`);
-                            if (checkbox) checkbox.checked = true;
-                        });
-                    }
-                    
-                    // Restaurar checkboxes actitudinales
-                    if (semana.actitudinales) {
-                        semana.actitudinales.forEach(act => {
-                            const checkbox = document.querySelector(`input[name="actitudinal-semana-${numSemana}"][value="${act}"]`);
-                            if (checkbox) checkbox.checked = true;
-                        });
+                        if (evalContainer) evalContainer.innerHTML = estado.evaluacion;
                     }
                 });
             }, 100);
