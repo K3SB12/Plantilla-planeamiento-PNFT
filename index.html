@@ -3250,9 +3250,13 @@
                 return texto.toString().trim();
             }
 
-            function formatearProcedimentales(texto) {
+            function formatearTextoCapitalizado(texto) {
                 if (!texto) return '';
-                return texto.charAt(0).toUpperCase() + texto.slice(1);
+                // Capitalizar primera letra de cada palabra y el resto en minúscula
+                return texto.split(' ').map(palabra => {
+                    if (palabra.length === 0) return '';
+                    return palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();
+                }).join(' ');
             }
 
             function formatearIndicadores(texto) {
@@ -5069,4 +5073,5 @@
     </script>
 </body>
 </html>
+
 
