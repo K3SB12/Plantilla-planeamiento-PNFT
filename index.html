@@ -5040,6 +5040,13 @@
                     eje: semanaOriginal.eje || '' // preservar eje si ya tenía
                 };
             });
+
+            // --- NUEVA LÍNEA PARA ACTUALIZAR LOS SABERES GLOBALES ---
+            // Recolecta todos los saberes de todas las semanas y los añade al Set global.
+            saberesSeleccionados = new Set(
+                semanas.flatMap(semana => semana.saberes)
+            );
+            // --- FIN DE LA MODIFICACIÓN ---
             
             // Ajustar número de lecciones planificadas si es necesario
             const ultimaLeccion = semanas.length * 2;
@@ -5062,3 +5069,4 @@
     </script>
 </body>
 </html>
+
