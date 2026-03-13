@@ -1664,7 +1664,7 @@
     
     <script>
         // ====================================================
-        // INICIO: DATOS CURRICULARES (COPIADOS DEL ORIGINAL)
+        // INICIO: DATOS CURRICULARES (COMPLETOS)
         // ====================================================
         const PNFT_DATA = {
             // ========== MATERNO INFANTIL / TRANSICIÓN ==========
@@ -3060,6 +3060,9 @@
                 saberesGlobales: Array.from(saberesSeleccionados),
                 saberesProcedimentalesGlobales: Array.from(saberesProcedimentalesGlobales),
                 saberesActitudinalesGlobales: Array.from(saberesActitudinalesGlobales),
+                // === NUEVO: guardar estado de la proyección ===
+                proyeccionAreas: areasProyeccion, // áreas seleccionadas
+                proyeccionSaberes: Array.from(saberesProyeccionSeleccionados), // saberes marcados
                 fechaGuardado: new Date().toISOString()
             };
         }
@@ -3123,6 +3126,33 @@
             
             if (plan.saberesActitudinalesGlobales) {
                 saberesActitudinalesGlobales = new Set(plan.saberesActitudinalesGlobales);
+            }
+            
+            // === NUEVO: restaurar estado de la proyección ===
+            if (plan.proyeccionAreas) {
+                // Marcar checkboxes de áreas en proyección
+                const areaCheckboxes = document.querySelectorAll('input[name="area-proyeccion"]');
+                const areaMappingInverso = {
+                    'Apropiación tecnológica y Digital': 'apropiacion',
+                    'Programación y Algoritmos': 'programacion',
+                    'Computación física y Robótica': 'robotica',
+                    'Ciencia de datos e Inteligencia artificial': 'ciencia'
+                };
+                areaCheckboxes.forEach(cb => {
+                    const areaNombre = Object.keys(areaMappingInverso).find(key => areaMappingInverso[key] === cb.value);
+                    cb.checked = plan.proyeccionAreas.includes(areaNombre);
+                });
+                // Actualizar variable global
+                areasProyeccion = plan.proyeccionAreas;
+                actualizarRdAProyeccion();
+            }
+            if (plan.proyeccionSaberes) {
+                saberesProyeccionSeleccionados = new Set(plan.proyeccionSaberes);
+                // Forzar actualización de la vista de saberes
+                setTimeout(() => {
+                    actualizarSaberesConceptualesProyeccion();
+                    actualizarIndicadoresProyeccion();
+                }, 200);
             }
             
             if (plan.reflexiones) {
